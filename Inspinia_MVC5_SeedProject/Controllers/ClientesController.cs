@@ -237,6 +237,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Validamos que el cliente a ingresar no exista
                 if (db.Clientes.FirstOrDefault(a => a.Apellidos == cliente.Apellidos && a.Nombres == cliente.Nombres && a.Identificacion == cliente.Identificacion) != null)
                 {
                     ModelState.AddModelError("Apellidos", "El cliente que desea ingresar ya existe");
