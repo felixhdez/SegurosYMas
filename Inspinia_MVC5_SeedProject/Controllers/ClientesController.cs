@@ -73,6 +73,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
             return Json(new { list }, JsonRequestBehavior.AllowGet);
         }
         
+        //Listamos a los clientes
         public JsonResult SearchClientes(int Id)
         {
             var data = db.Clientes.ToList();
