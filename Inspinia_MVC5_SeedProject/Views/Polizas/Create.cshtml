@@ -1,0 +1,1615 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.Poliza
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<style>
+
+    
+   
+
+    #initialihiddenbutton,
+    #btnCancelarContratante,
+    #btnCancelarIntermediario{
+        display:none;
+    }
+
+    .ibox-hr{
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  background-color: #ffffff;
+  border-color: #e7eaec;
+  border-image: none;
+  border-style: solid solid none;
+  border-width: 2px 0 0;
+  color: inherit;
+  margin-bottom: 0;
+  padding: 0;
+  min-height: 48px;
+    }
+
+    p{
+        font-weight:400 !important;
+    }
+
+     h2{
+        font-size:26px !important;
+        font-weight:600 !important;
+    }
+
+    .container {
+    width: 97% !important;
+  }
+
+.btn-default{
+    background: #818e99 !important;
+    color: white !important;
+        opacity: inherit !important;
+}
+
+ .stepwizard .btn-primary {
+        background-color: #428bca !important;
+        color: white !important;
+    }
+
+
+   /*body{ 
+    margin-top:40px; 
+}*/
+
+.stepwizard-step p {
+    margin-top: 10px;
+}
+
+.stepwizard-row {
+    display: table-row;
+}
+
+.stepwizard {
+    display: table;
+    width: 100%;
+    position: relative;
+    
+    
+}
+
+.stepwizard-step button[disabled] {
+    opacity: 1 !important;
+    filter: alpha(opacity=100) !important;
+}
+
+.stepwizard-row:before {
+    top: 14px;
+    bottom: 0;
+    position: absolute;
+    content: " ";
+    width: 100%;
+    height: 1px;
+    background-color: #ccc;
+    z-index: 0;
+
+}
+
+.stepwizard-step {
+    display: table-cell;
+    text-align: center;
+    position: relative;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  line-height: 1.428571429;
+  border-radius: 15px;
+}
+</style>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Pólizas</h2>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("Lista", "Index")
+            </li>
+            <li class="active">
+                <strong>Crear</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-8">
+        <div class="title-action">
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("Index","Polizas")"><i class="fa fa-arrow-left "></i>&nbsp;&nbsp;Regresar</a>
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("Create","BienesAsegurados")" onclick="Valor()"><i class="fa fa-file-text-o"></i>&nbsp;&nbsp;Bienes</a>
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("Create","Bitacoras")" onclick="Valor()"><i class="fa fa-file-image-o"></i>&nbsp;&nbsp;Archivos</a>
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("Create","Adendas")" onclick="Valor()"><i class="fa fa-folder"></i>&nbsp;&nbsp;Adendas</a>
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("Create","Reclamos")" onclick="Valor()"><i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;Reclamos</a>
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("Create","Tramites")" onclick="Valor()"><i class="fa fa-folder-open"></i>&nbsp;&nbsp;Trámites</a>
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("Create","ReciboCuotas")" onclick="Valor()"><i class="fa fa-money"></i>&nbsp;&nbsp;Pagos</a>
+        </div>
+    </div>
+</div>
+
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Crear Poliza</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <!--Vistas que irán de siguiente en siguiente-->
+                        <div class="container">
+                            <div class="stepwizard">
+                                <div class="stepwizard-row setup-panel">
+                                    <div class="stepwizard-step col-xs-3">
+                                        <a href="#step-1" type="button" class="btn btn-primary btn-circle">1</a>
+                                        <p>Cliente</p>
+                                    </div>
+                                    <div class="stepwizard-step col-xs-6">
+                                        <a href="#step-2" type="button" class="btn btn-default btn-circle" @*disabled="disabled"*@>2</a>
+                                        <p>Contratante y Contacto</p>
+                                    </div>
+                                    <div class="stepwizard-step col-xs-3">
+                                        <a href="#step-3" type="button" class="btn btn-default btn-circle" @*disabled="disabled"*@>3</a>
+                                        <p>Póliza</p>
+                                    </div>
+                                    @*<div class="stepwizard-step col-xs-3">
+                                            <a href="#step-4" type="button" class="btn btn-default btn-circle" disabled="disabled">4</a>
+                                            <p><small>Bienes Asegurados</small></p>
+                                        </div>*@
+                                </div>
+                            </div>
+                        </div>
+
+                        <br />
+
+                        @using (Html.BeginForm("Create", "Polizas", FormMethod.Post, new { @onsubmit = "return AgregarDatos(this)" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                        <!--Paso #1-->
+                            <div class="row setup-content" id="step-1">
+                                <div class="col-md-offset-0">
+                                    <div class="col-md-12">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                <i class="fa fa-pencil-square-o fa-lg"></i>
+                                                <div class="button-group">
+                                                    <button class="btn btn-danger fa fa-times " type="button" onclick="limpiar()" style="float: right;margin-top: -1.7em;margin-left: 1em;" id="initialihiddenbutton">&nbsp;&nbsp;Cancelar</button>
+                                                    <button class="btn btn-success fa fa-search" data-toggle="modal" data-target="#modal-default" type="button" style="float: right;margin-top:-1.7em; margin-left:1em">&nbsp;&nbsp;Buscar</button>
+                                                </div>
+                                            </div>
+                                            <div class="container" style="margin-top:20px;">
+                                                <h2>Datos del Cliente</h2>
+                                                <hr class="ibox-hr" />
+                                            </div>
+
+                                            <div class="panel-body">
+                                                <!--Caja interna para división-->
+                                                <div class="row">
+                                                    <div class="col-lg-6 b-r">
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Cliente.TipoCliente, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.DropDownList("TipoCliente", (SelectList)ViewBag.DropDown, htmlAttributes: new { @class = "form-control", @id = "dropTipoCliente" })
+                                                                @Html.ValidationMessageFor(model => model.Cliente.TipoCliente, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Cliente.Apellidos, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Cliente.Apellidos, new { htmlAttributes = new { @class = "form-control", @id = "txtApellidos" } })
+                                                                @Html.ValidationMessageFor(model => model.Cliente.Apellidos, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Cliente.Nombres, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Cliente.Nombres, new { htmlAttributes = new { @class = "form-control", @id = "txtNombres" } })
+                                                                @Html.ValidationMessageFor(model => model.Cliente.Nombres, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Cliente.Identificacion, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @*<input name="Cliente.Identificacion" class="form-control" id="txtIdentificacion" data-mask="999-999999-99999" />*@
+                                                                @Html.EditorFor(model => model.Cliente.Identificacion, new { htmlAttributes = new { @class = "form-control", @id = "txtIdentificacion"} })
+                                                                @Html.ValidationMessageFor(model => model.Cliente.Identificacion, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Cliente.NumTelf1, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Cliente.NumTelf1, new { htmlAttributes = new { @class = "form-control", @id = "txtNumtelf1" } })
+                                                                @Html.ValidationMessageFor(model => model.Cliente.NumTelf1, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Cliente.NumTelf2, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Cliente.NumTelf2, new { htmlAttributes = new { @class = "form-control", @id = "txtNumtelf2" } })
+                                                                @Html.ValidationMessageFor(model => model.Cliente.NumTelf2, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Cliente.NumTelf3, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Cliente.NumTelf3, new { htmlAttributes = new { @class = "form-control", @id = "txtNumtelf3" } })
+                                                                @Html.ValidationMessageFor(model => model.Cliente.NumTelf3, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        
+                                                    </div> <!--termina contenedor de la primera división-->
+                                                    <!--Segundo contenedor-->
+                                                    <div class="col-lg-6">
+                                                        <!--Título del segundo contenedor-->
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Cliente.Celular, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Cliente.Celular, new { htmlAttributes = new { @class = "form-control", @id = "txtCelular" } })
+                                                                @Html.ValidationMessageFor(model => model.Cliente.Celular, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Cliente.Email, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Cliente.Email, new { htmlAttributes = new { @class = "form-control", @id = "txtEmail" } })
+                                                                @Html.ValidationMessageFor(model => model.Cliente.Email, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Cliente.FechaNacimiento, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Cliente.FechaNacimiento, new { htmlAttributes = new { @class = "form-control", @id = "txtFechaNacimiento" } })
+                                                                @Html.ValidationMessageFor(model => model.Cliente.FechaNacimiento, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Cliente.DepartamentoId, "Departamento", htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.DropDownList("DepartamentoId", (SelectList)ViewBag.DepartamentoId, htmlAttributes: new { @class = "form-control", @id = "dropDepartamento" })
+                                                                @Html.ValidationMessageFor(model => model.Cliente.DepartamentoId, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Cliente.Direccion, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Cliente.Direccion, new { htmlAttributes = new { @class = "form-control", @id = "txtDireccion" } })
+                                                                @Html.ValidationMessageFor(model => model.Cliente.Direccion, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Cliente.Notas, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Cliente.Notas, new { htmlAttributes = new { @class = "form-control", @id = "txtNotas" } })
+                                                                @Html.ValidationMessageFor(model => model.Cliente.Notas, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div> <!--termina el segundo contenedor-->
+                                                </div> <!--termina caja para división-->
+                                                <button class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:1.7em;">
+                                                    Siguiente
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        <!--Paso #2-->
+                            <div class="row setup-content" id="step-2">
+                                <div class="col-xs-12 col-md-offset-0">
+                                    <div class="col-md-12">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                <i class="fa fa-pencil-square-o fa-lg"></i>
+                                            </div>
+                                            <!--Contenido de la caja-->
+                                            <div class="panel-body">
+                                                <!--Caja interna para división-->
+                                                <div class="row">
+                                                    <div class="col-lg-7 b-r">
+                                                        <!--Título del primer contenedor-->
+                                                            <div class="container" style="margin-top:11px;">               
+                                                                <h2>Contratante</h2>
+                                                                <div class="ibox-tools">
+                                                                    <a class="btn btn-danger fa fa-times" onclick="limpiar2()" style="float: right;margin-top: -2.3em;margin-left: 1em;" id="btnCancelarContratante">&nbsp;&nbsp;Cancelar</a>
+                                                                    <a class="btn btn-success fa fa-search" id="btnBB" data-toggle="modal" data-target="#modal-default-contratante" style="float: right;margin-top:-2.3em; margin-left:1em">&nbsp;&nbsp;Buscar</a>
+                                                                </div>
+                                                                <hr class="ibox-hr"/>
+                                                            </div>
+
+                                                     <!--Fin del titulo-->
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-4">Tipo de Contratante</label>
+                                                            <div class="col-md-8">
+                                                                <select class="form-control" id="dropTipoContratante">
+                                                                    <option value="Natural">Natural</option>
+                                                                    <option value="Jurídico">Jurídico</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Persona.Apellidos, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Persona.Apellidos, new { htmlAttributes = new { @class = "form-control", @id = "txtApellidosContratante" } })
+                                                                @Html.ValidationMessageFor(model => model.Persona.Apellidos, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Persona.Nombres, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Persona.Nombres, new { htmlAttributes = new { @class = "form-control", @id = "txtNombresContratante" } })
+                                                                @Html.ValidationMessageFor(model => model.Persona.Nombres, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Persona.Identificacion, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Persona.Identificacion, new { htmlAttributes = new { @class = "form-control", @id = "txtIdentificacionContratante" } })
+                                                                @Html.ValidationMessageFor(model => model.Persona.Identificacion, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Persona.NumTelf1, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Persona.NumTelf1, new { htmlAttributes = new { @class = "form-control", @id = "txtNumtelf1Contratante" } })
+                                                                @Html.ValidationMessageFor(model => model.Persona.NumTelf1, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Persona.NumTelf2, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Persona.NumTelf2, new { htmlAttributes = new { @class = "form-control", @id = "txtNumtelf2Contratante" } })
+                                                                @Html.ValidationMessageFor(model => model.Persona.NumTelf2, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Persona.NumTelf3, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Persona.NumTelf3, new { htmlAttributes = new { @class = "form-control", @id = "txtNumtelf3Contratante" } })
+                                                                @Html.ValidationMessageFor(model => model.Persona.NumTelf3, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Persona.Celular, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Persona.Celular, new { htmlAttributes = new { @class = "form-control", @id = "txtCelularContratante" } })
+                                                                @Html.ValidationMessageFor(model => model.Persona.Celular, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Persona.Email, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Persona.Email, new { htmlAttributes = new { @class = "form-control", @id = "txtEmailContratante" } })
+                                                                @Html.ValidationMessageFor(model => model.Persona.Email, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Persona.DepartamentoId, "Departamento", htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.DropDownList("DeptoId", (SelectList)ViewBag.DepartamentoId, "", htmlAttributes: new { @class = "form-control", @id = "dropDepartamentoContratante" })
+                                                                @Html.ValidationMessageFor(model => model.Persona.DepartamentoId, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Persona.Direccion, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Persona.Direccion, new { htmlAttributes = new { @class = "form-control", @id = "txtDireccionContratante" } })
+                                                                @Html.ValidationMessageFor(model => model.Persona.Direccion, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Persona.Notas, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Persona.Notas, new { htmlAttributes = new { @class = "form-control", @id = "txtNotasContratante" } })
+                                                                @Html.ValidationMessageFor(model => model.Persona.Notas, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div> <!--termina contenedor de la primera división-->
+                                                    <!--Segundo contenedor-->
+                                                    <div class="col-lg-5">
+                                                        <!--Título del segundo contenedor-->
+                                                        
+                                                        @*<div class="ibox-title">*@
+                                                        <div class="container" style="margin-top:15px;">
+                                                            <h2>Contacto</h2>
+                                                            <div class="ibox-tools">
+                                                                <a class="btn btn-danger fa fa-times" onclick="limpiar3()" style="float: right;margin-top: -2.3em;margin-left: 1em;" id="btnCancelarIntermediario">&nbsp;&nbsp;Cancelar</a>
+                                                                <a class="btn btn-success fa fa-search" id="btnBB" data-toggle="modal" data-target="#modal-default-intermediario" style="float: right;margin-top:-2.3em; margin-left:1em">&nbsp;&nbsp;Buscar</a>
+                                                            </div>
+                                                            <hr class="ibox-hr" />
+                                                        </div>
+                                                                
+                                                            @*</div>*@ <!--Fin del titulo-->
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.ContactoIntermediario.Apellidos, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.ContactoIntermediario.Apellidos, new { htmlAttributes = new { @class = "form-control", @id = "txtApellidosContactoIntermediario" } })
+                                                                @Html.ValidationMessageFor(model => model.ContactoIntermediario.Apellidos, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.ContactoIntermediario.Nombres, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.ContactoIntermediario.Nombres, new { htmlAttributes = new { @class = "form-control", @id = "txtNombresContactoIntermediario" } })
+                                                                @Html.ValidationMessageFor(model => model.ContactoIntermediario.Nombres, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.ContactoIntermediario.Telefono, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.ContactoIntermediario.Telefono, new { htmlAttributes = new { @class = "form-control", @id = "txtTelefonoContactoIntermediario" } })
+                                                                @Html.ValidationMessageFor(model => model.ContactoIntermediario.Telefono, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.ContactoIntermediario.Email, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.ContactoIntermediario.Email, new { htmlAttributes = new { @class = "form-control", @id = "txtEmailContactoIntermediario" } })
+                                                                @Html.ValidationMessageFor(model => model.ContactoIntermediario.Email, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.ContactoIntermediario.Cargo, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.ContactoIntermediario.Cargo, new { htmlAttributes = new { @class = "form-control", @id = "txtCargoContactoIntermediario" } })
+                                                                @Html.ValidationMessageFor(model => model.ContactoIntermediario.Cargo, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                    </div> <!--termina el segundo contenedor-->
+                                                </div> <!--termina caja para división-->
+
+                                                <button class="btn btn-primary backBtn pull-left" type="button" style="float:left; margin-top:1.7em;">Regresar</button>
+                                                <button class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:1.7em;">
+                                                    Siguiente
+                                                </button>
+
+                                            </div> <!--termina contenido de la caja-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Paso #3-->
+                            <div class="row setup-content" id="step-3">
+                                <div class="col-xs-12 col-md-offset-0">
+                                    <div class="col-md-12">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                <i class="fa fa-pencil-square-o fa-lg"></i>
+                                            </div>
+                                            <!--Contenido de la caja-->
+                                            <div class="panel-body">
+                                                <!--Título del contenedor-->
+                                                <div class="container" style="margin-top:20px;">
+                                                    <h2>Datos de la Póliza</h2>
+                                                    <hr class="ibox-hr" />
+                                                </div> <!--Fin del titulo-->
+                                                <!--Caja interna para división-->
+                                                <div class="row">
+                                                    <div class="col-lg-6 b-r">
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.NumPoliza, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.NumPoliza, new { htmlAttributes = new { @class = "form-control", @id = "txtNumPoliza" } })
+                                                                @Html.ValidationMessageFor(model => model.NumPoliza, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Producto.AseguradoraId, "Aseguradora", htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.DropDownList("IdAseguradora", (SelectList)ViewBag.AseguradoraId, htmlAttributes: new { @class = "form-control", @id = "dropAseguradora", @onchange = "loadProductos()" })
+                                                                @Html.ValidationMessageFor(model => model.Producto.AseguradoraId, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.ProductoId, "Producto", htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.DropDownList("ProductoId", (SelectList)ViewBag.ProductoId, htmlAttributes: new { @class = "form-control", @id = "dropProducto", @onchange = "ObtenerComision()" })
+                                                                @*<select id="dropProducto" name="ProductoId" class="form-control"></select>*@
+                                                                @Html.ValidationMessageFor(model => model.ProductoId, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.TipoMoneda, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.DropDownList("TipoMoneda", (SelectList)ViewBag.TipoMoneda, htmlAttributes: new { @class = "form-control", @id = "dropTipoMoneda" })
+                                                                @Html.ValidationMessageFor(model => model.TipoMoneda, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.FechaEmision, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.FechaEmision, new { htmlAttributes = new { @class = "form-control", @id = "txtFechaEmision", @onchange="ObtenerCambio()" } })
+                                                                @Html.ValidationMessageFor(model => model.FechaEmision, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.FechaDesde, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.FechaDesde, new { htmlAttributes = new { @class = "form-control", @id = "txtFechaDesde" } })
+                                                                @Html.ValidationMessageFor(model => model.FechaDesde, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.FechaHasta, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.FechaHasta, new { htmlAttributes = new { @class = "form-control", @id = "txtFechaHasta" } })
+                                                                @Html.ValidationMessageFor(model => model.FechaHasta, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Tipo, "Tipo de Póliza", htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.DropDownList("Tipo", (SelectList)ViewBag.TipoPoliza, htmlAttributes: new { @class = "form-control", @id = "dropTipoPoliza" })
+                                                                @Html.ValidationMessageFor(model => model.Tipo, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.FormaDePago, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.DropDownList("FormaDePago", (SelectList)ViewBag.FormadePago, htmlAttributes: new { @class = "form-control", @id = "dropFormaPago" })
+                                                                @Html.ValidationMessageFor(model => model.FormaDePago, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        
+                                                    </div><!--termina contenedor de la primera división-->
+                                                    <!--Segundo contenedor-->
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.PrimaNeta, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.PrimaNeta, new { htmlAttributes = new { @class = "form-control", @id = "txtPrimaNeta", @onkeyup= "IVA_Emision()" } })
+                                                                @Html.ValidationMessageFor(model => model.PrimaNeta, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Emision, "Derecho de Emisión", htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Emision, new { htmlAttributes = new { @class = "form-control", @id = "txtEmision" } })
+                                                                @Html.ValidationMessageFor(model => model.Emision, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Iva, "IVA", htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Iva, new { htmlAttributes = new { @class = "form-control", @id = "txtIva" } })
+                                                                @Html.ValidationMessageFor(model => model.Iva, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.Otros, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.Otros, new { htmlAttributes = new { @class = "form-control", @id = "txtOtros" } })
+                                                                @Html.ValidationMessageFor(model => model.Otros, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.ComisionPorcentaje, "Porcentaje de Comisión", htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.ComisionPorcentaje, new { htmlAttributes = new { @class = "form-control", @id = "txtComisionPorc"} })
+                                                                @Html.ValidationMessageFor(model => model.ComisionPorcentaje, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.ComisionValor, "Comisión",htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.ComisionValor, new { htmlAttributes = new { @class = "form-control", @id = "txtComision", @readonly = "true" } })
+                                                                @Html.ValidationMessageFor(model => model.ComisionValor, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.TipoDeCambio, htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.EditorFor(model => model.TipoDeCambio, new { htmlAttributes = new { @class = "form-control", @id = "txtTipoCambio", @readonly = "true" } })
+                                                                @Html.ValidationMessageFor(model => model.TipoDeCambio, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <br /><br />
+                                                        <div class="form-group">
+                                                            @Html.LabelFor(model => model.AgenteId, "Agente", htmlAttributes: new { @class = "control-label col-md-4" })
+                                                            <div class="col-md-8">
+                                                                @Html.DropDownList("AgenteId", (SelectList)ViewBag.AgenteId, htmlAttributes: new { @class = "form-control", @id = "dropAgente" })
+                                                                @Html.ValidationMessageFor(model => model.AgenteId, "", new { @class = "text-danger" })
+                                                            </div>
+                                                        </div>
+                                                        <input id="txtReciboPrima" name="ReciboPrima" hidden />
+                                                        <br /><br />
+                                                    </div><!--termina el segundo contenedor-->
+                                                </div> <!--termina caja para división-->
+                                                <br /><br />
+                                                <!--Título del contenedor-->
+                                                <div class="ibox-title">
+                                                    <h2>Detalle de Cuotas</h2>
+                                                    <a class="btn btn-success fa fa-plus dim pull-right" data-toggle="modal" data-target="#modal-cuotas" style="float: right;margin-top: -2.5em;margin-left: 1em;" id="btnAgregarCuotas"> &nbsp; &nbsp; Agregar </a>
+                                                </div> <!--Fin del titulo-->
+                                                <br />
+                                                <!--TABLA DE DETALLE DE CUOTAS-->
+                                                <div class="panel-footer">
+                                                    <div class="table-responsive">
+                                                        <table class="table" id="tableCuotas">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Cuota</th>
+                                                                    <th>Vence</th>
+                                                                    <th>Monto</th>
+                                                                    <th>Estado</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!--FIN DE TABLA DE DETALLE DE CUOTAS-->
+                                                <button class="btn btn-primary backBtn pull-left" type="button" style="float:left; margin-top:1.7em;">Regresar</button>
+                                                <button class="btn btn-primary pull-right" type="submit" style="margin-top:1.7em;"> Guardar </button>
+
+                                            </div> <!--termina contenido de la caja-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    @*Modal para buscar un cliente*@
+    <div class="modal inmodal fade" id="modal-default" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Clientes</h4>
+                </div>
+                <div class="modal-body">
+                    @Html.Partial("_BuscarCliente")
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <!--Modal para buscar un contratante-->
+    <div class="modal inmodal fade" id="modal-default-contratante" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Contratantes</h4>
+                </div>
+                <div class="modal-body">
+                    @Html.Partial("_BuscarContratante")
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <!--Modal para buscar un Intermediario-->
+    <div class="modal inmodal fade" id="modal-default-intermediario" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Contactos</h4>
+                </div>
+                <div class="modal-body">
+                    @Html.Partial("_BuscarIntermediario")
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <!--Modal para generar cuotas-->
+    <div class="modal inmodal fade" id="modal-cuotas" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Generar Cuotas</h4>
+                </div>
+                <div class="modal-body">
+                    @Html.Partial("_GenerarCuotas")
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="agregarCuotas()" class="btn btn-success pull-right" id="btnGenerar">Generar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+        <!-- Datos de select -->
+        <script src="~/Scripts/select2/select2.min.js"></script>
+        <link href="~/Content/select2/select2.min.css" rel="stylesheet" />
+        <!-- Datatable -->
+        <link href="~/Content/DataTables/media/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+        <link href="~/Content/DataTables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+        <link href="~/Content/DataTables/media/css/dataTables.jqueryui.min.css" rel="stylesheet" />
+        <script src="~/Scripts/DataTables/media/js/dataTables.bootstrap.min.js"></script>
+        <script src="~/Scripts/DataTables/media/js/dataTables.jqueryui.min.js"></script>
+        <script src="~/Scripts/DataTables/media/js/jquery.dataTables.min.js"></script>
+        <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"> </script>
+        <script src="~/Scripts/iCheck/jquery.mask.js"></script>>
+        <!-- Script para el paso a paso.-->
+        <script>
+            $(document).ready(function () {
+                var navListItems = $('div.setup-panel div a'),
+                        allWells = $('.setup-content'),
+                        allNextBtn = $('.nextBtn'),
+                        allBackButton = $('.backBtn');
+
+                allWells.hide();
+
+                navListItems.click(function (e) {
+                    e.preventDefault();
+                    var $target = $($(this).attr('href')),
+                            $item = $(this);
+
+                    if (!$item.hasClass('disabled')) {
+                        navListItems.removeClass('btn-primary').addClass('btn-default');
+                        $item.addClass('btn-primary');
+                        allWells.hide();
+                        $target.show();
+                        $target.find('input:eq(0)').focus();
+                    }
+                });
+                allBackButton.click(function () {
+                    var curStep = $(this).closest(".setup-content"),
+                        curStepBtn = curStep.attr("id"),
+                        nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().prev().children("a"),
+                        curInputs = curStep.find("input[type='text'],input[type='url']"),
+                        isValid = true;
+
+                    $(".form-group").removeClass("has-error");
+                    for (var i = 0; i < curInputs.length; i++) {
+                        if (!curInputs[i].validity.valid) {
+                            isValid = false;
+                            $(curInputs[i]).closest(".form-group").addClass("has-error");
+                        }
+                    }
+
+                    nextStepWizard.removeAttr('disabled').trigger('click');
+                });
+
+                allNextBtn.click(function () {
+                    var curStep = $(this).closest(".setup-content"),
+                        curStepBtn = curStep.attr("id"),
+                        nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
+                        curInputs = curStep.find("input[type='text'],input[type='url']"),
+                        isValid = true;
+
+                    $(".form-group").removeClass("has-error");
+                    for (var i = 0; i < curInputs.length; i++) {
+                        if (!curInputs[i].validity.valid) {
+                            isValid = false;
+                            $(curInputs[i]).closest(".form-group").addClass("has-error");
+                        }
+                    }
+
+                    if (isValid)
+                        nextStepWizard.removeAttr('disabled').trigger('click');
+                });
+
+
+                $('div.setup-panel div a.btn-primary').trigger('click');
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $("#dropTipoCliente").change();
+                $("#dropTipoContratante").change();
+                var d = new Date();
+
+                var month = d.getMonth() + 1;
+                var day = d.getDate();
+
+                var output = d.getFullYear() + '-' +
+                    (month < 10 ? '0' : '') + month + '-' +
+                    (day < 10 ? '0' : '') + day;
+                $("#txtFechaEmision").val(output).change();
+                //$("#txtIdentificacionContratante").mask("000-000000-0000S");
+                $("#dropTipoCliente,#dropTipoContratante,#dropDepartamento,#dropDepartamentoContratante,#dropAseguradora,#dropProducto,#dropTipoMoneda,#dropTipoPoliza,#dropFormaPago,#dropAgente").select2({ width: "100%" });
+            });
+
+            $("#btnAgregarCuotas").click(function () {
+                $("#TipoCuotas").val("valor1");
+                $("#TipoCuotas").change();
+                if ($("#txtPrimaNeta").val().trim() &&
+                    $("#txtEmision").val().trim() &&
+                    $("#txtIva").val().trim() &&
+                    $("#txtOtros").val().trim()) {
+
+                    var neta = parseFloat($("#txtPrimaNeta").val());
+                    var emision = parseFloat($("#txtEmision").val());
+                    var iva = parseFloat($("#txtIva").val());
+                    var otros = parseFloat($("#txtOtros").val());
+                    $("#PrimaNeta").val(neta + emision + iva + otros);
+
+                    var prima = parseFloat($("#PrimaNeta").val());
+                    var num = parseInt($("#NumCuotas").val())
+                    $("#Monto").val(parseFloat(prima / num).toFixed(2));
+                }
+                else {
+                    swal({
+                        title: "Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.",
+                        text: "Seguros & Más",
+                        icon: "warning",
+                        buttons: "Ok",
+                        dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                        if (willDelete) {$("#modal-cuotas .close").click();}
+                    });
+                }                    
+            })
+
+            function cambiarMonto() {
+                if ($("#PrimaNeta").val().trim() && $("#NumCuotas").val().trim()) {
+                    var prima = parseFloat($("#PrimaNeta").val());
+                    var num = parseInt($("#NumCuotas").val())
+                    $("#Monto").val((prima / num).toFixed(2));
+                }
+            }
+
+            function loadProductos() {
+                var i = $("#dropAseguradora").val();
+                var url = "/Polizas/Filtro/" + i;
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    dataType: "JSON",
+                    success: function (list) {
+                        var addprod = "";
+                        $("#dropProducto").empty();
+                        for (var a = 0; a < list.listProd.length; a++) {
+                            addprod += " <option value=" + list.listProd[a].IdProducto + ">" + list.listProd[a].Descripcion + "</option>;";
+                        }
+                        $("#dropProducto").append(addprod)
+                        $("#dropProducto").select2("val", $("#dropProducto option:first").val());
+                        $("#dropProducto").change();
+                    }
+                })
+            }
+
+            function ObtenerComision()
+            {
+                var P_Id = $("#dropProducto").val();
+                var url = "/Polizas/GetComision/" + P_Id;
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    dataType: "JSON",
+                    success: function (list) {
+                        $("#txtComisionPorc").val(list.s);
+                        if ($("#txtPrimaNeta").val().trim() &&
+                            $("#txtEmision").val().trim() &&
+                            $("#txtIva").val().trim() &&
+                            $("#txtOtros").val().trim() &&
+                            $("#txtComisionPorc").val().trim()) {
+                            var prima = parseFloat($("#txtPrimaNeta").val());
+                            var porc = $("#txtComisionPorc").val();
+                            var valor = prima * (porc / 100);
+                            valor = parseFloat(valor).toFixed(2);
+                            $("#txtComision").val(valor);
+                        }
+                    }
+                })
+            }
+
+            
+
+            function IVA_Emision()
+            {
+                if ($("#txtPrimaNeta").val().trim()) {
+                    var prima = parseFloat($("#txtPrimaNeta").val());
+                    var iva = prima * 0.15;
+                    iva = parseFloat(iva).toFixed(2);
+                    $("#txtIva").val(iva);
+
+                    //Calcular emisión
+                    var emision = prima * 0.02;
+                    emision = parseFloat(emision).toFixed(2);
+                    $("#txtEmision").val(emision);
+                }
+                //ComisionValor();
+            }
+
+            $("#txtPrimaNeta,#txtIva,#txtEmision,#txtOtros,#txtComisionPorc").keyup( function() {
+                if ($("#txtPrimaNeta").val().trim() &&
+                    $("#txtEmision").val().trim() &&
+                    $("#txtIva").val().trim() &&
+                    $("#txtOtros").val().trim() &&
+                    $("#txtComisionPorc").val().trim()) {
+                    var prima = parseFloat($("#txtPrimaNeta").val());
+                    var porc = $("#txtComisionPorc").val();
+                    var valor = prima * (porc / 100);
+                    valor = parseFloat(valor).toFixed(2);
+                    $("#txtComision").val(valor);
+                }
+            })
+
+            function ObtenerCambio() {
+                var url = "/Polizas/GetTipoDeCambio/";
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    data: {fecha : $("#txtFechaEmision").val()},
+                    dataType: "JSON",
+                    success: function (list) {
+                        $("#txtTipoCambio").val(list.s);
+                    }
+                })
+            }
+        </script>
+        <script>
+
+            $("#dropTipoCliente").change(function () {
+                if ($(this).val() == "Natural") {
+                    $("#txtIdentificacion").mask("000-000000-0000S");
+                    $("#txtFechaNacimiento").val("").attr("readonly", false);
+                }
+                else{
+                    $("#txtIdentificacion").unmask();
+                    var d = new Date();
+
+                    var month = d.getMonth()+1;
+                    var day = d.getDate();
+
+                    var output = d.getFullYear() + '-' +
+                        (month<10 ? '0' : '') + month + '-' +
+                        (day<10 ? '0' : '') + day;
+                    $("#txtFechaNacimiento").val(output).attr("readonly", true);
+                }
+            });
+
+            $("#dropTipoContratante").change(function () {
+                if ($(this).val() == "Natural") {
+                    $("#txtIdentificacionContratante").mask("000-000000-0000S");
+                }
+                else {
+                    $("#txtIdentificacionContratante").unmask();
+                }
+            });
+
+            // Referencia la tabla de detalles
+            var dataTableDetalle = null;
+            // Crea una instancia de datatable para el detalle
+            $(function () {
+                $("#TipoCuotas").change(); //Activamos el evento del select de Tipo de Cuotas -modal-
+                
+                ObtenerCambio();
+                // Instancia del datatable para mostrar los detalles.
+                dataTableDetalle = $("#tableDetalle").DataTable({
+                    "info": false,
+                    "paging": false,
+                    "ordering": false,
+                    "searching": false,
+                    "language": {
+                        "emptyTable": "Agregar detalles de Cuotas",
+                        "search": "Busqueda"
+                    }, "columnDefs": [{
+                        "targets": 4,
+                        "render": function (data, type, row, meta) {
+                            return "<button class='btn btn-sm btn-danger' value='" + data + "' type='button'>Remover</button>";
+                        }
+                    }],
+                    "language": {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "No hay clientes para mostrar",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "Buscar:",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    }
+                });
+
+            });
+
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            //===================================================================CLIENTES=========================================================================
+            // Instancia de dataTable para la tabla que muestra los clientes
+            var dataTable = null;
+
+            $(function () {
+                dataTable = $("#BuscarCliente").DataTable({
+                    "ajax": {
+                        "url": "@Url.Action("getClientes", "Clientes")",
+                        "type": "POST",
+                        "dataType": "Json"
+                    }, "columns": [
+                        {
+                            "data": "IdCliente", "render": function (data) {
+                                return "<button class='btn btn-success' value='" + data + "'>Seleccionar</button>";
+                            }
+                        },
+                        { "data": "Apellidos" },
+                        { "data": "Nombres" },
+                        { "data": "Identificacion" },
+                        { "data": "TipoCliente" }
+                    ], "language": {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "Buscar:",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    }
+                });
+            });
+
+
+            $idClienteSelect = 0;
+            // Mostrar el boton agregar solo cuando se seleccione un cliente
+            $("#txtApellidos").change(function () {
+                if (!$(this).val())
+                    $("#initialihiddenbutton").hide();
+                else
+                    $("#initialihiddenbutton").show();
+            });
+            // Evento al hacer click en el boton seleccionar
+            $(function () {
+                $("#BuscarCliente tbody").on("click", "button", function () {
+                    var data = dataTable.row($(this).parents('tr')).data();
+                    //Obtenemos la fila seleccionada
+                    $idClienteSelect = data.IdCliente;
+                    $("#modal-default .close").click();
+                    //Mandamos a buscar el registro
+                    var url = "/Clientes/SearchClientes/" + $idClienteSelect;
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        dataType: "JSON",
+                        success: function (list) {
+                            //Asignamos los valores devueltos por el método
+                            $("#txtApellidos").val(list.data[0].Apellidos).change();
+                            $("#txtNombres").val(list.data[0].Nombres);
+                            $("#txtIdentificacion").val(list.data[0].Identificacion);
+                            $("#txtNumtelf1").val(list.data[0].NumTelf1);
+                            $("#txtNumtelf2").val(list.data[0].NumTelf2);
+                            $("#txtNumtelf3").val(list.data[0].NumTelf3);
+                            $("#txtCelular").val(list.data[0].Celular);
+                            $("#txtEmail").val(list.data[0].Email);
+                            $("#dropTipoCliente").select2("val", list.data[0].TipoCliente);
+                            //var date = new Date(list.data[0].FechaNacimiento);
+                            //console.log(date);
+                            //let dia = ("0" + date.getDate()).slice(-2);
+                            //let mes = ("0" + date.getMonth() + 1).slice(-2);
+                            //let fecha = date.getFullYear() + "-" + mes + "-" + dia;
+                            //console.log(fecha);
+                            $("#txtFechaNacimiento").val(list.data[0].FechaNacimiento); //yy-MM-dd
+                            $("#dropDepartamento").val(list.data[0].DeptoId);
+                            $("#txtNotas").val(list.data[0].Notas);
+                            $("#txtDireccion").val(list.data[0].Direccion);
+                        }
+                    })
+                    //Deshabilitar campos
+                    $("#txtApellidos").prop("readonly", true);
+                    $("#txtNombres").prop("readonly", true);
+                    $("#txtIdentificacion").prop("readonly", true);
+                    $("#txtNumtelf1").prop("readonly", true);
+                    $("#txtNumtelf2").prop("readonly", true);
+                    $("#txtNumtelf3").prop("readonly", true);
+                    $("#txtCelular").prop("readonly", true);
+                    $("#txtEmail").prop("readonly", true);
+                    $("#txtFechaNacimiento").prop("disabled", true);
+                    $("#txtDireccion").prop("readonly", true);
+                    $("#dropDepartamento").prop("disabled", true);
+                    $("#txtNotas").prop("readonly", true);
+                    $("#dropTipoCliente").prop("disabled", true);
+                });
+            });
+
+            //Limpiar campos de cliente
+            function limpiar() {
+                $("#txtApellidos").val("").prop("readonly", false).change().focus();
+                $("#txtNombres").val("").prop("readonly", false);
+                $("#txtIdentificacion").val("").prop("readonly", false);
+                $("#txtNumtelf1").val("").prop("readonly", false);
+                $("#txtNumtelf2").val("").prop("readonly", false);
+                $("#txtNumtelf3").val("").prop("readonly", false);
+                $("#txtCelular").val("").prop("readonly", false);
+                $("#txtEmail").val("").prop("readonly", false);
+                $("#dropTipoCliente").val("").prop("disabled", false);
+                $("#txtFechaNacimiento").get(0).type = 'date';
+                $("#txtFechaNacimiento").val("").prop("disabled", false);
+                $("#dropDepartamento").val(0).prop("disabled", false);
+                $("#txtNotas").val("").prop("readonly", false);
+                $("#txtDireccion").val("").prop("readonly", false);
+                $idClienteSelect = 0;
+            }
+
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            //===================================================================CONTRATANTES=====================================================================
+            // Instancia de dataTable para la tabla que muestra los contratantes
+            var dataTablecontratante = null;
+
+            $(function () {
+                dataTablecontratante = $("#BuscarContratante").DataTable({
+                    "ajax": {
+                        "url": "@Url.Action("getContratantes", "Clientes")",
+                        "type": "POST",
+                        "dataType": "Json"
+                    }, "columns": [
+                        {
+                            "data": "IdContratante", "render": function (data) {
+                                return "<button class='btn btn-success' value='" + data + "'>Seleccionar</button>";
+                            }
+                        },
+                        { "data": "Apellidos" },
+                        { "data": "Nombres" },
+                        { "data": "Identificacion" },
+                        { "data": "Email" }
+                    ], "language": {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "No hay contratantes para mostrar",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "Buscar:",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    }
+                });
+            });
+
+            $idContratanteSelect = 0;
+            // Mostrar el boton agregar solo cuando se seleccione un CONTRATANTE
+            $("#txtApellidosContratante").change(function () {
+                if (!$(this).val())
+                    $("#btnCancelarContratante").hide();
+                else
+                    $("#btnCancelarContratante").show();
+            });
+
+            // Evento al hacer click en el boton seleccionar para Contratante
+            $(function () {
+                $("#BuscarContratante tbody").on("click", "button", function () {
+                    var data = dataTablecontratante.row($(this).parents('tr')).data();
+                    //Determinamos el contratante seleccionado
+                    $idContratanteSelect = data.IdContratante;
+                    $("#modal-default-contratante .close").click();
+
+                    //Mandamos a buscar al contratante
+                    var url = "/Clientes/SearchContratantes/" + $idContratanteSelect;
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        dataType: "JSON",
+                        success: function (list) {
+                            //Asignamos los valores devueltos por el método
+                            $("#txtApellidosContratante").val(list.data[0].Apellidos).change();
+                            $("#txtNombresContratante").val(list.data[0].Nombres);
+                            $("#txtIdentificacionContratante").val(list.data[0].Identificacion);
+                            $("#txtNumtelf1Contratante").val(list.data[0].NumTelf1);
+                            $("#txtNumtelf2Contratante").val(list.data[0].NumTelf2);
+                            $("#txtNumtelf3Contratante").val(list.data[0].NumTelf3);
+                            $("#txtCelularContratante").val(list.data[0].Celular);
+                            $("#txtEmailContratante").val(list.data[0].Email);
+                            $("#dropDepartamentoContratante").val(list.data[0].DeptoId);
+                            $("#txtNotasContratante").val(list.data[0].Notas);
+                            $("#txtDireccionContratante").val(list.data[0].Direccion);
+                        }
+                    })
+                    //Deshabilitar campos
+                    $("#dropTipoContratante").prop("disabled", true);
+                    $("#txtApellidosContratante").prop("readonly", true);
+                    $("#txtNombresContratante").prop("readonly", true);
+                    $("#txtIdentificacionContratante").prop("readonly", true);
+                    $("#txtNumtelf1Contratante").prop("readonly", true);
+                    $("#txtNumtelf2Contratante").prop("readonly", true);
+                    $("#txtNumtelf3Contratante").prop("readonly", true);
+                    $("#txtCelularContratante").prop("readonly", true);
+                    $("#txtEmailContratante").prop("readonly", true);
+                    $("#dropDepartamentoContratante").prop("disabled", true);
+                    $("#txtNotasContratante").prop("readonly", true);
+                    $("#txtDireccionContratante").prop("readonly", true);
+                });
+            });
+            //Evento limpiar contratante
+            function limpiar2() {
+                $("#dropTipoContratante").prop("disabled", false);
+                $("#txtApellidosContratante").val("").prop("readonly", false).change().focus();
+                $("#txtNombresContratante").val("").prop("readonly", false);
+                $("#txtIdentificacionContratante").val("").prop("readonly", false);
+                $("#txtNumtelf1Contratante").val("").prop("readonly", false);
+                $("#txtNumtelf2Contratante").val("").prop("readonly", false);
+                $("#txtNumtelf3Contratante").val("").prop("readonly", false);
+                $("#txtCelularContratante").val("").prop("readonly", false);
+                $("#txtEmailContratante").val("").prop("readonly", false);
+                $("#dropDepartamentoContratante").val(0).prop("disabled", false);
+                $("#txtNotasContratante").val("").prop("readonly", false);
+                $("#txtDireccionContratante").val("").prop("readonly", false);
+                $idContratanteSelect = 0;
+            }
+
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            //===================================================================INTERMEDIARIOS===================================================================
+            // Instancia de dataTable para la tabla que muestra los Intermediario
+            var dataTableintermediario = null;
+
+            $(function () {
+                dataTableintermediario = $("#BuscarIntermediario").DataTable({
+                    "ajax": {
+                        "url": "@Url.Action("getIntermediarios", "Clientes")",
+                        "type": "POST",
+                        "dataType": "Json"
+                    }, "columns": [
+                        {
+                            "data": "IdContacto", "render": function (data) {
+                                return "<button class='btn btn-success' value='" + data + "'>Seleccionar</button>";
+                            }
+                        },
+                        { "data": "Apellidos" },
+                        { "data": "Nombres" },
+                        { "data": "Email" },
+                        { "data": "Cargo" }
+                    ], "language": {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "No hay contactos para mostrar",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "Buscar:",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    }
+                });
+            });
+
+            $idIntermediarioSelect = 0;
+            // Mostrar el boton agregar solo cuando se seleccione un INTERMEDIARIO
+            $("#txtApellidosContactoIntermediario").change(function () {
+                if (!$(this).val())
+                    $("#btnCancelarIntermediario").hide();
+                else
+                    $("#btnCancelarIntermediario").show();
+            });
+
+            // Evento al hacer click en el boton seleccionar para intermediario
+            $(function () {
+                $("#BuscarIntermediario tbody").on("click", "button", function () {
+                    var data = dataTableintermediario.row($(this).parents('tr')).data();
+                    //Determinamos el intermedario seleccionado
+                    $idIntermediarioSelect = data.IdContacto;
+                    $("#modal-default-intermediario .close").click();
+
+                    //Mandamos a buscarlo
+                    var url = "/Clientes/SearchIntermediarios/" + $idIntermediarioSelect;
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        dataType: "JSON",
+                        success: function (list) {
+                            $("#txtApellidosContactoIntermediario").val(list.data[0].Apellidos).change();
+                            $("#txtNombresContactoIntermediario").val(list.data[0].Nombres);
+                            $("#txtTelefonoContactoIntermediario").val(list.data[0].NumTelf1);
+                            $("#txtEmailContactoIntermediario").val(list.data[0].Email);
+                            $("#txtCargoContactoIntermediario").val(list.data[0].Cargo);
+                        }
+                    })
+                        
+                    //Deshabilitar campos
+                    $("#txtApellidosContactoIntermediario").prop("readonly", true);
+                    $("#txtNombresContactoIntermediario").prop("readonly", true);
+                    $("#txtTelefonoContactoIntermediario").prop("readonly", true);
+                    $("#txtEmailContactoIntermediario").prop("readonly", true);
+                    $("#txtCargoContactoIntermediario").prop("readonly", true);
+                });
+            });
+            //Evento limpiar intermediario
+            function limpiar3() {
+                $("#txtApellidosContactoIntermediario").val("").prop("readonly", false).change().focus();
+                $("#txtNombresContactoIntermediario").val("").prop("readonly", false);
+                $("#txtTelefonoContactoIntermediario").val("").prop("readonly", false);
+                $("#txtEmailContactoIntermediario").val("").prop("readonly", false);
+                $("#txtCargoContactoIntermediario").val("").prop("readonly", false);
+                $idIntermediarioSelect = 0;
+            }
+
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            //==================================================FIN DE LOS PRIMEROS DOS STEP======================================================================
+
+
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            //===================================================================TABLA DE DETALLE DE CUOTAS=======================================================
+            // Referencia la tabla de cuotas
+            var dataTableDetalleCuotas = null;
+            // Crea una instancia de datatable para el detalle
+            $(function () {
+                // Instancia del datatable para mostrar los detalles.
+                dataTableDetalleCuotas = $("#tableCuotas").DataTable({
+                    "info": false,
+                    "paging": false,
+                    "ordering": false,
+                    "searching": false,
+                    "language": {
+                        "emptyTable": "Agregue cuotas",
+                        "search": "Busqueda"
+                    }
+                });
+            });
+
+            //Intento hacer que se bloquee el numero de cuotas según lo que el select tenga xD
+            $("#TipoCuotas").change(function () {
+                if ($(this).val() == "valor2")
+                    $("#NumCuotas").val("").prop("readonly", false);
+                else {
+                    $("#Monto").val($("#PrimaNeta").val());
+                    $("#NumCuotas").val(1).prop("readonly", true);
+                }
+            });
+
+            //Agregar filas a la tabla
+            function agregarCuotas() {
+                if ($("#ReciboP").val().trim() &&
+                    $("#PrimaNeta").val().trim() &&
+                     $("#NumCuotas").val().trim() &&
+                    $("#TipoCuotas").val().trim() &&
+                    $("#Vence").val().trim() &&
+                    $("#Monto").val().trim()) {
+
+                    var recibo = $("#ReciboP").val();
+                    console.log(recibo);
+                    $("#txtReciboPrima").val(recibo);
+                    dataTableDetalleCuotas.clear();
+                    $("#modal-cuotas .close").click();
+                    var suma = 0;
+                    var meses = $("#NumCuotas").val();
+                    var date = new Date($("#Vence").val());
+                    date.setDate(date.getDate() + 1);
+                    date.setMonth(date.getMonth() + 1);
+                    for (x = 0; x < meses; x++) {
+                        date.setMonth(date.getMonth() + x);
+                        let dia = ("0" + date.getDate()).slice(-2);
+                        let mes = ("0" + date.getMonth()).slice(-2);
+                        if (mes == "00") {
+                            mes = "12";
+                            date.setYear(date.getFullYear() - 1);
+                        }
+                        let fecha = date.getFullYear() + "/" + mes + "/" + dia;
+                        if (mes == "12") {
+                            date.setYear(date.getFullYear() + 1);
+                        }
+                        dataTableDetalleCuotas.row.add([
+                               x+1,
+                               fecha,
+                               $("#Monto").val(),
+                               "Pendiente"]).draw(false);
+                        date.setMonth(date.getMonth() - x);
+                    }
+                } else {
+                    swal("Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.", "Seguros & Más", "warning");
+                }
+            }
+
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            //===================================================================ALMACENAR========================================================================
+            $ultimo = 1;
+
+            function getCuotas() {
+                $detalleCuotas = [];
+                var data = dataTableDetalleCuotas.rows().data();
+                data.each(function (value, index) {
+                    item = {};
+                    // Hacemos un objeto tipo JSON con las descripciones iguales a nuestra clase en C#
+                    item["Id"] = 0;
+                    item["Cuotas"] = value[0];
+                    item["Vence"] = value[1];
+                    item["Monto"] = value[2];
+                    item["Estado"] = value[3];
+                    item["Cuota"] = null;
+                    item["Poliza"] = null;
+                    $detalleCuotas.push(item);
+                });
+                return JSON.stringify($detalleCuotas);
+            }
+
+            function validarFechaNac()
+            {
+                if ($("#dropTipoCliente").val()== "Natural") {
+
+                    //obtenemos desde la cedula
+                    var ident = $("#txtIdentificacion").val().split('-');
+                    //console.log(ident);
+                    ident = ident[1];
+                    //console.log(ident);
+                    var fecha = ident.slice(4, 6) + '-' + ident.slice(2, 4) + '-' + ident.slice(0, 2);
+                    //console.log(fecha);
+
+                    //obtenemos la fecha de nacimiento
+                    var fechanac = $("#txtFechaNacimiento").val();
+                    fechanac = fechanac.slice(2, fechanac.length);
+                    //console.log(fechanac);
+
+                    if (fecha != fechanac)
+                        return false;
+                    else
+                        return true;
+                }
+                else
+                    return true;
+            }
+
+            $form = null;
+            function AgregarDatos(form) {
+                $.validator.unobtrusive.parse(form);
+                if ($(form).valid() && dataTableDetalleCuotas.rows().count() > 0) {
+                    if (validarFechaNac()) {
+                        var data = $(form).serialize() + "&IdCliente=" + $idClienteSelect + "&idContratante=" + $idContratanteSelect + "&IdContacto=" + $idIntermediarioSelect + "&ultimo=" + dataTableDetalleCuotas.rows().count() + "&detalleCuotas=" + getCuotas();
+                        $.ajax({
+                            url: form.action,
+                            type: "POST",
+                            data: data,
+                            success: function (data) {
+                                if (data.d == -3) {
+                                    swal("El número de póliza que intenta ingresar ya existe.", "Seguros & Más", "error");
+                                }
+                                else
+                                    if (data.d > 0) {
+                                        window.location.href = '/Polizas/Create';
+                                    }
+                                    else
+                                        swal("Hubo un error al intentar guardar.", "Seguros & Más", "error");
+                            }
+                        });
+                    }
+                    else
+                        swal("La fecha de nacimiento no coincide con la identificación.\nPor favor verifique.", "Seguros & Más", "error");
+                } else {
+                    swal("Aún faltan datos.\nPor favor verifique.", "Seguros & Más", "error");
+                    $detalle = [];
+                    return false;
+                }
+                return false;
+            }
+
+            function Valor()
+            {
+                $.ajax({
+                    url: "/Polizas/SetValue/" + 0,
+                    type: "GET",
+                    success: function (data) {
+                    }
+                });
+            }
+
+        </script>
+    }

@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewBag.Title = "IndexTramites";
+}
+
+<link href="~/Content/iCheck/datepicker3.css" rel="stylesheet" />
+<link href="~/Content/select2/select2.css" rel="stylesheet" />
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h1 class="text-center">Reportes de Trámites</h1>
+                </div>
+                <div class="ibox-content">
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-8 b-r">
+                            <div class="form-group">
+                                <label>Reporte general</label>
+                                <select class="form-control col-md-8" id="general">
+                                    <option value="1">Listado de Trámites</option>
+                                    <option value="2">Trámites pendientes</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Filtro</label>
+                                <div class="input-daterange input-group col-md-12" id="datepicker">
+                                    <input type="date" class="form-control" id="start" />
+                                    <span class="input-group-addon">&nbsp; a &nbsp; </span>
+                                    <input type="date" class="form-control" id="end" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <a onclick="Generar()"><i class="fa fa-file-pdf-o big-icon text-navy"></i></a>
+                            <h4 onclick="Generar()">Generar reporte</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="~/Scripts/select2/select2.full.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#general").select2({ width: "100%" });
+            $("#general").change();
+        });
+
+        $("#general").change(function () {
+            var valor = $(this).val();
+            if (valor == 1) {//Listado de trámites
+                $("#start,#end").attr("disabled", false);
+            }
+            else
+                if (valor == 2) {//Trámites pendientes
+                    $("#start,#end").attr("disabled", true);
+                }
+        });
+
+        function Generar() {
+            var rep2 = $("#general").val();
+            if (rep2 == 1) {//Lista de trámites
+                if ($("#start").val().trim() && $("#end").val().trim()) {
+                    var val1 = $("#start").val();
+                    var val2 = $("#end").val();
+                    window.location.href = "/Reportes/Tramites?desde=" + val1 + "&hasta=" + val2;
+                }
+                else {
+                    swal("Por favor establezca los filtros.", "Seguros & Más", "error");
+                }
+            }
+            else
+                if (rep2 == 2) {//Trámites pendientes
+                    window.location.href = "/Reportes/TramitesPendientes";
+                }
+        }
+    </script>
+}
+
+

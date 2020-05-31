@@ -1,0 +1,55 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+    @Html.AntiForgeryToken()
+    <ul class="nav navbar-top-links navbar-right">
+        <li class="dropdown">
+            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                <i class="fa fa-bell"></i>  <span class="label label-primary" id="notify"></span>
+            </a>
+            <ul class="dropdown-menu dropdown-alerts" id="notificaciones">
+                @*<li>
+                    <a href="#">
+                        <div>
+                            <i class="fa fa-envelope fa-fw"></i> Nuevo reclamo
+                            <span class="pull-right text-muted small">Guillermo Pérez</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="#">
+                        <div>
+                            <i class="fa fa-phone fa-fw"></i> Nueva llamada
+                            <span class="pull-right text-muted small">Roberto Solís</span>
+                        </div>
+                    </a>
+                </li>*@
+                @*<li class="divider"></li>*@
+                @*<li>
+                    <div class="text-center link-block">
+                        <a href="#">
+                            <strong>No hay nuevas notificaciones</strong>
+                        </a>
+                    </div>
+                </li>*@
+            </ul>
+        </li>
+        <li>
+            @Html.ActionLink("Hola " + User.Identity.GetUserName() + "!", "Manage", "Account", routeValues: null, htmlAttributes: new { title = "Manage" })
+        </li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">Cerrar Sesión</a></li>
+    </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-top-links navbar-right">
+        @*<li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>*@
+        <li>@Html.ActionLink("Acceder", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}
+
+    

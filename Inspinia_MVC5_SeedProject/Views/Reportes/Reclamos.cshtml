@@ -1,0 +1,26 @@
+﻿@using ReportViewerForMvc;
+@{
+    ViewBag.Title = "Reclamos";
+}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content text-center">
+                    @if (ViewBag.datos > 0)
+                    {
+                        @Html.ReportViewer(ViewBag.rpt as Microsoft.Reporting.WebForms.ReportViewer, new { @Style = "width: 50%; height: 100%" })
+                    }
+                    else
+                    {
+                        <div>
+                            <i class="fa fa-folder-open big-icon text-warning"></i><br />
+                            <h3 class="font-bold">NO HAY DATOS QUE MOSTRAR</h3>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,101 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.LoginViewModel
+
+@{
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Seguros & Más</title>
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="~/Content/img/SyM.png" />
+    <link href="~/Fonts/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="~/Content/animate.css" rel="stylesheet">
+    <link href="~/Content/style.css" rel="stylesheet">
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    <style>
+        .gray-bg {
+            background-color: #ebebeb !important;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+        <div>
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <h2>¡Bienvenido!</h2>
+                <small>Ingrese sus credenciales de acceso</small>
+                <br /><br />
+                <img src="~/Content/img/SyM colores.png" style="width:90%;" />
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.UserName, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @id="UserN"})
+                        @Html.ValidationMessageFor(m => m.UserName)
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
+                    <div class="col-md-9">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @id="PassN" })
+                        @Html.ValidationMessageFor(m => m.Password)
+                    </div>
+                </div>
+                @*<div class="form-group">
+                    <div class="col-md-offset-2 col-md-8">
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(m => m.RememberMe)
+                            @Html.LabelFor(m => m.RememberMe)
+                        </div>
+                    </div>
+                </div>*@
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        @if (ViewBag.Login < 1)
+                        {
+                            <input type="submit" value="Acceder" class="btn btn-primary" />
+                        }
+                        
+                        @if(ViewBag.Login > 0)
+                        {
+                            <a href="@Url.Action("Index", "Home")" class="btn btn-white">Regresar</a>
+                        }
+                    </div>
+                </div>
+
+                if (ViewBag.Login > 0)
+                {
+                    <br /><br />
+                    <h3 class="text-navy">Usted no tiene permisos para esta acción.</h3>
+                }
+            }
+        </div>
+    </div>
+</body>
+</html>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script>
+    if(@ViewBag.Login>0){
+        $("#UserN,#PassN").attr("disabled", true);
+    }
+    </script>
+}

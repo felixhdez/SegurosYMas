@@ -1,0 +1,257 @@
+﻿@{
+    ViewBag.Title = "IndexClientes";
+}
+
+<link href="~/Content/iCheck/datepicker3.css" rel="stylesheet" />
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h1 class="text-center">Reportes de Clientes</h1>
+                </div>
+                <div class="ibox-content">
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-8 b-r">
+                            <div class="form-group">
+                                <label>Reporte general</label>
+                                <select class="form-control col-md-8" id="general">
+                                    <option value="1">Listado de Clientes</option>
+                                    <option value="2">Clientes - Pólizas</option>
+                                </select>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <label>Reporte específico</label>
+                                <select class="form-control col-md-8" id="especifico"></select>
+                            </div>
+                            <br />
+                            <div class="form-group" id="data_5">
+                                <label>Filtro</label>
+                                <div class="input-daterange input-group col-md-12" id="datepicker">
+                                    <input type="date" class="form-control" id="start" />
+                                    <span class="input-group-addon">&nbsp; a &nbsp; </span>
+                                    <input type="date" class="form-control" id="end" />
+                                </div>
+                            </div>
+                            <div class="form-group" id="filtro2">
+                                <label id="texto">Seleccione </label>
+                                <select class="form-control col-md-8" id="filtroselect"></select>
+                            </div>
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <a onclick="Generar()"><i class="fa fa-file-pdf-o big-icon text-navy"></i></a>
+                            <h4 onclick="Generar()">Generar reporte</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#general,#especifico,#filtroselect").select2({ width: "100%" });
+            $("#general").change();
+            $("#filtro2").hide();
+        })
+
+        $("#general").change(function () {
+            var valor = $(this).val();
+            if (valor == 1) {
+                var add = "<option value='1'>Todos los clientes</option>";
+                add += "<option value='2'>Clientes activos</option>";
+                add += "<option value='3'>Clientes inactivos</option>";
+                $("#especifico").empty();
+                $("#especifico").append(add);
+                $("#especifico").select2("val", "1");
+                $("#especifico").attr("disabled", false);
+                $("#start,#end").attr("disabled", true);
+            }
+            else
+                if (valor == 2) {
+                    var add = "<option value='4'>Listado de Pólizas</option>";
+                    add += "<option value='5'>Pólizas vigentes</option>";
+                    add += "<option value='6'>Pólizas por compañía</option>";
+                    add += "<option value='7'>Pólizas por agente</option>";
+                    add += "<option value='8'>Pólizas por cliente</option>";
+                    add += "<option value='9'>Pólizas prontas a vencerse</option>";
+                    $("#especifico").empty();
+                    $("#especifico").append(add);
+                    $("#especifico").select2("val", "4");
+                    $("#especifico").attr("disabled", false);
+                    $("#start,#end").attr("disabled", false);
+                }
+                //else
+                //    if (valor == 3) {
+                //        $("#especifico").empty();
+                //        var add = "<option value='10'>Listado de Reclamos</option>";
+                //        add += "<option value='11'>Reclamos por Cliente</option>";
+                //        $("#especifico").append(add);
+                //        $("#especifico").attr("disabled", false);
+                //        $("#start,#end").attr("disabled", false);
+                //        $("#filtro2").hide();
+                //    }
+        });
+
+        $("#especifico").change(function () {
+            var esp = $(this).val();
+            if (esp == 4) { //Listado de todas las pólizas por fechas
+                $("#start,#end").attr("disabled", false);
+                $("#filtro2").hide();
+            }
+            else
+                if (esp == 5) { //Pólizas vigentes
+                    $("#start,#end").attr("disabled", true);
+                    $("#filtro2").hide();
+                }
+                else
+                    if (esp == 6) { //Pólizas por compañía
+                        $("#start,#end").attr("disabled", false);
+                        $("#texto").html("Seleccione la compañía:");
+                        $("#filtro2").show();
+                        $("#filtroselect").empty();
+                        $.ajax({
+                            type: "GET",
+                            url: "/Reportes/Compañias/",
+                            success: function (list) {
+                                var addf = "";
+                                for (var i = 0; i < list.data.length; i++) {
+                                    addf += "<option value='" + list.data[i].Id + "'>" + list.data[i].Nombre + "</option>";
+                                }
+                                $("#filtroselect").append(addf);
+                            }
+                        });
+                    }
+                    else
+                        if (esp == 7) { //Pólizas por agentes
+                            $("#start,#end").attr("disabled", false);
+                            $("#texto").html("Seleccione el agente:");
+                            $("#filtro2").show();
+                            $("#filtroselect").empty();
+                            $.ajax({
+                                type: "GET",
+                                url: "/Reportes/Agentes/",
+                                success: function (list) {
+                                    var addf2 = "";
+                                    for (var i = 0; i < list.data.length; i++) {
+                                        addf2 += "<option value='" + list.data[i].Id + "'>" + list.data[i].Nombre + "</option>";
+                                    }
+                                    $("#filtroselect").append(addf2);
+                                }
+                            });
+                        }
+                        else
+                            if (esp == 8) { //Pólizas por clientes
+                                $("#start,#end").attr("disabled", false);
+                                $("#texto").html("Seleccione el cliente:");
+                                $("#filtro2").show();
+                                $("#filtroselect").empty();
+                                $.ajax({
+                                    type: "GET",
+                                    url: "/Reportes/Clientes/",
+                                    success: function (list) {
+                                        var addf = "";
+                                        for (var i = 0; i < list.data.length; i++) {
+                                            addf += "<option value='" + list.data[i].Id + "'>" + list.data[i].Ident + " | "+ list.data[i].Nombre + "</option>";
+                                        }
+                                        $("#filtroselect").append(addf);
+                                    }
+                                });
+                            } else
+                                if (esp == 9) { //Pólizas prontas a vencerse
+                                    //$("#start,#end").attr("disabled", true);
+                                    $("#filtro2").hide();
+                                }
+        });
+
+        function Generar() {
+            var rep1 = $("#general").val();
+            var rep2 = $("#especifico").val();
+            if (rep1 == 1) {
+                if (rep2 == 1) { //Listado de todos los clientes
+                    window.location.href = "/Reportes/TodosClientes/";
+                }
+                else
+                    if (rep2 == 2) { //Clientes activos
+                        window.location.href = "/Reportes/ClientesActivos/";
+                    }
+                    else
+                        if (rep2 == 3) { //Clientes inactivos
+                            window.location.href = "/Reportes/ClientesInactivos/";
+                        }
+            }
+            else
+                if (rep1 == 2) {
+                    if (rep2 == 4) { //Listado de todas las polizas en un intervalo de fechas
+                        if ($("#start").val().trim() && $("#end").val().trim()) {
+                            var val1 = $("#start").val();
+                            var val2 = $("#end").val();
+                            window.location.href = "/Reportes/TodasPolizas?desde=" + val1 + "&hasta=" + val2;
+                        }
+                        else {
+                            swal("Por favor establezca los filtros.", "Seguros & Más", "error");
+                        }
+                    }
+                    else
+                        if (rep2 == 5) { //Listado de las pólizas vigentes
+                            window.location.href = "/Reportes/PolizasVigentes/";
+                        }
+                        else
+                            if (rep2 == 6) { //Pólizas por compañia
+                                if ($("#start").val().trim() && $("#end").val().trim() && $("#filtroselect").val()) {
+                                    var val1 = $("#start").val();
+                                    var val2 = $("#end").val();
+                                    var id = $("#filtroselect").val();
+                                    window.location.href = "/Reportes/PolizasporCompanias?desde=" + val1 + "&hasta=" + val2 + "&id=" + id;
+                                } else {
+                                    swal("Por favor establezca los filtros.", "Seguros & Más", "error");
+                                }
+                            }
+                            else
+                                if (rep2 == 7) {//Polizas por agente
+                                    if ($("#start").val().trim() && $("#end").val().trim() && $("#filtroselect").val()) {
+                                        var val1 = $("#start").val();
+                                        var val2 = $("#end").val();
+                                        var id = $("#filtroselect").val();
+                                        window.location.href = "/Reportes/PolizasPorAgentes?desde=" + val1 + "&hasta=" + val2 + "&id=" + id;
+                                    } else {
+                                        swal("Por favor establezca los filtros.", "Seguros & Más", "error");
+                                    }
+                                }
+                                else
+                                    if (rep2 == 8) { //Polizas por cliente
+                                        if ($("#start").val().trim() && $("#end").val().trim() && $("#filtroselect").val()) {
+                                            var val1 = $("#start").val();
+                                            var val2 = $("#end").val();
+                                            var id = $("#filtroselect").val();
+                                            window.location.href = "/Reportes/PolizasPorClientes?desde=" + val1 + "&hasta=" + val2 + "&id=" + id;
+                                        } else {
+                                            swal("Por favor establezca los filtros.", "Seguros & Más", "error");
+                                        }
+                                    }
+                                    else
+                                        if (rep2 == 9) {
+                                            var val1 = $("#start").val();
+                                            var val2 = $("#end").val();
+                                            window.location.href = "/Reportes/PolizasV/?desde=" + val1 + "&hasta=" + val2;
+                                        }
+                }
+        };
+
+        //$('#data_5 .input-daterange').datepicker({
+        //    keyboardNavigation: false,
+        //    forceParse: false,
+        //    autoclose: true
+        //});
+    </script>
+}

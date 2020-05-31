@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.Title = "IndexPolizas";
+}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h1 class="text-center">Reportes de Pólizas</h1>
+                </div>
+                <div class="ibox-content">
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-8 b-r">
+                            <div class="form-group">
+                                <label>Reporte general</label>
+                                <select class="form-control col-md-8" id="general">
+                                    <option value="1">Bitácora</option>
+                                    <option value="2">Bienes Asegurados por Póliza</option>
+                                    <option value="3">Adendas por Póliza</option>
+                                    <option value="4">Reclamos por Póliza</option>
+                                    <option value="5">Estado de Cuenta</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Filtro</label>
+                                <div class="input-daterange input-group col-md-12" id="datepicker">
+                                    <input type="date" class="form-control" id="start" />
+                                    <span class="input-group-addon">&nbsp; a &nbsp; </span>
+                                    <input type="date" class="form-control" id="end" />
+                                </div>
+                            </div>
+                            <div class="form-group" id="filtro2">
+                                <label id="texto">Seleccione la póliza: </label>
+                                <select class="form-control col-md-8" id="filtroselect"></select>
+                            </div>
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <a onclick="Generar()"><i class="fa fa-file-pdf-o big-icon text-navy"></i></a>
+                            <h4 onclick="Generar()">Generar reporte</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#general,#filtroselect").select2({ width: "100%" });
+            $.ajax({
+                type: "GET",
+                url: "/Reportes/Polizas/",
+                success: function (list) {
+                    var add = "";
+                    for (var i = 0; i < list.data.length; i++) {
+                        add += "<option value='" + list.data[i].Id + "'>" + list.data[i].Pol + " | " + list.data[i].Nombre + "</option>";
+                    }
+                    $("#filtroselect").append(add);
+                    $("#filtroselect").select2("val", $("#filtroselect option:first").val());
+                }
+            });
+        });
+
+        $("#general").change(function () {
+            var valor = $(this).val();
+            if (valor == 5 || valor==2) {
+                $("#start,#end").attr("disabled", true);
+            }
+            else {
+                $("#start,#end").attr("disabled", false);
+            }
+        });
+
+        function Generar() {
+            var gen = $("#general").val();
+            if (gen == 1) {//Bitácora
+                if ($("#start").val().trim() && $("#end").val().trim() && $("#filtroselect").val()) {
+                    var val1 = $("#start").val();
+                    var val2 = $("#end").val();
+                    var id = $("#filtroselect").val();
+                    window.location.href = "/Reportes/Bitacora?desde=" + val1 + "&hasta=" + val2 + "&id=" + id;
+                } else {
+                    swal("Por favor establezca los filtros.", "Seguros & Más", "error");
+                }
+            }
+            else
+                if (gen == 2) {//BienesAsegurados
+                    if ($("#filtroselect").val()) {
+                        var id = $("#filtroselect").val();
+                        window.location.href = "/Reportes/BienesAsegurados?id=" + id;
+                    }
+                } else
+                    if (gen == 3) {//Adendas
+                        if ($("#start").val().trim() && $("#end").val().trim() && $("#filtroselect").val()) {
+                            var val1 = $("#start").val();
+                            var val2 = $("#end").val();
+                            var id = $("#filtroselect").val();
+                            window.location.href = "/Reportes/Adendas?desde=" + val1 + "&hasta=" + val2 + "&id=" + id;
+                        } else {
+                            swal("Por favor establezca los filtros.", "Seguros & Más", "error");
+                        }
+                    }
+                    else
+                        if (gen == 4) {//Reclamos
+                            if ($("#start").val().trim() && $("#end").val().trim() && $("#filtroselect").val()) {
+                                var val1 = $("#start").val();
+                                var val2 = $("#end").val();
+                                var id = $("#filtroselect").val();
+                                window.location.href = "/Reportes/Reclamos?desde=" + val1 + "&hasta=" + val2 + "&id=" + id;
+                            } else {
+                                swal("Por favor establezca los filtros.", "Seguros & Más", "error");
+                            }
+                        }
+                        else
+                            if (gen == 5) {//Estado de cuenta
+                                if ($("#filtroselect").val()) {
+                                    var id = $("#filtroselect").val();
+                                    window.location.href = "/Reportes/EstadodeCuenta?id=" + id;
+                                } else {
+                                    swal("Por favor seleccione una póliza.", "Seguros & Más", "error");
+                                }
+                            }
+        };
+    </script>
+}
+

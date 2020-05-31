@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>SEGUROS & MÁS</title>
+    <link rel="icon" type="image/png" href="~/Content/img/SyM.png" />
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/font-awesome/css")
+</head>
+<body>
+
+    @*<style>
+            body{
+                font-family:normal!important;
+            }
+        </style>*@
+
+    <!-- Wrapper-->
+    <div id="wrapper">
+        <!-- Navigation -->
+        @Html.Partial("_Navigation")
+
+        <!-- Page wraper -->
+        <div id="page-wrapper" class="gray-bg">
+
+            <!-- Top Navbar -->
+            @Html.Partial("_TopNavbar")
+
+            <!-- Main view  -->
+            @RenderBody()
+
+            <!-- Footer -->
+            @Html.Partial("_Footer")
+
+        </div>
+        <!-- End page wrapper-->
+
+    </div>
+    <!-- End wrapper-->
+    @*Modal para buscar un cliente*@
+    <div class="modal inmodal fade" id="detalle" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Notificación</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Nombre</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" id="Nombre" readonly />
+                                </div>
+                            </div>
+                            <br /><br />
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Fecha</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" id="Fecha" readonly />
+                                </div>
+                            </div>
+                            <br /><br />
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Lugar</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" id="Lugar" readonly />
+                                </div>
+                            </div>
+                            <br /><br />
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Comentarios</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" id="Comentarios" readonly />
+                                </div>
+                            </div>
+                            <br /><br />
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">Tipo</label>
+                                <div class="col-md-10">
+                                    <input class="form-control" id="Tipo" readonly />
+                                </div>
+                            </div>
+                            <br /><br />
+                            <button id="botonVer" class="btn btn-primary pull-right">Ver cliente</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/plugins/metsiMenu")
+    @Scripts.Render("~/plugins/pace")
+    @Scripts.Render("~/plugins/slimScroll")
+    @Scripts.Render("~/bundles/inspinia")
+    @RenderSection("scripts", required: false)
+    <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <script src="/signalr/hubs"></script>
+    <script>
+        javascript: window.history.forward(1);
+
+        var num = 0;
+        var html = '';
+        $(function () {
+            //$(window).on('beforeunload', function () {
+            //    $.connection.hub.stop();
+            //});
+            var hub = $.connection.notifications;
+            var cont = 0;
+            function alerta() {
+                var datos = "";
+                hub.server.getNotificaciones().done(function (data) {
+                    console.log(data);
+                    $.each(data, function (index, value) {
+                        num++;
+                        datos = "<tr><td>" + value.NombreCliente + "</td><td>" + value.Fecha + "</td><td>" + value.Lugar + "</td><td>" + value.Comentarios + "</td></tr>";
+                        if (value.Visto == false) {
+                            html += '<li class="' + value.Id + 'ab"><a onclick="Modal(' + value.Id + ')" ><div>';
+                            if (value.Tipo == "1")
+                                html += '<i class="fa fa-folder-open fa-fw">&nbsp;</i>Nuevo reclamo';
+                            else
+                                html += '<i class="fa fa-phone fa-fw">&nbsp;</i>Nueva llamada';
+                            html += '<span class="pull-right text-muted small">' + value.NombreCliente + '</span ></div ></li>';
+                            if (index != data.length - 1)
+                                html += '<li class="divider ' + value.Id + 'ab""></li>';
+                            cont++;
+                        }
+                        $("#tableHome").prepend(datos);
+                    });
+                    if (cont > 0) {
+                        $("#notify").html(cont);
+                        num = cont;
+                    }
+                    else {
+                        html += '<div class="text-center link-block"><a href="#" ><strong>No hay nuevas notificaciones</strong></a ></div >';
+                    }
+                    html += "</ul>";
+                    $("#notificaciones").html(html);
+                });
+                //alert("Hola");
+            };
+
+            hub.client.nuevaNotificacion = function (data) {
+                var datos2 = "";
+                console.log(data);
+                datos2 = "<tr><td>" + data.NombreCliente + "</td><td>" + data.Fecha + "</td><td>" + data.Lugar + "</td><td>" + data.Comentarios + "</td></tr>";
+                $("#tableHome").prepend(datos2);
+                html += '<li class="divider"></li>';
+                html += '<li><a data-id="' + data.Id + '" onclick="Modal(' + data.Id + ')"><div>'
+                if (data.Tipo == "1")
+                    html += '<i class="fa fa-folder-open fa-fw">&nbsp;</i>Nuevo reclamo';
+                else
+                    html += '<i class="fa fa-phone fa-fw">&nbsp;</i>Nueva llamada';
+                html += '<span class="pull-right text-muted small">' + data.NombreCliente + '</span ></div ></li>';
+                ++num;
+                $("#notify").html(num);
+                html += "</ul>";
+                $("#notificaciones").html(html);
+            }
+
+            $.connection.hub.start().done(alerta);
+        });
+
+
+        function Modal(dato) {
+            $("." + dato + "ab").hide();
+            $.ajax({
+                type: "GET",
+                url: "/Reclamos/CambiarEstado/",
+                data: {"i": dato},
+                success: function (data) {
+                    console.log(data);
+                    $("#Nombre").val(data.t[0].Nombre);
+                    $("#Fecha").val(data.t[0].Fecha);
+                    $("#Lugar").val(data.t[0].Lugar);
+                    $("#Comentarios").val(data.t[0].Comentarios);
+                    if (data.t[0].Tipo == "1")
+                        $("#Tipo").val("Reclamo");
+                    else
+                        $("#Tipo").val("Llamada");
+                    $("#botonVer").val(data.t[0].Id);
+                    num--;
+                    if (num > 0)
+                        $("#notify").html(num);
+                    else {
+                        $("#notify").html("");
+                    }
+                }
+            })
+            $("#detalle").modal("show");
+        }
+
+        $("#botonVer").click(function () {
+            var valor = $(this).val();
+            console.log(valor);
+            window.location.href = "/Clientes/Details/?id=" + valor;
+        });
+    </script>
+</body>
+</html>

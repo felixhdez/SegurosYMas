@@ -1,0 +1,799 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.BienAsegurado
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<style>
+    #initialihiddenbutton {
+        display: none;
+    }
+
+
+   .ibox-hr{
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  background-color: #ffffff;
+  border-color: #e7eaec;
+  border-image: none;
+  border-style: solid solid none;
+  border-width: 2px 0 0;
+  color: inherit;
+  margin-bottom: 0;
+  padding: 0;
+  min-height: 48px;
+    }
+    
+    p{
+        font-weight:400 !important;
+    }
+
+    h2{
+        font-size:26px !important;
+        font-weight:600 !important;
+    }
+
+
+       .container {
+    width: 97% !important;
+  }
+    
+    .btn-default{
+    background: #818e99 !important;
+    color: white !important;
+        opacity: inherit !important;
+}
+
+    .stepwizard .btn-primary {
+        background-color: #428bca !important;
+        color: white !important;
+    }
+
+
+    .stepwizard-step p {
+        margin-top: 0px;
+    }
+
+    .stepwizard-row {
+        display: table-row;
+    }
+
+    .stepwizard {
+        display: table;
+        width: 100%; /*Cambié esta del 82% al 100% para mejorarlo*/
+        position: relative;
+    }
+
+    .stepwizard-step button[disabled] {
+        opacity: 1 !important;
+        filter: alpha(opacity=100) !important;
+    }
+
+    .stepwizard-row:before {
+        top: 14px;
+        bottom: 0;
+        position: absolute;
+        content: " ";
+        width: 100%;
+        height: 1px;
+        background-color: #ccc;
+        z-index: 0;
+    }
+
+    .stepwizard-step {
+        display: table-cell;
+        text-align: center;
+        position: relative;
+    }
+
+    .btn-circle {
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        padding: 6px 0;
+        font-size: 12px;
+        line-height: 1.428571429;
+        border-radius: 15px;
+    }
+</style>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Pólizas</h2>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("Lista", "Index")
+            </li>
+            <li class="active">
+                <strong>Crear</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-8">
+        <div class="title-action">
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("Index","Polizas")"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Regresar</a>
+            @*<a class="btn btn-success btn-outline dim" href="@Url.Action("Create","Bitacoras")"><i class="fa fa-file-image-o"></i>&nbsp;&nbsp;Archivos</a>*@
+        </div>
+    </div>
+</div>
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Ingresar Bien Asegurado</h5>
+                </div>
+                <div class="ibox-content">
+
+                <!--Nav de steps-->
+                <div class="container">
+                    <div class="stepwizard">
+                        <div class="stepwizard-row setup-panel">
+                            <div class="stepwizard-step col-xs-4">
+                                <a href="#step-1" type="button" class="btn btn-primary btn-circle">1</a>
+                                <p>Póliza</p>
+                            </div>
+                            <div class="stepwizard-step col-xs-4">
+                                <a href="#step-2" type="button" class="btn btn-default btn-circle" @*disabled="disabled"*@>2</a>
+                                <p>Bien Asegurado</p>
+                            </div>
+                            <div class="stepwizard-step col-xs-4">
+                                <a href="#step-3" type="button" class="btn btn-default btn-circle" @*disabled="disabled"*@>3</a>
+                                <p>Coberturas</p>
+                            </div>
+                        </div>
+                    </div>
+                </div> <!--Finaliza el nav de steps-->
+                <br />
+
+				@using (Html.BeginForm("Create", "BienesAsegurados", FormMethod.Post, new { @onsubmit = "return AgregarDatos(this)", id = "formBienes" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                    <!--Paso #1-->
+                    <div class="row setup-content" id="step-1">
+                        <div class="col-md-offset-0">
+                            <div class="col-md-12">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <i class="fa fa-pencil-square-o fa-lg"></i>
+                                        <div class="button-group">
+                                            <button class="btn btn-danger fa fa-times " type="button" onclick="limpiar()" style="float: right;margin-top: -1.7em;margin-left: 1em;" id="initialihiddenbutton">&nbsp;&nbsp;Cancelar</button>
+                                            <button class="btn btn-success fa fa-search" data-toggle="modal" data-target="#modal-poliza" type="button" style="float: right;margin-top:-1.7em; margin-left:1em">&nbsp;&nbsp;Buscar</button>
+                                        </div>
+                                    </div>
+                                    <div class="container" style="margin-top:20px;">
+                                        <h2>Seleccione la Póliza</h2>
+                                        <hr class="ibox-hr" />
+                                    </div>
+
+                                    <div class="panel-body">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2" for="NombreCompleto">Nombre del Cliente</label>
+                                                <div class="col-md-10">
+                                                    <input id="NombreCompleto" name="NombreCompleto" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*<div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4" for="Nombres">Nombres del Cliente</label>
+                                                <div class="col-md-8">
+                                                    <input id="Nombres" name="Nombres" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                        <br /><br /><br />
+
+                                        
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4" for="Ident">Identificación del Cliente</label>
+                                                <div class="col-md-8">
+                                                    <input id="Ident" name="Ident" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4" for="NumPoliza">Número de Póliza</label>
+                                                <div class="col-md-8">
+                                                    <input id="NumPoliza" name="NumPoliza" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br /><br /><br />
+                                        
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4" for="Producto">Producto</label>
+                                                <div class="col-md-8">
+                                                    <input id="Producto" name="Producto" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4" for="Aseguradora">Aseguradora</label>
+                                                <div class="col-md-8">
+                                                    <input id="Aseguradora" name="Aseguradora" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+                                            <br /><br />
+                                            <button class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:1.7em;">
+                                                Siguiente
+                                            </button>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Paso #2-->
+                    <div class="row setup-content" id="step-2">
+                        <div class="col-md-offset-0">
+                            <div class="col-md-12">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <i class="fa fa-pencil-square-o fa-lg"></i>
+                                    </div>
+                                    <div class="container" style="margin-top:20px;">
+                                        <h2>Bienes Asegurados</h2>
+                                        <hr class="ibox-hr" />
+                                    </div>
+
+                                    <div class="panel-body" style="margin-top: -2em;">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.NumCertificado, new { @class = "control-label col-md-4" })
+                                                <div class="col-md-8">
+                                                    @Html.EditorFor(model => model.NumCertificado)
+                                                    @Html.ValidationMessageFor(model => model.NumCertificado, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Observacion, new { @class = "control-label col-md-4" })
+                                                <div class="col-md-8">
+                                                    @Html.EditorFor(model => model.Observacion)
+                                                    @Html.ValidationMessageFor(model => model.Observacion, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br /><br />
+                                            <div class="form-group">
+                                                @*@Html.LabelFor(model => model.Estado, "¿Excluido?", new { @class = "control-label col-md-2" })*@
+                                                <div class="col-md-10">
+                                                    @Html.HiddenFor(model => model.Estado, new { Value = false})
+                                                    @*@Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })*@
+                                                </div>
+                                            </div>
+
+                                            <div class="ibox-title">
+                                                <h2>Características</h2> <br>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.NumCertificado, "Seleccione la característica", htmlAttributes: new { @class = "control-label col-md-4" })
+                                                <div class="col-md-8">
+                                                    @Html.DropDownList("lista", (SelectList)ViewBag.CaracteristicaId, "-Seleccione una característica-", htmlAttributes: new { @class = "form-control", @id = "dropCaracteristica" })
+                                                    @Html.ValidationMessage("", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                            <br /><br />
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4">Valor</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" class="form-control" name="Valor" id="txtValor" />
+                                                </div>
+                                            </div>
+                                            <br /><br />
+                                            <div class="ibox-title">
+                                                <h3>Lista de Características</h3>
+                                                <a class="btn btn-success fa fa-plus dim pull-right" onclick="agregarCaract()" style="float: right;margin-top: -2em;margin-left: 1em;" id="btnAgregarCuotas"> &nbsp; &nbsp; Agregar </a>
+                                            </div> <!--Fin del titulo-->
+                                            <br />
+                                            <!--TABLA DE CARACTERISTICAS-->
+                                            <div class="panel-footer">
+                                                <div class="table-responsive">
+                                                    <table class="table" id="tableCaract">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Característica</th>
+                                                                <th>Valor</th>
+                                                                <th>Acciones</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!--FIN DE TABLA DE CARACTERISTICAS-->
+                                            <button class="btn btn-primary backBtn pull-left" type="button" style="float:left; margin-top:1.7em;">Regresar</button>
+                                            <button class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:1.7em;"> Siguiente </button>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Paso #3-->
+                    <div class="row setup-content" id="step-3">
+                        <div class="col-md-offset-0">
+                            <div class="col-md-12">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <i class="fa fa-pencil-square-o fa-lg"></i>
+                                    </div>
+                                    <div class="container" style="margin-top:20px;">
+                                        <h2>Coberturas</h2>
+                                        <hr class="ibox-hr" />
+                                    </div>
+
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.NumCertificado, "Seleccione la cobertura", htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.DropDownList("lista", (SelectList)ViewBag.CoberturaId, "-Seleccione una cobertura-", htmlAttributes: new { @class = "form-control", @id = "dropCobertura" })
+                                                @Html.ValidationMessage("", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <br /><br />
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.NumCertificado, "Suma asegurada", htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                <input type="text" class = "form-control" id = "txtSuma" name="SumaAsegurada"/>
+                                            </div>
+                                        </div>
+                                        <br /><br />
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.NumCertificado, "Deducible", htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                <input type="text" class = "form-control" id = "txtDeducible" name="Deducible" />
+                                            </div>
+                                        </div>
+                                        <br /><br />
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.NumCertificado, "Prima", htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                               <input type="text" class = "form-control" id = "txtPrima" name="Prima" />
+                                            </div>
+                                        </div>
+                                        <br /><br />
+                                        <div class="ibox-title">
+                                            <h3>Lista de Coberturas</h3>
+                                            <a class="btn btn-success fa fa-plus dim pull-right" onclick="agregarCob()" style="float: right;margin-top: -2em;margin-left: 1em;" id="btnAgregarCoberturas"> &nbsp; &nbsp; Agregar </a>
+                                        </div> <!--Fin del titulo-->
+                                        <br />
+                                        <!--TABLA DE COBERTURAS-->
+                                        <div class="panel-footer">
+                                            <div class="table-responsive">
+                                                <table class="table" id="tableCobert">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Cobertura</th>
+                                                            <th>Suma Asegurada</th>
+                                                            <th>Deducible</th>
+                                                            <th>Prima</th>
+                                                            <th>Acciones</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <!--FIN DE TABLA DE COBERTURAS-->
+                                        <button class="btn btn-primary backBtn pull-left" type="button" style="float:left; margin-top:1.7em;">Regresar</button>
+                                        <button class="btn btn-primary pull-right" type="submit" style="margin-top:1.7em;"> Guardar </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+
+ @*Modal para buscar una póliza*@
+<div class="modal inmodal fade" id="modal-poliza" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Pólizas</h4>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("_BuscarPoliza")
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>  
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<!-- Datos de select -->
+<script src="~/Scripts/select2/select2.min.js"></script>
+<link href="~/Content/select2/select2.min.css" rel="stylesheet" />
+<!-- Datatable -->
+<link href="~/Content/DataTables/media/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/media/css/dataTables.jqueryui.min.css" rel="stylesheet" />
+<script src="~/Scripts/DataTables/media/js/dataTables.bootstrap.min.js"></script>
+<script src="~/Scripts/DataTables/media/js/dataTables.jqueryui.min.js"></script>
+<script src="~/Scripts/DataTables/media/js/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"> </script>
+
+
+
+<!-- Script para el paso a paso.-->
+<script>
+    $(document).ready(function () {
+        var navListItems = $('div.setup-panel div a'),
+                allWells = $('.setup-content'),
+                allNextBtn = $('.nextBtn'),
+                allBackButton = $('.backBtn');
+
+        allWells.hide();
+
+        navListItems.click(function (e) {
+            e.preventDefault();
+            var $target = $($(this).attr('href')),
+                    $item = $(this);
+
+            if (!$item.hasClass('disabled')) {
+                navListItems.removeClass('btn-primary').addClass('btn-default');
+                $item.addClass('btn-primary');
+                allWells.hide();
+                $target.show();
+                $target.find('input:eq(0)').focus();
+            }
+        });
+        allBackButton.click(function () {
+            var curStep = $(this).closest(".setup-content"),
+                curStepBtn = curStep.attr("id"),
+                nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().prev().children("a"),
+                curInputs = curStep.find("input[type='text'],input[type='url']"),
+                isValid = true;
+
+            $(".form-group").removeClass("has-error");
+            for (var i = 0; i < curInputs.length; i++) {
+                if (!curInputs[i].validity.valid) {
+                    isValid = false;
+                    $(curInputs[i]).closest(".form-group").addClass("has-error");
+                }
+            }
+
+            nextStepWizard.removeAttr('disabled').trigger('click');
+        });
+
+        allNextBtn.click(function () {
+            var curStep = $(this).closest(".setup-content"),
+                curStepBtn = curStep.attr("id"),
+                nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
+                curInputs = curStep.find("input[type='text'],input[type='url']"),
+                isValid = true;
+
+            $(".form-group").removeClass("has-error");
+            for (var i = 0; i < curInputs.length; i++) {
+                if (!curInputs[i].validity.valid) {
+                    isValid = false;
+                    $(curInputs[i]).closest(".form-group").addClass("has-error");
+                }
+            }
+
+            if (isValid)
+                nextStepWizard.removeAttr('disabled').trigger('click');
+        });
+
+
+        $('div.setup-panel div a.btn-primary').trigger('click');
+    });
+</script>
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#dropCaracteristica,#dropCobertura").select2({ width: "100%" });
+    });
+
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //===================================================================POLIZAS=========================================================================
+    // Instancia de dataTable para la tabla que muestra las pólizas
+    var dataTable = null;
+
+    $(function () {
+        dataTable = $("#BuscarPoliza").DataTable({
+            "ajax": {
+                "url": "@Url.Action("getPolizas", "BienesAsegurados")",
+                "type": "POST",
+                "dataType": "Json"
+                }, "columns": [
+                {
+                "data": "IdPoliza", "render": function (data) {
+                return "<button class='btn btn-success' value='" + data + "'>Seleccionar</button>";
+                }
+                },
+                { "data": "NumPoliza" },
+                { "data": "Apellidos" },
+                { "data": "Nombres" },
+                { "data": "Identificacion" },
+                { "data": "Producto"},
+                { "data": "Aseguradora" },
+                ], "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "No hay pólizas para mostrar",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }
+        });
+                });
+
+
+                $idPolizaSelected = 0;
+                // Mostrar el boton agregar solo cuando se seleccione un cliente
+                $("#NumPoliza").change(function () {
+                if (!$(this).val())
+                $("#initialihiddenbutton").hide();
+                else
+                $("#initialihiddenbutton").show();
+                });
+
+                // Evento al hacer click en el boton seleccionar
+                $(function () {
+                $("#BuscarPoliza tbody").on("click", "button", function () {
+                    var data = dataTable.row($(this).parents('tr')).data();
+                    $("#NumPoliza").val(data.NumPoliza).change();
+                    $("#NombreCompleto").val(data.Nombres + ' ' + data.Apellidos).change();
+                    $("#Nombres").val(data.Nombres);
+                    $("#Ident").val(data.Identificacion);
+                    $("#Producto").val(data.Producto);
+                    $("#Aseguradora").val(data.Aseguradora);
+                    $idPolizaSelected = data.IdPoliza;
+                    $("#modal-poliza .close").click();
+                });
+                });
+
+                //Limpiar campos de cliente
+                function limpiar()
+                {
+                    $("#NumPoliza").val("").change();
+                    $("#NombreCompleto").val("");
+                    //$("#Nombres").val("");
+                    $("#Ident").val("");
+                    $("#Producto").val("");
+                    $("#Aseguradora").val("");
+                    $idPolizaSelected = 0;
+                }
+
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //===================================================================TABLA DE CARACTERISTICAS=========================================================
+    // Referencia la tabla de caracteristicas
+    var dataTableDetalle = null;
+    // Crea una instancia de datatable para el detalle
+    $(function () {
+        // Instancia del datatable para mostrar los detalles.
+        dataTableDetalle = $("#tableCaract").DataTable({
+            "info": false,
+            "paging": false,
+            "ordering": false,
+            "searching": false,
+            "language": {
+                "emptyTable": "Agregue características",
+                "search": "Busqueda"
+            }, "columnDefs": [{
+                "targets": 2,
+                "render": function (data, type, row, meta) {
+                    return "<button class='btn btn-sm btn-danger' value='" + data + "' type='button'>Remover</button>";
+                }
+            }]
+        });
+    });
+
+    //Agregar filas a la tabla
+    function agregarCaract() {
+        if ($("#dropCaracteristica").val().trim() &&
+             $("#txtValor").val().trim()) {
+
+            dataTableDetalle.row.add([
+                    $("#dropCaracteristica").find('option:selected').text(),
+                    $("#txtValor").val(),
+                    $("#dropCaracteristica").val()]).draw(false);
+            // Limpíar seleccion
+            $("#dropCaracteristica").val("");
+            $("#txtValor").val("");
+        } else {
+            swal("Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.", "Seguros & Más", "warning");
+        }
+    }
+
+    // Evento para eliminar una fila
+    $(function () {
+        $("#tableCaract tbody").on('click', 'button', function () {
+            dataTableDetalle.row($(this).parents('tr'))
+                            .remove()
+                            .draw(false);
+        });
+    });
+
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //===================================================================TABLA DE COBERTURAS==============================================================
+    // Referencia la tabla de caracteristicas
+    var dataTableDetalleCob = null;
+    // Crea una instancia de datatable para el detalle
+    $(function () {
+        $("#IdPoliza").select2();
+        // Instancia del datatable para mostrar los detalles.
+        dataTableDetalleCob = $("#tableCobert").DataTable({
+            "info": false,
+            "paging": false,
+            "ordering": false,
+            "searching": false,
+            "language": {
+                "emptyTable": "Agregue coberturas",
+                "search": "Busqueda"
+            }, "columnDefs": [{
+                "targets": 4,
+                "render": function (data, type, row, meta) {
+                    return "<button class='btn btn-sm btn-danger' value='" + data + "' type='button'>Remover</button>";
+                }
+            }]
+        });
+    });
+
+    //Agregar filas a la tabla
+    function agregarCob() {
+        if ($("#dropCobertura").val().trim() &&
+             $("#txtSuma").val().trim() &&
+            $("#txtDeducible").val().trim() &&
+            $("#txtPrima").val().trim()) {
+
+            dataTableDetalleCob.row.add([
+                    $("#dropCobertura").find('option:selected').text(),
+                    $("#txtSuma").val(),
+                    $("#txtDeducible").val(),
+                    $("#txtPrima").val(),
+                    $("#dropCobertura").val()]).draw(false);
+            // Limpíar seleccion
+            $("#dropCobertura").val("");
+            $("#txtSuma").val("");
+            $("#txtDeducible").val("");
+            $("#txtPrima").val("");
+        } else {
+            swal("Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.", "Seguros & Más", "warning");
+        }
+    }
+
+    // Evento para eliminar una fila
+    $(function () {
+        $("#tableCobert tbody").on('click', 'button', function () {
+            dataTableDetalleCob.row($(this).parents('tr'))
+                            .remove()
+                            .draw(false);
+        });
+    });
+
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //===================================================================ALMACENAR========================================================================
+    function getDetalle() {
+        $detalle = [];
+        var data = dataTableDetalle.rows().data();
+        data.each(function (value, index) {
+            item = {};
+            // Hacemos un objeto tipo JSON con las descripciones iguales a nuestra clase en C#
+            item["Id"] = 0;
+            item["Valor"] = value[1];
+            item["CaracteristicaId"] = value[2];
+            item["Caracteristica"] = null;
+            item["BienAsegurado"] = null;
+            $detalle.push(item);
+        });
+        return JSON.stringify($detalle);
+    }
+
+    function getCoberturas() {
+        $detalleCob = [];
+        var data = dataTableDetalleCob.rows().data();
+        data.each(function (value, index) {
+            item = {};
+            // Hacemos un objeto tipo JSON con las descripciones iguales a nuestra clase en C#
+            item["Id"] = 0;
+            item["SumaAsegurada"] = value[1];
+            item["Deducible"] = value[2];
+            item["Prima"] = value[3];
+            item["CoberturaId"] = value[4];
+            item["BienAsegurados"] = null;
+            item["Coberturas"] = null;
+            $detalleCob.push(item);
+        });
+        return JSON.stringify($detalleCob);
+    }
+    
+    $form = null;
+    function AgregarDatos(form) {
+        $.validator.unobtrusive.parse(form);
+        if ($(form).valid() && dataTableDetalle.rows().count() > 0 && dataTableDetalleCob.rows().count() > 0 && $idPolizaSelected != 0) {
+            var data = $(form).serialize() + "&detalleCaract=" + getDetalle() + "&IdPoliza=" + $idPolizaSelected + "&detalleCobert=" + getCoberturas();
+            $.ajax({
+                url: form.action,
+                type: "POST",
+                data : data,
+                success: function (data) {
+                    if (data.d == -3) {
+                        swal("El número de certificado que intenta ingresar ya existe para esta póliza.", "Seguros & Más", "error");
+                    }
+                    else
+                        if (data.d > 0) {
+                            window.location.href = '/BienesAsegurados/Create';
+                        }
+                        else
+                            swal("Hubo un error al intentar guardar.", "Seguros & Más", "error");
+                }
+            });
+        } else {
+            swal("Aún faltan datos.\nPor favor verifique.", "Seguros & Más", "error");
+            $detalle = [];
+            return false;
+        }
+        return false;
+    }
+
+    $(document).ready(function () {
+        $.ajax({
+            url: "/Polizas/GetValue/",
+            type: "GET",
+            success: function (data) {
+                if (data.PolizaActual > 0) {
+                    $.ajax({
+                        url: "/Polizas/GetPoliza/" + data.PolizaActual,
+                        type: "GET",
+                        success: function (data) {
+                            $("#NumPoliza").val(data.lista[0].NumPoliza).change();
+                            $("#NombreCompleto").val(data.lista[0].Nombres + ' ' + data.lista[0].Apellidos).change();
+                            //$("#Nombres").val(data.lista[0].Nombres);
+                            $("#Ident").val(data.lista[0].Identificacion);
+                            $("#Producto").val(data.lista[0].Producto);
+                            $("#Aseguradora").val(data.lista[0].Aseguradora);
+                            $idPolizaSelected = data.lista[0].IdPoliza;
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+</script>
+}

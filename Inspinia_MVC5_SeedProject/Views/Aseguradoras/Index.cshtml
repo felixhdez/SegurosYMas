@@ -1,0 +1,222 @@
+﻿@model IEnumerable<Inspinia_MVC5_SeedProject.Models.Aseguradora>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    .oculta {
+        display: none;
+    }
+
+    .muestra {
+        display: table-row;
+    }
+</style>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Aseguradoras</h2>
+        <ol class="breadcrumb">
+            <li class="active">
+                <strong>Lista de Aseguradoras</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5></h5>
+					<div class="ibox-tools">
+                        <a class="btn btn-success dim" id="btnFiltrar"><i class="fa fa-filter"></i>&nbsp;&nbsp;Mostrar/Filtrar</a>
+                        <a class="btn btn-success dim" href="@Url.Action("Create","Aseguradoras")"><i class="fa fa-plus"></i></a>
+						@*@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-xs"})*@
+					</div>
+                </div>
+                <div class="ibox-content">
+                    <div id="Filtro">
+                        <div class="col-md-12">
+                            <input id="buscarC" type="text" class="form-control" placeholder="Buscar" />
+                        </div>
+
+                        <br /><br /><br />
+                    </div>
+<table class="table table-striped" id="tableC">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Direccion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Telefono1)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Telefono2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Asistencia)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IR)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IMI)
+                </th>*@
+            <th></th>
+        </tr>
+    </thead>
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descripcion)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Direccion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Telefono1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Telefono2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Asistencia)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IR)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IMI)
+        </td>*@
+        <td>
+            <a href="#" class="btn btn-primary btn-sm btnDetalles" data-value="@item.Id">Ver detalle</a>
+			@*@Html.ActionLink("Details", "Details", new { id=item.Id }, new { @class = "btn btn-primary btn-sm"})*@
+            @Html.ActionLink("Editar", "Edit", new { id=item.Id }, new { @class = "btn btn-white btn-sm"})
+            @*@Html.ActionLink("Delete", "Delete", new { id=item.Id }, new { @class = "btn btn-white btn-sm"})*@
+        </td>
+    </tr>
+}
+
+</table>
+                    @*Modal*@
+
+                    <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                    <h4 class="modal-title">Detalle de Aseguradora</h4>
+
+                                </div>
+                                <div class="modal-body">
+
+                                    <div id="vistapartial"></div>
+
+                                </div>
+                                @*<div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>*@
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    @section scripts{
+                        <script type="text/javascript">
+                    $(document).ready(function () {
+
+                        $(".btnDetalles").click(function () {
+
+                            var id = $(this).data("value");
+                            $("#vistapartial").load("/Aseguradoras/Details/" + id,
+
+                                function () {
+                                    $('#myModal5').modal("show");
+                                }
+                            );
+                        });
+                    });
+
+                    $(document).ready(function () {
+                        $("#Filtro").show();
+                        var contenido_fila;
+                        var coincidencias;
+                        var exp;
+                        var codigoAscci;
+                        $(function () {
+                            $("#tableC tbody tr").each(function () {
+                                $(this).addClass('oculta');
+                            })
+                        });
+
+                        $("#buscarC").keyup(function () {
+                            if ($(this).val().length >= 1)
+                                filtrar($(this).val());
+                            else
+                                mostrarfilas();
+                        });
+
+                        function filtrar(cadena) {
+                            $("#tableC tbody tr").each(function () {
+                                $(this).removeClass('muestra');
+                                contenido_fila = $(this).find('td:eq(0)').text();
+                                exp = RegExp(cadena, 'gi');
+                                coincidencias = contenido_fila.match(exp);
+                                if (coincidencias != null)
+                                    $(this).addClass('muestra');
+                                //else
+                                //    $(this).addClass('oculta');
+                            })
+                        };
+
+                        function mostrarfilas() {
+                            $("#tableC tbody tr").each(function () {
+                                $(this).removeClass('muestra');
+                                $(this).addClass('oculta');
+                                //$(this).removeClass('resaltar');
+                            })
+                        };
+                    })
+
+                    var num = 0;
+
+                    $("#btnFiltrar").click(function () {
+                        if (num == 0) {
+                            $("#Filtro").hide();
+                            $("#tableC tbody tr").each(function () {
+                                $(this).addClass('muestra');
+                                $(this).removeClass('oculta');
+                            })
+                            num = 1;
+                        }
+                        else {
+                            $("#Filtro").show();
+                            $("#tableC tbody tr").each(function () {
+                                $(this).addClass('oculta');
+                                $(this).removeClass('muestra');
+                            })
+                            num = 0;
+                        }
+                    });
+                        </script>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+
+
+
+

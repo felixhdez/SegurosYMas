@@ -1,0 +1,1749 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.Poliza
+
+@{
+    ViewBag.Title = "CreateRenovacion";
+}
+<link href="~/Content/iCheck/custom.css" rel="stylesheet" />
+
+<style>
+    #initialihiddenbutton,
+    #btnCancelarContratante,
+    #btnCancelarIntermediario {
+        display: none;
+    }
+
+    .ibox-hr {
+        -moz-border-bottom-colors: none;
+        -moz-border-left-colors: none;
+        -moz-border-right-colors: none;
+        -moz-border-top-colors: none;
+        background-color: #ffffff;
+        border-color: #e7eaec;
+        border-image: none;
+        border-style: solid solid none;
+        border-width: 2px 0 0;
+        color: inherit;
+        margin-bottom: 0;
+        padding: 0;
+        min-height: 48px;
+    }
+
+    p {
+        font-weight: 400 !important;
+    }
+
+    h2 {
+        font-size: 26px !important;
+        font-weight: 600 !important;
+    }
+
+    .container {
+        width: 97% !important;
+    }
+
+    .btn-default {
+        background: #818e99 !important;
+        color: white !important;
+        opacity: inherit !important;
+    }
+
+    .stepwizard .btn-primary {
+        background-color: #428bca !important;
+        color: white !important;
+    }
+
+
+    /*body{
+        margin-top:40px;
+    }*/
+
+    .stepwizard-step p {
+        margin-top: 10px;
+    }
+
+    .stepwizard-row {
+        display: table-row;
+    }
+
+    .stepwizard {
+        display: table;
+        width: 100%;
+        position: relative;
+    }
+
+    .stepwizard-step button[disabled] {
+        opacity: 1 !important;
+        filter: alpha(opacity=100) !important;
+    }
+
+    .stepwizard-row:before {
+        top: 14px;
+        bottom: 0;
+        position: absolute;
+        content: " ";
+        width: 100%;
+        height: 1px;
+        background-color: #ccc;
+        z-index: 0;
+    }
+
+    .stepwizard-step {
+        display: table-cell;
+        text-align: center;
+        position: relative;
+    }
+
+    .btn-circle {
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        padding: 6px 0;
+        font-size: 12px;
+        line-height: 1.428571429;
+        border-radius: 15px;
+    }
+</style>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Pólizas</h2>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("Lista","Index")
+            </li>
+            <li class="active">
+                <strong>Renovación</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-8">
+        <div class="title-action">
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("Index","Polizas")"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Regresar</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Renovar Póliza</h5>
+                </div>
+                <div class="ibox-content">
+                    <!--Steps-->
+                    <div class="container">
+                        <div class="stepwizard">
+                            <div class="stepwizard-row setup-panel">
+                                <div class="stepwizard-step col-xs-3">
+                                    <a href="#step-1" type="button" class="btn btn-primary btn-circle">1</a>
+                                    <p>Póliza</p>
+                                </div>
+                                <div class="stepwizard-step col-xs-3">
+                                    <a href="#step-2" type="button" class="btn btn-default btn-circle" @*disabled="disabled"*@>2</a>
+                                    <p>Detalle de Cuotas</p>
+                                </div>
+                                <div class="stepwizard-step col-xs-3">
+                                    <a href="#step-3" type="button" class="btn btn-default btn-circle" @*disabled="disabled"*@>3</a>
+                                    <p>Bienes Asegurados</p>
+                                </div>
+                                <div class="stepwizard-step col-xs-3">
+                                    <a href="#step-4" type="button" class="btn btn-default btn-circle" @*disabled="disabled"*@>4</a>
+                                    <p>Archivos</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    @using (Html.BeginForm("CreateRenovacion","Polizas",FormMethod.Post, new { @onsubmit = "return GuardarDatos(this)" })) {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(false,"",new { @class = "text-danger" })
+
+                        <!--Paso #1-->
+                        <div class="row setup-content" id="step-1">
+                            <div class="col-md-offset-0">
+                                <div class="col-md-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-pencil-square-o fa-lg"></i>
+                                            <div class="button-group">
+                                                <button class="btn btn-danger fa fa-times " type="button" onclick="limpiar()" style="float: right;margin-top: -1.7em;margin-left: 1em;" id="initialihiddenbutton">&nbsp;&nbsp;Cancelar</button>
+                                                <button class="btn btn-success fa fa-search" data-toggle="modal" data-target="#modal-poliza" type="button" style="float: right;margin-top:-1.7em; margin-left:1em">&nbsp;&nbsp;Buscar</button>
+                                            </div>
+                                        </div>
+                                        <!--Bloque #1-->
+                                        <div class="container" style="margin-top:20px;">
+                                            <h2>Cliente, Contratante e Intermediario</h2>
+                                            <hr class="ibox-hr" />
+                                        </div>
+
+                                        <div class="panel-body">
+
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Cliente,"Cliente",htmlAttributes: new { @class = "control-label col-md-4" })
+                                                <div class="col-md-8">
+                                                    @Html.EditorFor(model => model.Cliente.NombreCompleto,new { htmlAttributes = new { @class = "form-control", @readonly = "true" } })
+                                                    @Html.HiddenFor(model => model.ClienteId, new { @id = "IdCliente" })
+                                                </div>
+                                            </div>
+                                            <br /><br />
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Cliente,"Contacto Intermediario",htmlAttributes: new { @class = "control-label col-md-4" })
+                                                <div class="col-md-8">
+                                                   @Html.EditorFor(model => model.ContactoIntermediario.NombreCompleto,new { htmlAttributes = new { @class = "form-control",@readonly = "true" } })
+                                                    @Html.HiddenFor(model => model.ContactoIntermediarioId, new { @id = "IdContacto" })
+                                                </div>
+                                            </div>
+                                            <br /><br />
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.Cliente,"Contratante",htmlAttributes: new { @class = "control-label col-md-4" })
+                                                <div class="col-md-8">
+                                                    @Html.EditorFor(model => model.Persona.NombreCompleto,new { htmlAttributes = new { @class = "form-control",@readonly = "true" } })
+                                                    @Html.HiddenFor(model=> model.PersonaId,new { @id = "IdPersona" })
+                                                </div>
+                                            </div>
+                                            <br /><br />
+
+                                        </div>
+
+                                        <!--Bloque #2-->
+                                        <!--Título del contenedor-->
+                                        <div class="container ibox-title">
+                                            <h2>Datos de Póliza</h2>
+                                        </div> <!--Fin del titulo-->
+                                        <br />
+
+                                        <!--Caja interna para división-->
+                                        <div class="row">
+                                            <div class="col-lg-6 b-r">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.NumPoliza,htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.NumPoliza,new { htmlAttributes = new { @class = "form-control",@id = "txtNumPolizaE" } })
+                                                        @Html.ValidationMessageFor(model => model.NumPoliza,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Producto.AseguradoraId,"Aseguradora",htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    <div class="col-md-8">
+                                                        @Html.DropDownList("IdAseguradora",(SelectList)ViewBag.AseguradoraId,htmlAttributes: new { @class = "form-control",@id = "dropAseguradoraE",@onchange = "loadProductos()" })
+                                                        @Html.ValidationMessageFor(model => model.Producto.AseguradoraId,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.ProductoId,"Producto",htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    <div class="col-md-8">
+                                                        @Html.DropDownList("ProductoId",(SelectList)ViewBag.ProductoId,htmlAttributes: new { @class = "form-control",@id = "dropProductoE",@onchange = "ObtenerComision()" })
+                                                        @*<select id="dropProducto" name="ProductoId" class="form-control"></select>*@
+                                                        @Html.ValidationMessageFor(model => model.ProductoId,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.TipoMoneda,htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    <div class="col-md-8">
+                                                        @Html.DropDownList("TipoMoneda",(SelectList)ViewBag.TipoMoneda,htmlAttributes: new { @class = "form-control",@id = "dropTipoMonedaE" })
+                                                        @Html.ValidationMessageFor(model => model.NumPoliza,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.FechaEmision,htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.FechaEmision,new { htmlAttributes = new { @class = "form-control",@id = "txtFechaEmisionE", @onchange="ObtenerCambio()" } })
+                                                        @Html.ValidationMessageFor(model => model.FechaEmision,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.FechaDesde,htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.FechaDesde,new { htmlAttributes = new { @class = "form-control",@id = "txtFechaDesdeE" } })
+                                                        @Html.ValidationMessageFor(model => model.FechaDesde,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.FechaHasta,htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.FechaHasta,new { htmlAttributes = new { @class = "form-control",@id = "txtFechaHastaE" } })
+                                                        @Html.ValidationMessageFor(model => model.FechaHasta,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Tipo,"Tipo de Póliza",htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    <div class="col-md-8">
+                                                        @Html.DropDownList("Tipo",(SelectList)ViewBag.TipoPoliza,htmlAttributes: new { @class = "form-control",@id = "dropTipoPolizaE" })
+                                                        @Html.ValidationMessageFor(model => model.Tipo,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.FormaDePago,htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    <div class="col-md-8">
+                                                        @Html.DropDownList("FormaDePago",(SelectList)ViewBag.FormadePago,htmlAttributes: new { @class = "form-control",@id = "dropFormaPagoE" })
+                                                        @Html.ValidationMessageFor(model => model.FormaDePago,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+
+                                            </div><!--termina contenedor de la primera división-->
+                                            <!--Segundo contenedor-->
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.PrimaNeta,htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.PrimaNeta,new { htmlAttributes = new { @class = "form-control",@id = "txtPrimaNetaE",@onkeyup = "IVA_Emision()" } })
+                                                        @Html.ValidationMessageFor(model => model.PrimaNeta,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Emision,"Derecho de Emisión",htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.Emision,new { htmlAttributes = new { @class = "form-control",@id = "txtEmisionE" } })
+                                                        @Html.ValidationMessageFor(model => model.Emision,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Iva,"IVA",htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.Iva,new { htmlAttributes = new { @class = "form-control",@id = "txtIvaE" } })
+                                                        @Html.ValidationMessageFor(model => model.Iva,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Otros,htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.Otros,new { htmlAttributes = new { @class = "form-control",@id = "txtOtrosE" } })
+                                                        @Html.ValidationMessageFor(model => model.Otros,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.ComisionPorcentaje,htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.ComisionPorcentaje,new { htmlAttributes = new { @class = "form-control",@id = "txtComisionPorcE" } })
+                                                        @Html.ValidationMessageFor(model => model.ComisionPorcentaje,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.ComisionValor,htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.ComisionValor,new { htmlAttributes = new { @class = "form-control",@id = "txtComisionE",@readonly = "true" } })
+                                                        @Html.ValidationMessageFor(model => model.ComisionValor,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.TipoDeCambio,htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    <div class="col-md-8">
+                                                        @Html.EditorFor(model => model.TipoDeCambio,new { htmlAttributes = new { @class = "form-control",@id = "txtTipoCambioE",@readonly = "true" } })
+                                                        @Html.ValidationMessageFor(model => model.TipoDeCambio,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <br /><br />
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.AgenteId,"Agente",htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    <div class="col-md-8">
+                                                        @Html.DropDownList("AgenteId",(SelectList)ViewBag.AgenteId,htmlAttributes: new { @class = "form-control",@id = "dropAgenteE" })
+                                                        @Html.ValidationMessageFor(model => model.AgenteId,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+                                            </div><!--termina el segundo contenedor-->
+                                        </div> <!--termina caja para división-->
+
+                                        <button class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:1.7em;">
+                                            Siguiente
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Paso #2-->
+                        <div class="row setup-content" id="step-2">
+                            <div class="col-xs-12 col-md-offset-0">
+                                <div class="col-md-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-pencil-square-o fa-lg"></i>
+                                        </div>
+                                        <!--Contenido de la caja-->
+                                        <div class="panel-body">
+                                            <!--Título del contenedor-->
+                                            <div class="container" style="margin-top:20px;">
+
+                                                <h2>Detalle de Cuotas</h2>
+                                                <h3 id="lblRecibo"></h3>
+                                                <a class="btn btn-success fa fa-list dim pull-right" data-toggle="modal" data-target="#modal-cuotas" style="float: right;margin-top: -2.5em;margin-left: 1em;" id="btnAgregarCuotasE"> &nbsp; &nbsp; Generar cuotas</a>
+                                                <hr class="ibox-hr" />
+                                            </div> <!--Fin del titulo-->
+                                            <!--TABLA DE DETALLE DE CUOTAS-->
+                                            <div class="panel-footer">
+                                                <div class="table-responsive">
+                                                    <table class="table" id="tableCuotasEditar">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Cuota</th>
+                                                                <th>Vence</th>
+                                                                <th>Monto</th>
+                                                                <th>Estado</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!--FIN DE TABLA DE DETALLE DE CUOTAS-->
+                                            <button class="btn btn-primary backBtn pull-left" type="button" style="float:left; margin-top:1.7em;">Regresar</button>
+                                            <button class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:1.7em;"> Siguiente</button>
+
+                                        </div> <!--termina contenido de la caja-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Paso #3-->
+                        <div class="row setup-content" id="step-3">
+                            <div class="col-xs-12 col-md-offset-0">
+                                <div class="col-md-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-pencil-square-o fa-lg"></i>
+                                        </div>
+                                        <!--Contenido de la caja-->
+                                        <div class="panel-body">
+                                            <!--Título del contenedor-->
+                                            <div class="container" style="margin-top:20px;">
+                                                <h2>Bienes Asegurados</h2>
+                                                <hr class="ibox-hr" />
+                                            </div> <!--Fin del titulo-->
+                                            <br /><br />
+                                            <div class="form-group">
+                                                <div class="col-md-5">
+                                                    @Html.LabelFor(model => model.ClienteId,"Número de Certificado",htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    @*<label class="control-label col-md-4">Bien Asegurado</label>*@
+                                                    <div class="col-md-8">
+                                                        <select class="form-control" id="dropCertificadoR"></select></div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-5">
+                                                    @Html.LabelFor(model => model.ClienteId,"Observación",htmlAttributes: new { @class = "control-label col-md-4" })
+                                                    @*<label class="control-label col-md-4">Bien Asegurado</label>*@
+                                                    <div class="col-md-8">
+                                                        <input class="form-control" id="txtObservacionE" name="Observacion" style="margin-top: -1em;" readonly/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <a class="btn btn-success btn-block btn-outline" id="btnExcluir" style="margin-top: -1em;"><i class="fa fa-save"></i>&nbsp; Incluir</a>
+                                            </div>
+                                            <br /><br /><br />
+                                            <!--Título del contenedor-->
+                                            <div class="container ibox-title">
+                                                <h2>Características</h2>
+                                                <a class="btn btn-success fa fa-plus dim pull-right" data-toggle="modal" data-target="#myModal5" style="float: right;margin-top: -2.5em;margin-left: 1em;" id="btnAddCaract"> &nbsp; &nbsp; Agregar </a>
+                                            </div> <!--Fin del titulo-->
+                                            <br />
+                                            <!--TABLA DE DETALLE DE CARACTERISTICAS-->
+                                            <div class="panel-footer">
+                                                <div class="table-responsive">
+                                                    <table class="table" id="tableCaractEditar">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Característica</th>
+                                                                <th>Valor</th>
+                                                                <th>Acciones</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!--FIN DE TABLA DE DETALLE DE CARACTERISTICAS-->
+                                            <br />
+                                            <!--Título del contenedor-->
+                                            <div class="container ibox-title">
+                                                <h2>Coberturas</h2>
+                                                <a class="btn btn-success fa fa-plus dim pull-right" data-toggle="modal" data-target="#myModalCob" style="float: right;margin-top: -2.5em;margin-left: 1em;" id="btnAddCobert"> &nbsp; &nbsp; Agregar </a>
+                                            </div> <!--Fin del titulo-->
+                                            <br />
+                                            <!--TABLA DE DETALLE DE COBERTURAS-->
+                                            <div class="panel-footer">
+                                                <div class="table-responsive ">
+                                                    <table class="table" id="tableCobertEditar">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Cobertura</th>
+                                                                <th>Suma Asegurada</th>
+                                                                <th>Deducible</th>
+                                                                <th>Prima</th>
+                                                                <th>Acciones</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!--FIN DE TABLA DE DETALLE DE COBERTURAS-->
+
+                                            <button class="btn btn-primary backBtn pull-left" type="button" style="float:left; margin-top:1.7em;">Regresar</button>
+                                            <button class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:1.7em;"> Siguiente</button>
+
+                                        </div> <!--termina contenido de la caja-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Paso #4-->
+                        <div class="row setup-content" id="step-4">
+                            <div class="col-xs-12 col-md-offset-0">
+                                <div class="col-md-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-pencil-square-o fa-lg"></i>
+                                        </div>
+                                        <!--Contenido de la caja-->
+                                        <div class="panel-body">
+                                            <!--Título del contenedor-->
+                                            <div class="container" style="margin-top:20px;">
+                                                <h2>Archivos</h2>
+                                                <a class="btn btn-success fa fa-plus dim pull-right" data-toggle="modal" data-target="#myModalArchi" style="float: right;margin-top: -2.5em;margin-left: 1em;" id="btnAddArchivo"> &nbsp; &nbsp; Agregar </a>
+                                                <hr class="ibox-hr" />
+                                            </div> <!--Fin del titulo-->
+                                            <!--TABLA DE DETALLE DE ARCHIVOS-->
+                                            <div class="panel-footer">
+                                                <div class="table-responsive">
+                                                    <table class="table" id="tableArchivosP">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Imagen</th>
+                                                                <th>Acciones</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!--FIN DE TABLA DE DETALLE DE ARCHIVOS-->
+                                            <br />
+
+                                            <button class="btn btn-primary backBtn pull-left" type="button" style="float:left; margin-top:1.7em;">Regresar</button>
+                                            <button class="btn btn-primary pull-right" type="submit" style="margin-top:1.7em;"> Guardar </button>
+
+                                        </div> <!--termina contenido de la caja-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal para editar una caracteristica-->
+<div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Característica</h4>
+
+            </div>
+            <div class="modal-body">
+
+                @Html.Partial("_EditarCaracterísticas")
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="" class="btn btn-success pull-right" id="btnGuardarCambios" style="display:none;">Guardar</button>
+                <button type="button" onclick="" class="btn btn-success pull-right" id="btnAñadirCaracteristicas" style="display:none;">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal para editar una cobertura-->
+<div class="modal inmodal fade" id="myModalCob" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Cobertura</h4>
+
+            </div>
+            <div class="modal-body">
+
+                @Html.Partial("_EditarCoberturas")
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="" class="btn btn-success pull-right" id="btnGuardarCambiosCobertura" style="display:none;">Guardar</button>
+                <button type="button" onclick="" class="btn btn-success pull-right" id="btnAñadirCoberturas" style="display:none;">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal para generar cuotas-->
+<div class="modal inmodal fade" id="modal-cuotas" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Generar Cuotas</h4>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("_GenerarCuotas")
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="agregarCuotas()" class="btn btn-success pull-right" id="btnGenerar">Generar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+@*Modal para buscar una póliza*@
+<div class="modal inmodal fade" id="modal-poliza" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Pólizas</h4>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("_BuscarPoliza")
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<!--Modal para agregar archivo-->
+<div class="modal inmodal fade" id="myModalArchi" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Agregar Archivo</h4>
+
+            </div>
+            <div class="modal-body">
+
+                @Html.Partial("_AgregarArchivo")
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="" class="btn btn-success pull-right" id="btnActualizarArchivo">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <!-- Datatable -->
+    <link href="~/Content/DataTables/media/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/DataTables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Content/DataTables/media/css/dataTables.jqueryui.min.css" rel="stylesheet" />
+    <script src="~/Scripts/DataTables/media/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/DataTables/media/js/dataTables.jqueryui.min.js"></script>
+    <script src="~/Scripts/DataTables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"> </script>
+    <script src="~/Scripts/iCheck/icheck.min.js"></script>
+
+    <script>
+            $(document).ready(function () {
+                var navListItems = $('div.setup-panel div a'),
+                        allWells = $('.setup-content'),
+                        allNextBtn = $('.nextBtn'),
+                        allBackButton = $('.backBtn');
+
+                allWells.hide();
+
+                navListItems.click(function (e) {
+                    e.preventDefault();
+                    var $target = $($(this).attr('href')),
+                            $item = $(this);
+
+                    if (!$item.hasClass('disabled')) {
+                        navListItems.removeClass('btn-primary').addClass('btn-default');
+                        $item.addClass('btn-primary');
+                        allWells.hide();
+                        $target.show();
+                        $target.find('input:eq(0)').focus();
+                    }
+                });
+                allBackButton.click(function () {
+                    var curStep = $(this).closest(".setup-content"),
+                        curStepBtn = curStep.attr("id"),
+                        nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().prev().children("a"),
+                        curInputs = curStep.find("input[type='text'],input[type='url']"),
+                        isValid = true;
+
+                    $(".form-group").removeClass("has-error");
+                    for (var i = 0; i < curInputs.length; i++) {
+                        if (!curInputs[i].validity.valid) {
+                            isValid = false;
+                            $(curInputs[i]).closest(".form-group").addClass("has-error");
+                        }
+                    }
+
+                    nextStepWizard.removeAttr('disabled').trigger('click');
+                });
+
+                allNextBtn.click(function () {
+                    var curStep = $(this).closest(".setup-content"),
+                        curStepBtn = curStep.attr("id"),
+                        nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
+                        curInputs = curStep.find("input[type='text'],input[type='url']"),
+                        isValid = true;
+
+                    $(".form-group").removeClass("has-error");
+                    for (var i = 0; i < curInputs.length; i++) {
+                        if (!curInputs[i].validity.valid) {
+                            isValid = false;
+                            $(curInputs[i]).closest(".form-group").addClass("has-error");
+                        }
+                    }
+
+                    if (isValid)
+                        nextStepWizard.removeAttr('disabled').trigger('click');
+                });
+
+
+                $('div.setup-panel div a.btn-primary').trigger('click');
+            });
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+            $("#dropAseguradoraE,#dropProductoE,#dropTipoMonedaE,#dropTipoPolizaE,#dropFormaPagoE,#dropAgenteE").select2({ width: "100%" });
+            var d = new Date();
+
+            var month = d.getMonth() + 1;
+            var day = d.getDate();
+
+            var output = d.getFullYear() + '-' +
+                (month < 10 ? '0' : '') + month + '-' +
+                (day < 10 ? '0' : '') + day;
+            $("#txtFechaEmisionE").val(output).change();
+        });
+
+
+
+        function ObtenerCambio() {
+            var url = "/Polizas/GetTipoDeCambio/";
+            $.ajax({
+                type: "GET",
+                url: url,
+                data: { fecha: $("#txtFechaEmisionE").val() },
+                dataType: "JSON",
+                success: function (list) {
+                    $("#txtTipoCambioE").val(list.s);
+                }
+            })
+        }
+
+        //Llenar los dropdownlist de las modales
+        $(function () {
+            $("#btnAddCobert,#btnAddCaract,#btnAddArchivo").hide();
+            var url = "/Caracteristicas/ListarCaracteristicas/";
+            var url2 = "/Coberturas/ListarCoberturas/";
+            //Listar todas las caracteristicas para mostrarlas en el dropdownlist
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "JSON",
+                success: function (list) {
+                    //Vaciar el dropdownlist para que los datos no se repitan
+                    $("#dropCaract").empty();
+                    console.log(list.list);
+                    for (var a = 0; a < list.list.length; a++) {
+                        $("#dropCaract").append("<option value=" + list.list[a].IdCaract + ">" + list.list[a].Descripcion + "</option>;")
+                    }
+                }
+            });
+
+            //Listamos las coberturas en el dropdownlist
+            $.ajax({
+                type: "GET",
+                url: url2,
+                dataType: "JSON",
+                success: function (list) {
+                    $("#dropCobert").empty();
+                    for (var a = 0; a < list.list.length; a++) {
+                        $("#dropCobert").append("<option value=" + list.list[a].IdCob + ">" + list.list[a].Descripcion + "</option>;")
+                    }
+                }
+            });
+        });
+
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //===================================================================POLIZAS=========================================================================
+        // Instancia de dataTable para la tabla que muestra las pólizas
+        var dataTable = null;
+
+        $(function () {
+            dataTable = $("#BuscarPoliza").DataTable({
+                "ajax": {
+                    "url": "@Url.Action("getPolizas", "BienesAsegurados")",
+                "type": "POST",
+                "dataType": "Json"
+            }, "columns": [
+            {
+                "data": "IdPoliza", "render": function (data) {
+                    return "<button class='btn btn-success' value='" + data + "'>Seleccionar</button>";
+                }
+            },
+            { "data": "NumPoliza" },
+            { "data": "Apellidos" },
+            { "data": "Nombres" },
+            { "data": "Identificacion" },
+            { "data": "Producto"},
+            { "data": "Aseguradora" },
+            ], "language": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "No hay pólizas para mostrar",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            }
+        });
+        });
+
+
+        $idPolizaSelected = 0;
+        // Mostrar el boton agregar solo cuando se seleccione un cliente
+        $("#txtNumPolizaE").change(function () {
+            if (!$(this).val()) {
+                $("#initialihiddenbutton").hide();
+                $("#btnAddCobert,#btnAddCaract,#btnAddArchivo").hide();
+                VaciarCampos();
+            }
+            else {
+                $("#initialihiddenbutton").show();
+                $("#btnAddCobert,#btnAddCaract,#btnAddArchivo").show();
+                LlenarCampos();
+            }
+        });
+
+        // Evento al hacer click en el boton seleccionar
+        $(function () {
+            $("#BuscarPoliza tbody").on("click", "button", function () {
+                var data = dataTable.row($(this).parents('tr')).data();
+                //Ajax para traer todos los datos
+                $.ajax({
+                    type: "GET",
+                    url: "/Polizas/GetFull/" + data.IdPoliza,
+                    success: function (data) {
+                        $idPolizaSelected = data.objeto[0].IdPoliza,
+                        $("#Cliente_NombreCompleto").val(data.objeto[0].Cliente),
+                        $("#ContactoIntermediario_NombreCompleto").val(data.objeto[0].Contacto),
+                        $("#Persona_NombreCompleto").val(data.objeto[0].Contratante),
+                        $("#txtNumPolizaE").val(data.objeto[0].NumPoliza).change(),
+                        $("#dropAseguradoraE").val(data.objeto[0].Aseguradora),
+                        $("#dropAseguradoraE").change(),
+                        $("#dropProductoE").val(data.objeto[0].Producto),
+                        $("#dropTipoMonedaE").val(data.objeto[0].TipoMoneda),
+                        $("#txtFechaEmisionE").val(data.objeto[0].FechaEmision).change(),
+                        $("#txtFechaDesdeE").val(data.objeto[0].Desde),
+                        $("#txtFechaHastaE").val(data.objeto[0].Hasta),
+                        $("#dropTipoPolizaE").val(data.objeto[0].TipoPoliza),
+                        $("#dropFormaPagoE").val(data.objeto[0].FormaPago),//Añadirlo en controlador
+                        $("#txtPrimaNetaE").val(data.objeto[0].PrimaNeta),
+                        $("#txtEmisionE").val(data.objeto[0].Derecho),
+                        $("#txtIvaE").val(data.objeto[0].IVA),
+                        $("#txtOtrosE").val(data.objeto[0].Otros),
+                        $("#txtComisionPorcE").val(data.objeto[0].ComisionP),
+                        $("#txtComisionE").val(data.objeto[0].ComisionV),
+                        $("#dropAgenteE").val(data.objeto[0].Agente),
+                        $("#IdCliente").val(data.objeto[0].ClienteId),
+                        $("#IdContacto").val(data.objeto[0].ContactoId),
+                        $("#IdPersona").val(data.objeto[0].ContratanteId)
+                    }
+                });
+                $("#modal-poliza .close").click();
+            });
+        });
+
+        //Limpiar campos de cliente
+        function limpiar()
+        {
+            $idPolizaSelected = 0;
+            $("#Cliente_NombreCompleto").val("");
+            $("#ContactoIntermediario_NombreCompleto").val("");
+            $("#Persona_NombreCompleto").val(""),
+            $("#txtNumPolizaE").val("").change();
+            $("#txtFechaEmisionE").val("");
+            $("#txtFechaDesdeE").val("");
+            $("#txtFechaHastaE").val("");
+            $("#txtPrimaNetaE").val("");
+            $("#txtEmisionE").val("");
+            $("#txtIvaE").val("");
+            $("#txtOtrosE").val("");
+            $("#txtComisionPorcE").val("");
+            $("#txtComisionE").val("");
+        }
+
+        //=========================+++++++++++++++++++++DATATABLES++++++++++++++++++++==================
+        var dataTableDetalleCuotas = null;
+        // Crea una instancia de datatable para el detalle
+        $(function () {
+            // Instancia del datatable para mostrar los detalles.
+            dataTableDetalleCuotas = $("#tableCuotasEditar").DataTable({
+                "info": false,
+                "paging": false,
+                "ordering": false,
+                "searching": false,
+                "language": {
+                    "emptyTable": "Aún no se han agregado cuotas.",
+                    "search": "Busqueda"
+                }
+            });
+        });
+
+
+        var dataTableDetalleCaract = null;
+        // Crea una instancia de datatable para el detalle de características
+        $(function () {
+            // Instancia del datatable para mostrar los detalles.
+            dataTableDetalleCaract = $("#tableCaractEditar").DataTable({
+                "info": false,
+                "paging": false,
+                "ordering": false,
+                "searching": false,
+                "language": {
+                    "emptyTable": "No hay características que mostrar",
+                    "search": "Búsqueda"
+                }, "columnDefs": [{
+                    "targets": 2,
+                    "render": function (data, type, row, meta) {
+                        var buttons = "";
+                        buttons += "<button class='btn btn-sm btn-danger editar' data-toggle='modal' data-target='#myModal5' value='" + data + "' type='button'>Editar</button>&nbsp;";
+                        buttons += "<button class='btn btn-sm btn-danger remover'type='button'>Remover</button>"
+                        return buttons;
+                    }
+                }]
+            });
+            //dataTableDetalleCaract.columns([1]).visible(false);
+        });
+        
+        //dataTableDetalleCaract.on('order.dt search.dt', function () {
+        //    dataTableDetalleCaract.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+        //        cell.innerHTML = i + 1;
+        //    })
+        //});
+
+        var dataTableDetalleCobert = null;
+        // Crea una instancia de datatable para el detalle de coberturas
+        $(function () {
+            // Instancia del datatable para mostrar los detalles.
+            dataTableDetalleCobert = $("#tableCobertEditar").DataTable({
+                "info": false,
+                "paging": false,
+                "ordering": false,
+                "searching": false,
+                "language": {
+                    "emptyTable": "No hay coberturas que mostrar.",
+                    "search": "Búsqueda"
+                }, "columnDefs": [{
+                    "targets": 4,
+                    "render": function (data, type, row, meta) {
+                        var buttons = "";
+                        buttons += "<button class='btn btn-sm btn-danger editar' data-toggle='modal' data-target='#myModalCob' value='" + data + "' type='button'>Editar</button>&nbsp;";
+                        buttons += "<button class='btn btn-sm btn-danger remover'type='button'>Remover</button>"
+                        return buttons;
+                    }
+                }]
+            });
+        });
+
+        //dataTableDetalleCobert.on('order.dt search.dt', function () {
+        //    dataTableDetalleCobert.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+        //        cell.innerHTML = i + 1;
+        //    })
+        //});
+
+        var dataTableArchivos = null;
+        $(function () {
+            // Instancia del datatable para mostrar los detalles.
+            dataTableArchivos = $("#tableArchivosP").DataTable({
+                "info": false,
+                "paging": false,
+                "ordering": false,
+                "searching": false,
+                "language": {
+                    "emptyTable": "No hay imágenes que mostrar.",
+                }, "columnDefs": [{
+                    "targets": 0,
+                    "render": function (data, type, row, meta) {
+                        return "<img src='" + data + "' style='width:40%'/>";
+                    },
+                },
+                {
+                    "targets": 1,
+                    "render": function (data, type, row, meta) {
+                        return "<button class='btn btn-sm btn-danger' value='" + data + "' type='button'>Eliminar</button>";
+                    },
+                }]
+            });
+        });
+
+        //==================================MODALES=================================================
+        var datoCobertura = null;
+        var datoCaracteristica = null;
+        var indexCaract = -1;
+        var indexCobert = -1;
+        var bienes = [];
+
+        //Al hacer clic en el botón editar del datatable Caracteristicas
+        $(function () {
+            $("#tableCaractEditar tbody").on('click', '.editar', function () {
+                datoCaracteristica = dataTableDetalleCaract.row($(this).parents('tr')).data();
+                indexCaract = dataTableDetalleCaract.row($(this).closest('tr')).index();
+                $("#btnGuardarCambios").show();
+                $("#btnAñadirCaracteristicas").hide();
+                $("#tValor").val(datoCaracteristica[1]);
+                $("#dropCaract").val(datoCaracteristica[2]);
+            });
+        });
+
+        //Para remover una tupla del datatable caracteristicas
+        $(function () {
+            $("#tableCaractEditar tbody").on('click', '.remover', function () {
+                swal({
+                    title: "¿Está seguro que sea eliminar la característica seleccionada?",
+                    text: "Seguros & Más",
+                    icon: "warning",
+                    buttons: {
+                        cancel: {
+                            text: "Cancelar",
+                            value: null,
+                            visible: true,
+                            className: "",
+                            closeModal: true,
+                        },
+                        confirm: {
+                            text: "OK",
+                            value: true,
+                            visible: true,
+                            className: "",
+                            closeModal: true
+                        }
+                    },
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            dataTableDetalleCaract.row($(this).parents('tr')).remove().draw(false);
+                        }
+                    });
+            });
+        });
+
+        //Actualizar caracteristica
+        $("#btnGuardarCambios").click(function () {
+            if($("#tValor").val().trim())
+            {
+                $("#myModal5 .close").click();
+                dataTableDetalleCaract.row(indexCaract).data([$("#dropCaract").find('option:selected').text(), $("#tValor").val(), $("#dropCaract").val()]);
+            }
+        });
+
+        //Mostrar modal para agregar una nueva caracteristica
+        $("#btnAddCaract").click(function () {
+            $("#btnGuardarCambios").hide();
+            $("#btnAñadirCaracteristicas").show();
+            $("#tValor").val("");
+        });
+
+        //Agregar caracteristica nueva al datatable de caracteristicas
+        $("#btnAñadirCaracteristicas").click(function () {
+            if($("#tValor").val().trim())
+            {
+                dataTableDetalleCaract.row.add([
+                    $("#dropCaract").find('option:selected').text(),
+                    $("#tValor").val(),
+                    $("#dropCaract").val()
+                ]).draw(false);
+                $("#myModal5 .close").click();
+            }
+        });
+
+        //Al hacer clic en el botón editar del datatable coberturas
+        $(function () {
+            $("#tableCobertEditar tbody").on('click', '.editar', function () {
+                datoCobertura = dataTableDetalleCobert.row($(this).parents('tr')).data();
+                indexCobert= dataTableDetalleCobert.row($(this).closest('tr')).index();
+                $("#btnGuardarCambiosCobertura").show();
+                $("#btnAñadirCoberturas").hide();
+                $("#tSuma").val(datoCobertura[1]);
+                $("#tDeducible").val(datoCobertura[2]);
+                $("#tPrima").val(datoCobertura[3]);
+            });
+        });
+
+        //Para remover una tupla del datatable coberturas
+        $(function () {
+            $("#tableCobertEditar tbody").on('click', '.remover', function () {
+                swal({
+                    title: "¿Está seguro que sea eliminar la característica seleccionada?",
+                    text: "Seguros & Más",
+                    icon: "warning",
+                    buttons: {
+                        cancel: {
+                            text: "Cancelar",
+                            value: null,
+                            visible: true,
+                            className: "",
+                            closeModal: true,
+                        },
+                        confirm: {
+                            text: "OK",
+                            value: true,
+                            visible: true,
+                            className: "",
+                            closeModal: true
+                        }
+                    },
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            dataTableDetalleCobert.row($(this).parents('tr')).remove().draw(false);
+                        }
+                    });
+            });
+        });
+
+        //Actualizar cobertura
+        $("#btnGuardarCambiosCobertura").click(function () {
+            if ($("#tSuma").val().trim() && $("#tDeducible").val().trim() && $("#tPrima").val().trim()) {
+                $("#myModalCob .close").click();
+                dataTableDetalleCobert.row(indexCobert).data([$("#dropCobert").find('option:selected').text(), $("#tSuma").val(), $("#tDeducible").val(), $("#tPrima").val(), $("#dropCobert").val()]);
+            }
+        });
+
+        //Mostrar modal para agregar una nueva cobertura
+        $("#btnAddCobert").click(function () {
+            $("#btnGuardarCambiosCobertura").hide();
+            $("#btnAñadirCoberturas").show();
+            $("#tSuma").val("");
+            $("#tDeducible").val("");
+            $("#tPrima").val("");
+        });
+
+        //Agregar una nueva tupla al datatable Coberturas
+        $("#btnAñadirCoberturas").click(function () {
+            if ($("#tSuma").val().trim() && $("#tDeducible").val().trim() && $("#tPrima").val().trim()) {
+                dataTableDetalleCobert.row.add([
+                      $("#dropCobert").find('option:selected').text(),
+                      $("#tSuma").val(),
+                      $("#tDeducible").val(),
+                      $("#tPrima").val(),
+                      $("#dropCobert").val()
+                ]).draw(false);
+                $("#myModalCob .close").click();
+            }
+        });
+
+        //==================++++++++++++++++++OTROS MÉTODOS++++++++++++++++++========================
+        function getCaracteristicas() {
+            $detalle = [];
+            var data = dataTableDetalleCaract.rows().data();
+            data.each(function (value, index) {
+                item = {};
+                // Hacemos un objeto tipo JSON con las descripciones iguales a nuestra clase en C#
+                item["Id"] = 0;
+                item["Valor"] = value[1];
+                item["CaracteristicaId"] = value[2];
+                item["Caracteristica"] = null;
+                item["BienAsegurado"] = null;
+                $detalle.push(item);
+            });
+            return JSON.stringify($detalle);
+        }
+
+        function getCoberturas() {
+            $detalleCob = [];
+            var data = dataTableDetalleCobert.rows().data();
+            data.each(function (value, index) {
+                item = {};
+                // Hacemos un objeto tipo JSON con las descripciones iguales a nuestra clase en C#
+                item["Id"] = 0;
+                item["SumaAsegurada"] = value[1];
+                item["Deducible"] = value[2];
+                item["Prima"] = value[3];
+                item["CoberturaId"] = value[4];
+                item["BienAsegurados"] = null;
+                item["Coberturas"] = null;
+                $detalleCob.push(item);
+            });
+            return JSON.stringify($detalleCob);
+        }
+
+
+        //Almacenar el maestro - detalle de bien asegurado => caracteristicas & coberturas
+        $("#btnExcluir").click(function () {
+            var i = $('#dropCertificadoR > option').length;
+            if (i > 0) {
+                //$('#dropCertificadoR option:selected').remove();
+                //$("#dropCertificadoR").prop("selectedIndex", 0);
+                //$("#dropCertificadoR").change();
+                $.ajax({
+                    type: "GET",
+                    url:"/BienesAsegurados/AñadirBienRenov/",
+                    data: {
+                        observacion: $("#txtObservacionE").val(),
+                        numcert: $("#dropCertificadoR").val(),
+                        detalleCaract: getCaracteristicas(),
+                        detalleCobert: getCoberturas()
+                    },
+                    success: function (list) {
+                        if (list.d == -3)
+                        {
+                            swal("Hubo un error al incluir el bien.", "Seguros & Más", "error");
+                        }
+                        else
+                            if (list.d > 0)
+                            {
+                                item = {};
+                                item["Id"] = 0;
+                                item["BienAseguradoId"] = list.d;
+                                item["PolizaId"] = 0;
+                                item["BienAsegurado"] = null;
+                                item["Poliza"] = null;
+                                bienes.push(item);
+                                swal("Se ha incluido el bien en la renovación de la póliza.", "Seguros & Más", "success");
+                            }
+                        
+                    }
+                });
+            }
+            else
+                swal("No hay bienes disponibles.", "Seguros & Más", "error");
+        });
+
+        $("#btnAgregarCuotasE").click(function () {
+            $("#TipoCuotas").val("valor1");
+            $("#TipoCuotas").change();
+            if ($("#txtPrimaNetaE").val().trim() &&
+                $("#txtEmisionE").val().trim() &&
+                $("#txtIvaE").val().trim() &&
+                $("#txtOtrosE").val().trim()) {
+
+                var neta = parseFloat($("#txtPrimaNetaE").val());
+                var emision = parseFloat($("#txtEmisionE").val());
+                var iva = parseFloat($("#txtIvaE").val());
+                var otros = parseFloat($("#txtOtrosE").val());
+                $("#PrimaNeta").val(neta + emision + iva + otros);
+
+                var prima = parseFloat($("#PrimaNeta").val());
+                var num = parseInt($("#NumCuotas").val())
+                $("#Monto").val(parseFloat(prima / num).toFixed(2));
+            }
+            else {
+                swal({
+                    title: "Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.",
+                    text: "Seguros & Más",
+                    icon: "warning",
+                    buttons: "Ok",
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) { $("#modal-cuotas .close").click(); }
+                });
+            }
+        })
+
+        function cambiarMonto() {
+            if ($("#PrimaNeta").val().trim() && $("#NumCuotas").val().trim()) {
+                var prima = parseFloat($("#PrimaNeta").val());
+                var num = parseInt($("#NumCuotas").val())
+                $("#Monto").val((prima / num).toFixed(2));
+            }
+        }
+
+        //Intento hacer que se bloquee el numero de cuotas según lo que el select tenga xD
+        $("#TipoCuotas").change(function () {
+            if ($(this).val() == "valor2")
+                $("#NumCuotas").val("").prop("readonly", false);
+            else {
+                $("#Monto").val($("#PrimaNeta").val());
+                $("#NumCuotas").val(1).prop("readonly", true);
+            }
+        });
+
+        function loadProductos() {
+            var i = $("#dropAseguradoraE").val();
+            var url = "/Polizas/Filtro/" + i;
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "JSON",
+                success: function (list) {
+                    $("#dropProductoE").empty();
+                    for (var a = 0; a < list.listProd.length; a++) {
+                        $("#dropProductoE").append("<option value=" + list.listProd[a].IdProducto + ">" + list.listProd[a].Descripcion + "</option>;")
+                        $("#dropProductoE").change();
+                    }
+                }
+            })
+        }
+
+        function ObtenerComision() {
+            var P_Id = $("#dropProductoE").val();
+            var url = "/Polizas/GetComision/" + P_Id;
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "JSON",
+                success: function (list) {
+                    $("#txtComisionPorcE").val(list.s);
+                    if ($("#txtPrimaNetaE").val().trim() &&
+                        $("#txtEmisionE").val().trim() &&
+                        $("#txtIvaE").val().trim() &&
+                        $("#txtOtrosE").val().trim() &&
+                        $("#txtComisionPorcE").val().trim()) {
+                        var prima = parseFloat($("#txtPrimaNetaE").val());
+                        var porc = $("#txtComisionPorcE").val();
+                        var valor = prima * (porc / 100);
+                        valor = parseFloat(valor).toFixed(2);
+                        $("#txtComisionE").val(valor);
+                    }
+                }
+            })
+        }
+
+
+
+        function IVA_Emision() {
+            if ($("#txtPrimaNetaE").val().trim()) {
+                var prima = parseFloat($("#txtPrimaNetaE").val());
+                var iva = prima * 0.15;
+                iva = parseFloat(iva).toFixed(2);
+                $("#txtIvaE").val(iva);
+
+                //Calcular emisión
+                var emision = prima * 0.02;
+                emision = parseFloat(emision).toFixed(2);
+                $("#txtEmisionE").val(emision);
+            }
+            //ComisionValor();
+        }
+
+        $("#txtPrimaNetaE,#txtIvaE,#txtEmisionE,#txtOtrosE,#txtComisionPorcE").keyup(function () {
+            if ($("#txtPrimaNetaE").val().trim() &&
+                $("#txtEmisionE").val().trim() &&
+                $("#txtIvaE").val().trim() &&
+                $("#txtOtrosE").val().trim() &&
+                $("#txtComisionPorcE").val().trim()) {
+                var prima = parseFloat($("#txtPrimaNetaE").val());
+                var porc = $("#txtComisionPorcE").val();
+                var valor = prima * (porc / 100);
+                valor = parseFloat(valor).toFixed(2);
+                $("#txtComisionE").val(valor);
+            }
+        })
+
+        $(document).ready(function () {
+            $("#TipoCuotas").change();
+            var url = "/Polizas/GetTipoDeCambio/";
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "JSON",
+                success: function (list) {
+                    $("#txtTipoCambioE").val(list.s);
+                }
+            })
+        });
+
+        //Agregar filas a la tabla
+        function agregarCuotas() {
+            if ($("#ReciboP").val().trim() &&
+                $("#PrimaNeta").val().trim() &&
+                 $("#NumCuotas").val().trim() &&
+                $("#TipoCuotas").val().trim() &&
+                $("#Vence").val().trim() &&
+                $("#Monto").val().trim()) {
+
+                var recibo = $("#ReciboP").val();
+                console.log(recibo);
+                $("#txtReciboPrima").val(recibo);
+                dataTableDetalleCuotas.clear();
+                $("#modal-cuotas .close").click();
+                var suma = 0;
+                var meses = $("#NumCuotas").val();
+                var date = new Date($("#Vence").val());
+                date.setDate(date.getDate() + 1);
+                date.setMonth(date.getMonth() + 1);
+                for (x = 0; x < meses; x++) {
+                    date.setMonth(date.getMonth() + x);
+                    let dia = ("0" + date.getDate()).slice(-2);
+                    let mes = ("0" + date.getMonth()).slice(-2);
+                    if (mes == "00") {
+                        mes = "12";
+                        date.setYear(date.getFullYear() - 1);
+                    }
+                    let fecha = date.getFullYear() + "/" + mes + "/" + dia;
+                    if (mes == "12") {
+                        date.setYear(date.getFullYear() + 1);
+                    }
+                    dataTableDetalleCuotas.row.add([
+                           x + 1,
+                           fecha,
+                           $("#Monto").val(),
+                           "Pendiente"]).draw(false);
+                    date.setMonth(date.getMonth() - x);
+                }
+            } else {
+                swal("Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.", "Seguros & Más", "warning");
+            }
+        }
+
+        //============================++++++++++++++++++++++LLENAR Y VACIAR CAMPOS+++++++++++++++++++++++======================
+        function LlenarCampos()
+        {
+            $.ajax({
+                type: "GET",
+                url: "/Polizas/RecuperarArchivos/" + $idPolizaSelected,
+                success: function (list) {
+                    dataTableArchivos.clear().draw();
+                    for (var a = 0; a < list.list.length; a++) {
+                        dataTableArchivos.row.add([
+                         list.list[a].Foto,
+                        list.list[a].Id]).draw(false)
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "GET",
+                url: "/Polizas/RecuperarBienesNoExcluidos/" + $idPolizaSelected,
+                success: function (list) {
+                    $("#dropCertificadoR").empty();
+                    for (var a = 0; a < list.lista.length; a++) {
+                        $("#dropCertificadoR").append("<option value=" + list.lista[a].IdBien + ">" + list.lista[a].NumCertf + "</option>;")
+                    }
+                    $("#dropCertificadoR").change();
+                }
+            });
+        }
+
+        function VaciarCampos()
+        {
+            dataTableArchivos.clear().draw();
+            dataTableDetalleCuotas.clear().draw();
+            $("#txtObservacionE").val("");
+            dataTableDetalleCaract.clear().draw();
+            dataTableDetalleCobert.clear().draw();
+            $("#dropCertificadoR").empty();
+        }
+
+        $("#dropCertificadoR").change(function () {
+            id = $(this).val();
+            if (id != null) {
+                var datosbien = "/Polizas/RecuperarBien/" + id;
+                var caracteristicas = "/Polizas/RecuperarCaracteristicas/" + id;
+                var coberturas = "/Polizas/RecuperarCoberturas/" + id;
+                var archivos = "/Polizas/RecuperarArchivos/" + id;
+
+                //primer ajax
+                $.ajax({
+                    type: "GET",
+                    url: datosbien,
+                    dataType: "JSON",
+                    success: function (list) {
+                        $("#txtObservacionE").val(list.lista[0].Observacion);
+                    }
+                })
+                //fin del primer ajax que trae los datos del bien
+
+                //segundo ajax
+                $.ajax({
+                    type: "GET",
+                    url: caracteristicas,
+                    dataType: "JSON",
+                    success: function (list) {
+                        dataTableDetalleCaract.clear();
+                        for (var a = 0; a < list.list.length; a++) {
+                            dataTableDetalleCaract.row.add([
+                            list.list[a].Descripcion,
+                            list.list[a].Valor,
+                            list.list[a].IdCaracteristica]).draw(false);
+                        }
+                    }
+                })
+                //fin del segundo ajax que trae las caracteristicas
+
+                //tercer ajax
+                $.ajax({
+                    type: "GET",
+                    url: coberturas,
+                    dataType: "JSON",
+                    success: function (list) {
+                        dataTableDetalleCobert.clear();
+                        for (var a = 0; a < list.list.length; a++) {
+                            dataTableDetalleCobert.row.add([
+                           list.list[a].Descripcion,
+                           list.list[a].Suma,
+                           list.list[a].Deducible,
+                           list.list[a].Prima,
+                            list.list[a].IdCobertura]).draw(false);
+                        }
+                    }
+                })
+            }
+            else {
+                $("#txtObservacionE").val("");
+                dataTableDetalleCaract.clear().draw();
+                dataTableDetalleCobert.clear().draw();
+            }
+        });
+
+        //=============================++++++++++++++++++ARCHIVOS+++++++++++++++++++++==========================
+        //Guardar Archivo de la modal
+        var archivos = "/Polizas/RecuperarArchivos/" + $idPolizaSelected;
+        $("#btnActualizarArchivo").click(function () {
+            if (($("#inputbtn"))[0].files.length > 0) {
+                $("#myModalArchi .close").click();
+                var selectedfile = ($("#inputbtn"))[0].files[0];
+                var dataString = new FormData();
+                dataString.append("fileUpload", selectedfile);
+                dataString.append("id", 0);
+
+                //console.log(selectedfile);
+                //var archivos = "/Polizas/Max/";
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("ArchivosRenovacion", "Polizas")",
+                    dataType: "JSON",
+                    contentType: false,
+                    processData: false,
+                    data: dataString,
+                    //asignamos los parámetros que va a recibir el controlador
+                    success: function (data) {
+                        dataTableArchivos.row.add([
+                            data.d,
+                            0]).draw(false)
+                    }
+                })
+            }
+            else {
+                swal("No se ha seleccionado ningún archivo.\nPor favor verifique.", "Seguros & Más", "warning");
+            }
+            
+        });
+
+        $(function () {
+            var btneliminar = null;
+            var cadena = null;
+            $("#tableArchivosP tbody").on('click', 'button', function () {
+                btneliminar = dataTableArchivos.row($(this).parents('tr')).data();
+                cadena = btneliminar[0];
+                swal({
+                    title: "¿Desea eliminar el archivo seleccionado?",
+                    text: "Seguros & Más",
+                    icon: "warning",
+                    buttons: {
+                        cancel: {
+                            text: "Cancelar",
+                            value: null,
+                            visible: true,
+                            className: "",
+                            closeModal: true,
+                        },
+                        confirm: {
+                            text: "OK",
+                            value: true,
+                            visible: true,
+                            className: "",
+                            closeModal: true
+                        }
+                    },
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            dataTableArchivos.row($(this).parents('tr')).remove().draw(false);
+                            if (btneliminar[1] == 0) {
+                                $.ajax({
+                                    type: "GET",
+                                    url: "/Polizas/EliminarRenovacion/",
+                                    data: { url: cadena, },
+                                    success: function (data) {
+                                        if (data.d != 0)
+                                            swal("Hubo un error al intentar eliminar.", "Seguros & Más", "error");
+                                    }
+                                });
+                            }
+                        }
+                    });
+            });
+        });
+
+        //===================++++++++++++++++GUARDAR DATOS+++++++++++++++++++============================
+        function getCuotas() {
+            $detalleCuotas = [];
+            var data = dataTableDetalleCuotas.rows().data();
+            data.each(function (value, index) {
+                item = {};
+                // Hacemos un objeto tipo JSON con las descripciones iguales a nuestra clase en C#
+                item["Id"] = 0;
+                item["Cuotas"] = value[0];
+                item["Vence"] = value[1];
+                item["Monto"] = value[2];
+                item["Estado"] = value[3];
+                item["Cuota"] = null;
+                item["Poliza"] = null;
+                $detalleCuotas.push(item);
+            });
+            return JSON.stringify($detalleCuotas);
+        }
+
+        function getArchivos() {
+            $detalleArchivos = [];
+            var data = dataTableArchivos.rows().data();
+            data.each(function (value,index) {
+                item = {};
+                item["Id"] = 0;
+                item["Foto"] = value[0];
+                item["PolizaId"] = 0;        
+                item["Poliza"] = null;
+                $detalleArchivos.push(item);
+            });
+
+            return JSON.stringify($detalleArchivos);
+        }
+
+        function getBienes() {
+            //$detalleBienes = [];
+            //$("#dropCertificadoR option").each(function () {
+            //    item = {};
+            //    item["Id"] = 0;
+            //    item["BienAseguradoId"] = $(this).attr('value');
+            //    item["PolizaId"] = 0;
+            //    item["BienAsegurado"] = null;
+            //    item["Poliza"] = null;
+            //    $detalleBienes.push(item);
+            //});
+
+            return JSON.stringify(bienes);
+        }
+
+        $form = null;
+        function GuardarDatos(form) {
+            $.validator.unobtrusive.parse(form);
+            if ($(form).valid() && $idPolizaSelected != 0 && dataTableDetalleCuotas.rows().count() > 0 && dataTableArchivos.rows().count() > 0 && $("#dropCertificadoR > option").length > 0) {
+                var data = $(form).serialize() + "&ultimo=" + dataTableDetalleCuotas.rows().count() + "&detalleCuotas=" + getCuotas() + "&detalleArchivos=" + getArchivos() + "&detalleBienes=" + getBienes();
+                    $.ajax({
+                        url: form.action,
+                        type: "POST",
+                        data: data,
+                        success: function (data) {
+                            if (data.d == -3) {
+                                swal("El modelo no es válido.\nVerifique.", "Seguros & Más", "error");
+                            }
+                            else
+                                if (data.d > 0) {
+                                    window.location.href = '/Polizas/CreateRenovacion/';
+                                }
+                                else
+                                    swal("Hubo un error al intentar guardar.", "Seguros & Más", "error");
+                        }
+                    });
+            } else {
+                swal("Aún faltan datos.\nPor favor verifique.", "Seguros & Más", "error");
+                $detalle = [];
+                return false;
+            }
+            return false;
+        };
+
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Polizas/GetValue/",
+                type: "GET",
+                success: function (data) {
+                    if (data.PolizaActual > 0) {
+                        $.ajax({
+                            type: "GET",
+                            url: "/Polizas/GetFull/" + data.PolizaActual,
+                            success: function (data) {
+                                $idPolizaSelected = data.objeto[0].IdPoliza,
+                                $("#Cliente_NombreCompleto").val(data.objeto[0].Cliente),
+                                $("#ContactoIntermediario_NombreCompleto").val(data.objeto[0].Contacto),
+                                $("#Persona_NombreCompleto").val(data.objeto[0].Contratante),
+                                $("#txtNumPolizaE").val(data.objeto[0].NumPoliza).change(),
+                                $("#dropAseguradoraE").val(data.objeto[0].Aseguradora),
+                                $("#dropAseguradoraE").change(),
+                                $("#dropProductoE").val(data.objeto[0].Producto),
+                                $("#dropTipoMonedaE").val(data.objeto[0].TipoMoneda),
+                                $("#txtFechaEmisionE").val(data.objeto[0].FechaEmision).change(),
+                                $("#txtFechaDesdeE").val(data.objeto[0].Desde),
+                                $("#txtFechaHastaE").val(data.objeto[0].Hasta),
+                                $("#dropTipoPolizaE").val(data.objeto[0].TipoPoliza),
+                                $("#dropFormaPagoE").val(data.objeto[0].FormaPago),//Añadirlo en controlador
+                                $("#txtPrimaNetaE").val(data.objeto[0].PrimaNeta),
+                                $("#txtEmisionE").val(data.objeto[0].Derecho),
+                                $("#txtIvaE").val(data.objeto[0].IVA),
+                                $("#txtOtrosE").val(data.objeto[0].Otros),
+                                $("#txtComisionPorcE").val(data.objeto[0].ComisionP),
+                                $("#txtComisionE").val(data.objeto[0].ComisionV),
+                                $("#dropAgenteE").val(data.objeto[0].Agente),
+                                $("#IdCliente").val(data.objeto[0].ClienteId),
+                                $("#IdContacto").val(data.objeto[0].ContactoId),
+                                $("#IdPersona").val(data.objeto[0].ContratanteId)
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+}

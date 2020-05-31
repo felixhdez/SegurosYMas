@@ -1,0 +1,222 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.Cliente
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<style>
+    table th {
+        font-size: 14px;
+    }
+</style>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Clientes</h2>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("Lista", "Index")
+            </li>
+            <li class="active">
+                <strong>Detalle</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-8">
+        <div class="title-action">
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("Index","Clientes")"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;&nbsp;Regresar</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Datos Generales</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link"><i class="fa fa-chevron-up" style="color: #bebebe;"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-lg-6 b-r">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" style="border: solid 2px #bebebe;">
+                                    <tbody>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Nombre Completo</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.NombreCompleto)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Identificación</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Identificacion)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Dirección</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Direccion)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Teléfono #1</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.NumTelf1)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Teléfono #2</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.NumTelf2)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Teléfono #3</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.NumTelf3)</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" style="border: solid 2px #bebebe;">
+                                    <tbody>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Celular</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Celular)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">E-mail</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Email)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Tipo de Cliente</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.TipoCliente)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 40%;">Fecha de Nacimiento</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.FechaNacimiento)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Departamento</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Departamento.Descripcion)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Notas</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Notas)</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Pólizas</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link"><i class="fa fa-chevron-up" style="color: #bebebe;"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table class="table" id="tablePolizas">
+                            <thead>
+                                <tr>
+                                    <th>N° Póliza</th>
+                                    <th>Tipo</th>
+                                    <th>Fecha de Vencimiento</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+
+@section scripts{
+    <!-- Datatable -->
+<link href="~/Content/DataTables/media/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/media/css/dataTables.jqueryui.min.css" rel="stylesheet" />
+<script src="~/Scripts/DataTables/media/js/dataTables.bootstrap.min.js"></script>
+<script src="~/Scripts/DataTables/media/js/dataTables.jqueryui.min.js"></script>
+<script src="~/Scripts/DataTables/media/js/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"> </script>
+
+    <script>
+        var datatablePolizas = null;
+
+        $(function(){
+            datatablePolizas = $("#tablePolizas").DataTable({
+                "info": false,
+                "paging": true,
+                "ordering": false,
+                "searching": false,
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "No hay pólizas para mostrar",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }, "columnDefs": [{
+                    "targets": 3,
+                    "render": function (data, type, row, meta) {
+                        return "<button class='btn btn-sm btn-success' value='" + data + "' type='button'>Ver detalle</button>";
+                    }
+                }]
+            });
+        });
+
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Clientes/GetPolizas/" + @Model.Id,
+                dataType: "JSON",
+                success: function (list) {
+                    datatablePolizas.clear().draw();
+                    for (var i = 0; i < list.list.length; i++) {
+                        datatablePolizas.row.add([
+                            list.list[i].NumPoliza,
+                            list.list[i].Tipo,
+                            list.list[i].FHasta,
+                            list.list[i].IdPoliza
+                        ]).draw(false);
+                    }
+                }
+            })
+        });
+
+        $(function(){
+            $("#tablePolizas tbody").on('click', 'button', function () {
+                var datos = datatablePolizas.row($(this).parents('tr')).data();
+                window.location.href = '/Polizas/Details/' + datos[3];
+            })
+        });
+    </script>
+    }

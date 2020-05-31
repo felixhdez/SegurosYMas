@@ -1,0 +1,1232 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.Reclamo
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<style>
+    #initialihiddenbutton,
+    #btnCancelarContratante,
+    #btnCancelarIntermediario {
+        display: none;
+    }
+
+    .ibox-hr {
+        -moz-border-bottom-colors: none;
+        -moz-border-left-colors: none;
+        -moz-border-right-colors: none;
+        -moz-border-top-colors: none;
+        background-color: #ffffff;
+        border-color: #e7eaec;
+        border-image: none;
+        border-style: solid solid none;
+        border-width: 2px 0 0;
+        color: inherit;
+        margin-bottom: 0;
+        padding: 0;
+        min-height: 48px;
+    }
+
+    p {
+        font-weight: 400 !important;
+    }
+
+    h2 {
+        font-size: 26px !important;
+        font-weight: 600 !important;
+    }
+
+    .container {
+        width: 97% !important;
+    }
+
+    .btn-default {
+        background: #818e99 !important;
+        color: white !important;
+        opacity: inherit !important;
+    }
+
+    .stepwizard .btn-primary {
+        background-color: #428bca !important;
+        color: white !important;
+    }
+
+
+    /*body{
+        margin-top:40px;
+    }*/
+
+    .stepwizard-step p {
+        margin-top: 10px;
+    }
+
+    .stepwizard-row {
+        display: table-row;
+    }
+
+    .stepwizard {
+        display: table;
+        width: 100%;
+        position: relative;
+    }
+
+    .stepwizard-step button[disabled] {
+        opacity: 1 !important;
+        filter: alpha(opacity=100) !important;
+    }
+
+    .stepwizard-row:before {
+        top: 14px;
+        bottom: 0;
+        position: absolute;
+        content: " ";
+        width: 100%;
+        height: 1px;
+        background-color: #ccc;
+        z-index: 0;
+    }
+
+    .stepwizard-step {
+        display: table-cell;
+        text-align: center;
+        position: relative;
+    }
+
+    .btn-circle {
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        padding: 6px 0;
+        font-size: 12px;
+        line-height: 1.428571429;
+        border-radius: 15px;
+    }
+</style>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Reclamos</h2>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("Lista", "Index")
+            </li>
+            <li class="active">
+                <strong>Editar</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-8">
+        <div class="title-action">
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("Index","Reclamos")"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Regresar</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Editar Reclamo</h5>
+                </div>
+                <div class="ibox-content">
+
+                    <div class="container">
+                        <div class="stepwizard">
+                            <div class="stepwizard-row setup-panel">
+                                <div class="stepwizard-step col-xs-3">
+                                    <a href="#step-1" type="button" class="btn btn-primary btn-circle">1</a>
+                                    <p>Reclamo</p>
+                                </div>
+                                <div class="stepwizard-step col-xs-3">
+                                    <a href="#step-2" type="button" class="btn btn-default btn-circle" @*disabled="disabled"*@>2</a>
+                                    <p>Detalle de Documentos</p>
+                                </div>
+                                <div class="stepwizard-step col-xs-3">
+                                    <a href="#step-3" type="button" class="btn btn-default btn-circle" @*disabled="disabled"*@>3</a>
+                                    <p>Detalle de Pagos</p>
+                                </div>
+                                <div class="stepwizard-step col-xs-3">
+                                    <a href="#step-4" type="button" class="btn btn-default btn-circle" @*disabled="disabled"*@>4</a>
+                                    <p>Archivos</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        @Html.HiddenFor(model => model.Id)
+
+                        <!--Paso #1-->
+                        <div class="row setup-content" id="step-1">
+                            <div class="col-xs-12 col-md-offset-0">
+                                <div class="col-md-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-pencil-square-o fa-lg"></i>
+                                        </div>
+                                        <!--Contenido de la caja-->
+                                        <div class="panel-body">
+                                            <!--Título del contenedor-->
+                                            <div class="container" style="margin-top:20px;">
+                                                <h2>Reclamo</h2>
+                                                <hr class="ibox-hr" />
+                                            <br />
+                                            </div> <!--Fin del titulo-->
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.NumReclamo, new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.NumReclamo, new { htmlAttributes = new { @class = "form-control", @id = "txtNumReclamo" } })
+                                                        @Html.ValidationMessageFor(model => model.NumReclamo, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.TipoReclamo, new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.DropDownList("TipoReclamo", (SelectList)ViewBag.TiposReclamo, htmlAttributes: new { @class = "form-control", @id = "dropTipoReclamo" })
+                                                        @Html.ValidationMessageFor(model => model.TipoReclamo, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Dependiente, new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.Dependiente, new { htmlAttributes = new { @class = "form-control", @id = "txtDependiente" } })
+                                                        @Html.ValidationMessageFor(model => model.Dependiente, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Ajustador, new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.Ajustador, new { htmlAttributes = new { @class = "form-control", @id = "txtAjustador" } })
+                                                        @Html.ValidationMessageFor(model => model.Ajustador, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.FechaAviso, new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.FechaAviso, new { htmlAttributes = new { @class = "form-control", @id = "txtFechaAviso" } })
+                                                        @Html.ValidationMessageFor(model => model.FechaAviso, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.FechaSiniestro, new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.FechaSiniestro, new { htmlAttributes = new { @class = "form-control", @id = "txtFechaSiniestro" } })
+                                                        @Html.ValidationMessageFor(model => model.FechaSiniestro, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.LugarOcurrencia, new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.LugarOcurrencia, new { htmlAttributes = new { @class = "form-control", @id = "txtLugarOcurrencia" } })
+                                                        @Html.ValidationMessageFor(model => model.LugarOcurrencia, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.MontoReclamado, new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.MontoReclamado, new { htmlAttributes = new { @class = "form-control", @id = "txtMontoReclamado" } })
+                                                        @Html.ValidationMessageFor(model => model.MontoReclamado, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Responsable,new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.Responsable,new { htmlAttributes = new { @class = "form-control",@id = "txtResponsable" } })
+                                                        @Html.ValidationMessageFor(model => model.Responsable,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.CoberturaReclamoId, "Cobertura reclamada", new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.DropDownList("CoberturaReclamoId", (SelectList)ViewBag.CoberturaReclamoId, htmlAttributes: new { @class = "form-control", @id = "dropCoberturaR" })
+                                                        @Html.ValidationMessageFor(model => model.CoberturaReclamoId, "", new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <button class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:1.7em;"> Siguiente</button>
+
+                                        </div> <!--termina contenido de la caja-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Paso #2-->
+                        <div class="row setup-content" id="step-2">
+                            <div class="col-md-offset-0">
+                                <div class="col-md-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-pencil-square-o fa-lg"></i>
+                                        </div>
+
+                                        <div class="panel-body">
+
+                                            <div class="ibox-title">
+                                                <h2>Documentos</h2>
+                                                <a class="btn btn-success fa fa-plus dim pull-right" data-toggle='modal' data-target='#myModal_D' style="float: right;margin-top: -2.5em;margin-left: 1em;" id="btnAgregarDocs"> &nbsp; &nbsp; Agregar </a>
+                                            </div> <!--Fin del titulo-->
+                                            <br /><br />
+                                            <!--TABLA DE DOCUMENTOS-->
+                                            <div class="panel-footer">
+                                                <div class="table-responsive">
+                                                    <table class="table" id="tableDocumentosE">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Documento</th>
+                                                                <th>Fecha</th>
+                                                                <th>Emisor</th>
+                                                                <th>Número</th>
+                                                                <th>Valor</th>
+                                                                <th>Comentarios</th>
+                                                                <th>Acciones</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-primary backBtn pull-left" type="button" style="float:left; margin-top:1.7em;">Regresar</button>
+                                            <button class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:1.7em;">Siguiente</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Paso #3-->
+                        <div class="row setup-content" id="step-3">
+                            <div class="col-md-offset-0">
+                                <div class="col-md-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-pencil-square-o fa-lg"></i>
+                                        </div>
+
+                                        <div class="panel-body">
+
+                                            <div class="ibox-title">
+                                                <h2>Pagos</h2>
+                                                <a class="btn btn-success fa fa-plus dim pull-right" data-toggle='modal' data-target='#myModal_P' style="float: right;margin-top: -2.5em;margin-left: 1em;" id="btnAgregarPagos"> &nbsp; &nbsp; Agregar </a>
+                                            </div> <!--Fin del titulo-->
+                                            <br /><br />
+                                            <!--TABLA DE PAGOS-->
+                                            <div class="panel-footer">
+                                                <div class="table-responsive">
+                                                    <table class="table" id="tablePagosE">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Tipo de Pago</th>
+                                                                <th>Fecha</th>
+                                                                <th>Moneda</th>
+                                                                <th>N° Doc</th>
+                                                                <th>Valor</th>
+                                                                <th>Banco/Taller</th>
+                                                                <th>Notas</th>
+                                                                <th>Acciones</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-primary backBtn pull-left" type="button" style="float:left; margin-top:1.7em;">Regresar</button>
+                                            <button class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:1.7em;">Siguiente</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Paso #4-->
+                        <div class="row setup-content" id="step-4">
+                            <div class="col-xs-12 col-md-offset-0">
+                                <div class="col-md-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-pencil-square-o fa-lg"></i>
+                                        </div>
+                                        <!--Contenido de la caja-->
+                                        <div class="panel-body">
+                                            <!--Título del contenedor-->
+                                            <div class="container" style="margin-top:20px;">
+                                                <h2>Archivos</h2>
+                                                <a class="btn btn-success fa fa-plus dim pull-right" data-toggle="modal" data-target="#myModalArchi" style="float: right;margin-top: -2.5em;margin-left: 1em;" id="btnAddArchivo"> &nbsp; &nbsp; Agregar </a>
+                                                <hr class="ibox-hr" />
+                                            </div> <!--Fin del titulo-->
+                                            <!--TABLA DE DETALLE DE ARCHIVOS-->
+                                            <div class="panel-footer">
+                                                <div class="table-responsive">
+                                                    <table class="table" id="tableArchivosP">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Imagen</th>
+                                                                <th>Acciones</th>
+                                                            </tr>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!--FIN DE TABLA DE DETALLE DE ARCHIVOS-->
+                                            <br />
+
+                                            <button class="btn btn-primary backBtn pull-left" type="button" style="float:left; margin-top:1.7em;">Regresar</button>
+                                            <button class="btn btn-primary pull-right" type="submit" style="margin-top:1.7em;"> Guardar </button>
+
+                                        </div> <!--termina contenido de la caja-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input id="txtBienAsegurado" name="BienAseguradoId" hidden />
+                        <input id="txtPoliza" name="PolizaId" hidden />
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+
+<!--Modal para editar un documento-->
+<div class="modal inmodal fade" id="myModal_D" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Documento</h4>
+
+            </div>
+            <div class="modal-body">
+
+                @Html.Partial("_EditarDocumento")
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="" class="btn btn-success pull-right" id="btnGuardarCambios" style="display:none;">Guardar</button>
+                <button type="button" onclick="" class="btn btn-success pull-right" id="btnAñadirDocumentos" style="display:none;">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal para editar un pago-->
+<div class="modal inmodal fade" id="myModal_P" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Pago</h4>
+
+            </div>
+            <div class="modal-body">
+
+                @Html.Partial("_EditarPago")
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="" class="btn btn-success pull-right" id="btnGuardarCambiosPagos" style="display:none;">Guardar</button>
+                <button type="button" onclick="" class="btn btn-success pull-right" id="btnAñadirPagos" style="display:none;">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Modal para agregar archivo-->
+<div class="modal inmodal fade" id="myModalArchi" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Agregar Archivo</h4>
+
+            </div>
+            <div class="modal-body">
+
+                @Html.Partial("_AgregarArchivo")
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="" class="btn btn-success pull-right" id="btnActualizarArchivo">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <!-- Datatable -->
+<link href="~/Content/DataTables/media/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/media/css/dataTables.jqueryui.min.css" rel="stylesheet" />
+<script src="~/Scripts/DataTables/media/js/dataTables.bootstrap.min.js"></script>
+<script src="~/Scripts/DataTables/media/js/dataTables.jqueryui.min.js"></script>
+<script src="~/Scripts/DataTables/media/js/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"> </script>
+
+     <!-- Script para el paso a paso.-->
+<script>
+            $(document).ready(function () {
+                var navListItems = $('div.setup-panel div a'),
+                        allWells = $('.setup-content'),
+                        allNextBtn = $('.nextBtn'),
+                        allBackButton = $('.backBtn');
+
+                allWells.hide();
+
+                navListItems.click(function (e) {
+                    e.preventDefault();
+                    var $target = $($(this).attr('href')),
+                            $item = $(this);
+
+                    if (!$item.hasClass('disabled')) {
+                        navListItems.removeClass('btn-primary').addClass('btn-default');
+                        $item.addClass('btn-primary');
+                        allWells.hide();
+                        $target.show();
+                        $target.find('input:eq(0)').focus();
+                    }
+                });
+                allBackButton.click(function () {
+                    var curStep = $(this).closest(".setup-content"),
+                        curStepBtn = curStep.attr("id"),
+                        nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().prev().children("a"),
+                        curInputs = curStep.find("input[type='text'],input[type='url']"),
+                        isValid = true;
+
+                    $(".form-group").removeClass("has-error");
+                    for (var i = 0; i < curInputs.length; i++) {
+                        if (!curInputs[i].validity.valid) {
+                            isValid = false;
+                            $(curInputs[i]).closest(".form-group").addClass("has-error");
+                        }
+                    }
+
+                    nextStepWizard.removeAttr('disabled').trigger('click');
+                });
+
+                allNextBtn.click(function () {
+                    var curStep = $(this).closest(".setup-content"),
+                        curStepBtn = curStep.attr("id"),
+                        nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
+                        curInputs = curStep.find("input[type='text'],input[type='url']"),
+                        isValid = true;
+
+                    $(".form-group").removeClass("has-error");
+                    for (var i = 0; i < curInputs.length; i++) {
+                        if (!curInputs[i].validity.valid) {
+                            isValid = false;
+                            $(curInputs[i]).closest(".form-group").addClass("has-error");
+                        }
+                    }
+
+                    if (isValid)
+                        nextStepWizard.removeAttr('disabled').trigger('click');
+                });
+
+
+                $('div.setup-panel div a.btn-primary').trigger('click');
+            });
+</script>
+
+    <script>
+        $(document).ready(function () {
+            $("#dropTipoReclamo,#dropCoberturaR").select2({ width: "100%" });
+            $("#dropCoberturaR").select2("val", @Model.CoberturaReclamoId);
+        });
+
+            // Referencia la tabla de documentos
+            var dataTableDocs = null;
+            // Crea una instancia de datatable para el detalle
+            $(function () {
+                // Instancia del datatable para mostrar los detalles.
+                dataTableDocs = $("#tableDocumentosE").DataTable({
+                    "info": false,
+                    "paging": false,
+                    "ordering": false,
+                    "searching": false,
+                    "language": {
+                        "emptyTable": "No hay documentos remitidos que mostrar",
+                        "search": "Busqueda"
+                    }, "columnDefs": [{
+                        "targets": 6,
+                        "render": function (data, type, row, meta) {
+                            return "<button class='btn btn-sm btn-danger' data-toggle='modal' data-target='#myModal_D' value='" + data + "' type='button'>Editar</button>";
+                        }
+                    }]
+                });
+            });
+
+            // Referencia la tabla de pagos
+            var dataTablePagos = null;
+            // Crea una instancia de datatable para el detalle
+            $(function () {
+                // Instancia del datatable para mostrar los detalles.
+                dataTablePagos = $("#tablePagosE").DataTable({
+                    "info": false,
+                    "paging": false,
+                    "ordering": false,
+                    "searching": false,
+                    "language": {
+                        "emptyTable": "No hay pagos efectuados que mostrar",
+                        "search": "Busqueda"
+                    }, "columnDefs": [{
+                        "targets": 7,
+                        "render": function (data, type, row, meta) {
+                            return "<button class='btn btn-sm btn-danger' data-toggle='modal' data-target='#myModal_P' value='" + data + "' type='button'>Editar</button>";
+                        }
+                    }]
+                });
+            });
+
+       
+        //Archivo------------------------------------------------------------------------------------------------------------------
+        var dataTableArchivos = null;
+        $(function () {
+            // Instancia del datatable para mostrar los detalles.
+            dataTableArchivos = $("#tableArchivosP").DataTable({
+                "info": false,
+                "paging": false,
+                "ordering": false,
+                "searching": false,
+                "language": {
+                    "emptyTable": "No hay imágenes que mostrar.",
+                }, "columnDefs":[{
+                    "targets": 0,
+                    "render": function (data, type, row, meta) {
+                        return  "<img src='" + data +"' style='width:40%'/>";
+                    },
+                },
+                {
+                    "targets": 1,
+                    "render": function (data, type, row, meta) {
+                        return  "<button class='btn btn-sm btn-danger' value='" + data + "' type='button'>Eliminar</button>";
+                    },
+                }]
+            });
+        });
+        //Archivo------------------------------------------------------------------------------------------------------------------
+        $(function () {
+            $("#dropCoberturaR").val(@Model.CoberturaReclamoId);
+            $("#txtBienAsegurado").val(@Model.BienAseguradoId);
+            $("#txtPoliza").val(@Model.PolizaId);
+
+            var docs = "/Reclamos/RecuperarDocumentos/" + @Model.Id;
+            var pagos = "/Reclamos/RecuperarPagos/" + @Model.Id;
+            var archivos = "/Reclamos/RecuperarArchivos/" + @Model.Id;
+
+            //primer ajax - carga los documentos
+            $.ajax({
+                type: "GET",
+                url: docs,
+                dataType: "JSON",
+                success: function (list) {
+                    dataTableDocs.clear();
+                    for (var a = 0; a < list.list.length; a++) {
+                        dataTableDocs.row.add([
+                            list.list[a].Doc,
+                            list.list[a].Fecha,
+                            list.list[a].Emisor,
+                            list.list[a].Num,
+                            list.list[a].Valor,
+                            list.list[a].Comentarios,
+                            list.list[a].IdDetalle]).draw(false);
+                    }
+                }
+            })
+
+            //segundo ajax - carga los pagos
+            $.ajax({
+                type: "GET",
+                url: pagos,
+                dataType: "JSON",
+                success: function (list) {
+                    dataTablePagos.clear();
+                    for (var a = 0; a < list.list.length; a++) {
+                        dataTablePagos.row.add([
+                            list.list[a].Tipo,
+                            list.list[a].Fecha,
+                            list.list[a].Moneda,
+                            list.list[a].Num,
+                            list.list[a].Valor,
+                            list.list[a].Banc,
+                            list.list[a].Notas,
+                            list.list[a].IdDetalle]).draw(false);
+                    }
+                }
+            })
+
+            //Ahora traemos todas las imagenes que pertenecen a esa poliza
+            $.ajax ({
+                type: "GET",
+                url: archivos,
+                dataType: "JSON",
+                success: function (list) {
+                    dataTableArchivos.clear();
+                    for(var a=0; a<list.list.length; a++) {
+                        dataTableArchivos.row.add([
+                         list.list[a].Foto,
+                        list.list[a].Id]).draw(false)
+                    }
+                }
+            })
+
+        });
+
+            //*******************************************************************************************************************************\\
+            //========================================EVENTOS PARA MODIFICAR LOS DETALLES====================================================\\
+            //**********************************************DOCUMENTOS***********************************************************************\\
+
+            var datos = null; //Lo uso para obtener la fila sobre la que se hace clic
+            var doc = 0; // VariableGlobal
+            $(function () {
+                var botonRandom = null;
+                //Evento que se desencadena al hacer clic en el botón de editar en la tabla Caracteristicas
+                $("#tableDocumentosE tbody").on('click', 'button', function () {
+                    $("#btnGuardarCambios").show();
+                    $("#btnAñadirDocumentos").hide();
+                    limpiarModalDocs();
+                    datos = dataTableDocs.row($(this).parents('tr')).data();
+                    console.log(datos);
+                    botonRandom = $(this);
+                    var url = "/Documentos/ListarDocumentos/";
+                    var buscar = "/Documentos/DetalleDocumentos/" + botonRandom[0].value;
+
+                    //Recuperar la tupla que quiero editar
+                    $.ajax({
+                        type: "GET",
+                        url: buscar,
+                        dataType: "JSON",
+                        success: function (list) {
+                            $("#txtFechaE").val(list.listado[0].Fecha);
+                            $("#txtEmisorE").val(list.listado[0].Emisor);
+                            $("#txtNumE").val(list.listado[0].Num);
+                            $("#txtValorE").val(list.listado[0].Valor);
+                            $("#txtComentariosE").val(list.listado[0].Comentarios);
+                            //$("#tIdC").val(list.listado[0].IdCaract);
+                            doc = list.listado[0].IdDoc;
+
+                            //Listar todas las caracteristicas para mostrarlas en el dropdownlist
+                            $.ajax({
+                                type: "GET",
+                                url: url,
+                                dataType: "JSON",
+                                success: function (list) {
+                                    //Vaciar el dropdownlist para que los datos no se repitan
+                                    $("#dropDocumentoE").empty();
+                                    console.log(list.listado);
+                                    for (var a = 0; a < list.listado.length; a++) {
+                                        $("#dropDocumentoE").append("<option value=" + list.listado[a].IdDoc + ">" + list.listado[a].Descripcion + "</option>;")
+                                    }
+                                    //Asignar el valor por defecto al dropdownlist
+                                    $("#dropDocumentoE").val(doc);
+                                }
+                            })
+                        }
+                    });
+                });
+            });
+
+        //*************************
+        //Evento al dar clic en el botón de guardar cambios ubicado en la modal
+            $("#btnGuardarCambios").click(function () {
+                if($("#txtFechaE").val().trim() && $("#txtNumE").val().trim())
+                {
+
+                    $("#myModal_D .close").click();
+                    var docs = "/Reclamos/RecuperarDocumentos/" + @Model.Id;
+                    var url = "/Documentos/GuardarCambios/";
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        dataType: "JSON",
+                        //asignamos los parámetros que va a recibir el controlador
+                        data: {
+                            idDetalle: datos[6],
+                            IdDocumento: $("#dropDocumentoE").val(),
+                            fecha: $("#txtFechaE").val(),
+                            emisor: $("#txtEmisorE").val(),
+                            numero: $("#txtNumE").val(),
+                            valor: $("#txtValorE").val(),
+                            comentarios: $("#txtComentarioE").val()
+                        },
+                        success: function () {
+                            //Cuando se haya almacenado la modificación recuperamos nuevamente los datos
+                            $.ajax({
+                                type: "GET",
+                                url: docs,
+                                dataType: "JSON",
+                                success: function (list) {
+                                    dataTableDocs.clear();
+                                    for (var a = 0; a < list.list.length; a++) {
+                                        dataTableDocs.row.add([
+                                            list.list[a].Doc,
+                                            list.list[a].Fecha,
+                                            list.list[a].Emisor,
+                                            list.list[a].Num,
+                                            list.list[a].Valor,
+                                            list.list[a].Comentarios,
+                                            list.list[a].IdDetalle]).draw(false);
+                                    }
+
+                                    //Me falta limpiar los datos xD
+                                }
+                            })
+                        }
+                    })
+                }
+                else
+                    swal("Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.", "Seguros & Más", "warning");
+            });
+
+        //Al mostrar la modal tambien hacemos lo siguiente:
+        $("#btnAgregarDocs").click(function () {
+            $("#btnAñadirDocumentos").show();
+            $("#btnGuardarCambios").hide();
+            limpiarModalDocs();
+            var url = "/Documentos/ListarDocumentos/";
+            //$("#tValor").val("");
+            //Listar todos los documentos para mostrarlas en el dropdownlist
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "JSON",
+                success: function (list) {
+                    //Vaciar el dropdownlist para que los datos no se repitan
+                    $("#dropDocumentoE").empty();
+                    console.log(list.listado);
+                    for (var a = 0; a < list.listado.length; a++) {
+                        $("#dropDocumentoE").append("<option value=" + list.listado[a].IdDoc + ">" + list.listado[a].Descripcion + "</option>;")
+                    }
+                }
+            })
+        })
+
+        //Invocar controlador
+        $("#btnAñadirDocumentos").click(function () {
+            if($("#txtFechaE").val().trim() && $("#txtNumE").val().trim())
+            {
+                $("#myModal_D .close").click();
+                var add = "/Documentos/AddNuevo/";
+                var lista = "/Reclamos/RecuperarDocumentos/" + @Model.Id;
+                $.ajax({
+                    type: "POST",
+                    url: add,
+                    dataType: "JSON",
+                    //asignamos los parámetros que va a recibir el controlador
+                    data: {
+                        IdReclamo: @Model.Id,
+                        IdDocumento: $("#dropDocumentoE").val(),
+                        fecha: $("#txtFechaE").val(),
+                        emisor: $("#txtEmisorE").val(),
+                        numero: $("#txtNumE").val(),
+                        valor: $("#txtValorE").val(),
+                        comentarios: $("#txtComentarioE").val()
+                    },
+                    success: function () {
+                        //Cuando se haya almacenado el nuevo registro recuperamos nuevamente los datos
+                        $.ajax({
+                            type: "GET",
+                            url: lista,
+                            dataType: "JSON",
+                            success: function (list) {
+                                $("#myModal_D .close").click(); //cerramos la modal
+                                dataTableDocs.clear();
+                                for (var a = 0; a < list.list.length; a++) {
+                                    dataTableDocs.row.add([
+                                        list.list[a].Doc,
+                                        list.list[a].Fecha,
+                                        list.list[a].Emisor,
+                                        list.list[a].Num,
+                                        list.list[a].Valor,
+                                        list.list[a].Comentarios,
+                                        list.list[a].IdDetalle]).draw(false);
+                                }
+                            }
+                        })
+                    }
+                })
+            }
+            else
+                swal("Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.", "Seguros & Más", "warning");
+        })
+
+        function limpiarModalDocs() {
+            $("#txtFechaE").val("");
+            $("#txtEmisorE").val("");
+            $("#txtNumE").val("");
+            $("#txtValorE").val("");
+            $("#txtComentariosE").val("");
+            $("#dropDocumentoE").val(0);
+        }
+
+        //*******************************************************************************************************************************\\
+            //========================================EVENTOS PARA MODIFICAR LOS DETALLES====================================================\\
+            //***************************************************PAGOS***********************************************************************\\
+
+            var datos2 = null; //Lo uso para obtener la fila sobre la que se hace clic
+            var pg = 0; // VariableGlobal
+            $(function () {
+                var botonRandom = null;
+                //Evento que se desencadena al hacer clic en el botón de editar en la tabla Caracteristicas
+                $("#tablePagosE tbody").on('click', 'button', function () {
+                    $("#btnGuardarCambiosPagos").show();
+                    $("#btnAñadirPagos").hide();
+                    limpiarModalPagos();
+                    datos2 = dataTablePagos.row($(this).parents('tr')).data();
+                    console.log(datos2);
+                    botonRandom = $(this);
+                    var url = "/TipoDePagos/ListarPagos/";
+                    var buscar = "/TipoDePagos/DetallePagos/" + botonRandom[0].value;
+
+                    //Recuperar la tupla que quiero editar
+                    $.ajax({
+                        type: "GET",
+                        url: buscar,
+                        dataType: "JSON",
+                        success: function (list) {
+                            $("#txtFechaPE").val(list.listado[0].Fecha);
+                            if(list.listado[0].Moneda == "Dólares")
+                                $("#txtMonedaE").val("val1");
+                            else
+                                $("#txtMonedaE").val("val2");
+                            $("#txtNumDocE").val(list.listado[0].Num);
+                            $("#txtValorPE").val(list.listado[0].Valor);
+                            $("#txtBancoE").val(list.listado[0].Banco);
+                            $("#txtNotasE").val(list.listado[0].Nota);
+                            //$("#tIdC").val(list.listado[0].IdCaract);
+                            pg = list.listado[0].IdPago;
+
+                            //Listar todas las caracteristicas para mostrarlas en el dropdownlist
+                            $.ajax({
+                                type: "GET",
+                                url: url,
+                                dataType: "JSON",
+                                success: function (list) {
+                                    //Vaciar el dropdownlist para que los datos no se repitan
+                                    $("#dropPagoE").empty();
+                                    console.log(list.listado);
+                                    for (var a = 0; a < list.listado.length; a++) {
+                                        $("#dropPagoE").append("<option value=" + list.listado[a].IdPag + ">" + list.listado[a].Descripcion + "</option>;")
+                                    }
+                                    //Asignar el valor por defecto al dropdownlist
+                                    $("#dropPagoE").val(pg);
+                                }
+                            })
+                        }
+                    });
+                });
+            });
+
+        //*************************
+        //Evento al dar clic en el botón de guardar cambios ubicado en la modal
+            $("#btnGuardarCambiosPagos").click(function () {
+                if($("#txtFechaPE").val().trim() && $("#txtNumDocE").val().trim() && $("#txtValorPE").val().trim())
+                {
+                    $("#myModal_P .close").click();
+                    var pagos = "/Reclamos/RecuperarPagos/" + @Model.Id;
+                    var url = "/TipoDePagos/GuardarCambios/";
+                    $.ajax({
+                        type: "POST",
+                        url: url,
+                        dataType: "JSON",
+                        //asignamos los parámetros que va a recibir el controlador
+                        data: {
+                            idDetalle: datos2[7],
+                            IdPago: $("#dropPagoE").val(),
+                            fecha: $("#txtFechaPE").val(),
+                            moneda: $("#txtMonedaE").find('option:selected').text(),
+                            numero: $("#txtNumDocE").val(),
+                            valor: $("#txtValorPE").val(),
+                            banco: $("#txtBancoE").val(),
+                            nota: $("#txtNotasE").val()
+                        },
+                        success: function () {
+                            //Cuando se haya almacenado la modificación recuperamos nuevamente los datos
+                            $.ajax({
+                                type: "GET",
+                                url: pagos,
+                                dataType: "JSON",
+                                success: function (list) {
+                                    dataTablePagos.clear();
+                                    for (var a = 0; a < list.list.length; a++) {
+                                        dataTablePagos.row.add([
+                                            list.list[a].Tipo,
+                                            list.list[a].Fecha,
+                                            list.list[a].Moneda,
+                                            list.list[a].Num,
+                                            list.list[a].Valor,
+                                            list.list[a].Banc,
+                                            list.list[a].Notas,
+                                            list.list[a].IdDetalle]).draw(false);
+                                    }
+                                }
+                            })
+
+                            //Me falta limpiar los datos xD
+                        }
+                    })
+                }
+                else
+                    swal("Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.", "Seguros & Más", "warning");
+            });
+
+        //Al mostrar la modal tambien hacemos lo siguiente:
+        $("#btnAgregarPagos").click(function () {
+            $("#btnAñadirPagos").show();
+            $("#btnGuardarCambiosPagos").hide();
+            limpiarModalPagos();
+            var url = "/TipoDePagos/ListarPagos/";
+            //$("#tValor").val("");
+            //Listar todos los documentos para mostrarlas en el dropdownlist
+            $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "JSON",
+                success: function (list) {
+                    //Vaciar el dropdownlist para que los datos no se repitan
+                    $("#dropPagoE").empty();
+                    console.log(list.listado);
+                    for (var a = 0; a < list.listado.length; a++) {
+                        $("#dropPagoE").append("<option value=" + list.listado[a].IdPag + ">" + list.listado[a].Descripcion + "</option>;")
+                    }
+                }
+            })
+        })
+
+        //Invocar controlador
+        $("#btnAñadirPagos").click(function () {
+            if($("#txtFechaPE").val().trim() && $("#txtNumDocE").val().trim() && $("#txtValorPE").val().trim())
+            {
+            $("#myModal_P .close").click();
+            var add = "/TipoDePagos/AddNuevo/";
+            var lista = "/Reclamos/RecuperarPagos/" + @Model.Id;
+            $.ajax({
+                type: "POST",
+                url: add,
+                dataType: "JSON",
+                //asignamos los parámetros que va a recibir el controlador
+                data: {
+                    IdReclamo: @Model.Id,
+                    IdPago: $("#dropPagoE").val(),
+                    fecha: $("#txtFechaPE").val(),
+                    moneda: $("#txtMonedaE").find('option:selected').text(),
+                    numero: $("#txtNumDocE").val(),
+                    valor: $("#txtValorPE").val(),
+                    banco: $("#txtBancoE").val(),
+                    nota: $("#txtNotasE").val()
+                },
+                success: function () {
+                    //Cuando se haya almacenado el nuevo registro recuperamos nuevamente los datos
+                    $.ajax({
+                        type: "GET",
+                        url: lista,
+                        dataType: "JSON",
+                        success: function (list) {
+                            $("#myModal_P .close").click();
+                            dataTablePagos.clear();
+                            for (var a = 0; a < list.list.length; a++) {
+                                dataTablePagos.row.add([
+                                    list.list[a].Tipo,
+                                    list.list[a].Fecha,
+                                    list.list[a].Moneda,
+                                    list.list[a].Num,
+                                    list.list[a].Valor,
+                                    list.list[a].Banc,
+                                    list.list[a].Notas,
+                                    list.list[a].IdDetalle]).draw(false);
+                            }
+                        }
+                    })
+                }
+            })
+        }
+        else
+            swal("Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.", "Seguros & Más", "warning"); 
+        })
+
+        function limpiarModalPagos() {
+            $("#txtFechaPE").val("");
+            $("#txtMonedaE").val("");
+            $("#txtNumDocE").val("");
+            $("#txtValorPE").val("");
+            $("#txtBancoE").val("");
+            $("#txtNotasE").val("");
+            $("#dropPagoE").val(0);
+        }
+
+        //**************************************************************************************************************************************************
+        //************************************************************************ ARCHIVO GUARDAR, MOSTRAR BOTON, ELIMINAR ARCHIVO***********************************
+        //Mostrar El BUTTON de Guardar archivo modal
+        $("#myModalArchi").click(function(){
+            $("#btnActualizarArchivo").show();
+        })
+
+        //Guardar Archivo de la modal
+        var archivos = "/Reclamos/RecuperarArchivos/" + @Model.Id;
+        $("#btnActualizarArchivo").click(function(){
+            if (($("#inputbtn"))[0].files.length > 0) {
+                if(Size())
+                {
+                    $("#myModalArchi .close").click();
+                    var selectedfile = ($("#inputbtn"))[0].files[0];
+                    var dataString = new FormData();
+                    dataString.append("fileUpload", selectedfile);
+                    dataString.append("id",@Model.Id);
+
+                    //console.log(selectedfile);
+                    //var archivos = "/Polizas/Max/";
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("GuardarARExtra", "Reclamos")",
+                        dataType: "JSON",
+                    contentType: false,
+                    processData: false,
+                    data: dataString,
+                    //asignamos los parámetros que va a recibir el controlador
+                    success: function () {
+                        //console.log($("#inputbtn").val());
+                        //Cuando se haya almacenado el nuevo registro recuperamos nuevamente los datos
+                        $.ajax({
+                            type: "GET",
+                            url: archivos,
+                            dataType: "JSON",
+                            success: function (list) {
+                                $("#myModalArchi .close").click(); //cerramos la modal
+                                dataTableArchivos.clear(); //vaciamos la tabla
+                                for (var a = 0; a < list.list.length; a++) {//volvemos a asignar los valores a la tabla
+                                    dataTableArchivos.row.add([
+                                        list.list[a].Foto,
+                                        list.list[a].Id]).draw(false)
+                                }
+                                $("#inputbtn").val("");
+                            }
+                        })
+                    }
+                })
+                }
+                else
+                {
+                    swal("La capacidad de transferencia se ha excedido. Por favor reduza el tamaño de los archivos adjuntos.", "Seguros & Más", "warning");
+                }
+            }
+            else {
+                swal("No se ha seleccionado ningún archivo.\nPor favor verifique.", "Seguros & Más", "warning");
+            }
+        })
+
+        function Size()
+        {
+            var suma=0;
+            var l = $('#inputbtn')[0]['files'];
+            for (var i = 0; i < l.length; i++) {
+                suma += l[i]['size']
+            };
+            var filesize = suma / 1024 / 1024;
+            if (filesize >= 4)
+                return false;
+            else
+                return true;
+        }
+
+        //------------------------------------------------------------ELIMINAR IMAGEN--------------------------------------------------------
+
+        //var datosCob = null;
+        //var cobert;
+
+        $(function () {
+            var bontoeliminar = null;
+            $("#tableArchivosP tbody").on('click', 'button', function () {
+                //datosCob = dataTableDetalleCobert.row($(this).parents('tr')).data();
+                //$("#btnGuardarCambiosCobertura").show();
+                //$("#btnAñadirCoberturas").hide();
+                bontoeliminar = $(this);
+                var url = "/Reclamos/EliminarArchivo/"+ bontoeliminar[0].value;
+                var archivos = "/Reclamos/RecuperarArchivos/" +@Model.Id ; 
+
+                swal({
+                    title: "¿Desea eliminar el archivo seleccionado?",
+                    text: "Seguros & Más",
+                    icon: "warning",
+                    buttons: {
+                        cancel: {
+                            text: "Cancelar",
+                            value: null,
+                            visible: true,
+                            className: "",
+                            closeModal: true,
+                        },
+                        confirm: {
+                            text: "OK",
+                            value: true,
+                            visible: true,
+                            className: "",
+                            closeModal: true
+                        }
+                    },
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            //Recuperamos los datos de la tupla a editar
+                            $.ajax({
+                                type: "GET",
+                                url: url,
+                                dataType: "JSON",
+                                success: function (list) {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: archivos,
+                                        dataType: "JSON",
+                                        success: function (list) {
+                                            $("#myModalArchi .close").click(); //cerramos la modal
+                                            if (list.list.length != 0) {
+                                                dataTableArchivos.clear(); //vaciamos la tabla
+                                                for (var a = 0; a < list.list.length; a++) {//volvemos a asignar los valores a la tabla
+                                                    dataTableArchivos.row.add([
+                                                        list.list[a].Foto,
+                                                        list.list[a].Id]).draw(false)
+                                                }
+                                            }
+                                            else {
+                                                dataTableArchivos.clear().draw();
+                                            }
+                                        }
+                                    })
+
+                                }
+                            });
+
+                        }
+                    });
+
+               
+            });
+        });
+
+    </script>
+}

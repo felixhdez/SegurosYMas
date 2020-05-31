@@ -1,0 +1,1096 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.Poliza
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<link href="~/Content/blueimp-gallery.min.css" rel="stylesheet" />
+<link href="~/Content/blueimp-gallery.css" rel="stylesheet" />
+
+<style>
+    /* Local style for demo purpose */
+
+    .lightBoxGallery {
+        text-align: center;
+    }
+
+        .lightBoxGallery img {
+            margin: 5px;
+            height: 150px;
+            width: 150px;
+        }
+</style>
+
+<div id="blueimp-gallery" class="blueimp-gallery">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Pólizas</h2>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("Lista", "Index")
+            </li>
+            <li class="active">
+                <strong>Detalle</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-8">
+        <div class="title-action">
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("Index","Polizas")"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Regresar</a>
+            <a class="btn btn-success btn-outline dim" onclick="Editar()"><i class="fa fa-edit"></i>&nbsp;&nbsp;Editar</a>
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("CreateRenovacion","Polizas")" onclick="Valor()"><i class="fa fa-calendar"></i>&nbsp;&nbsp;Renovar</a>
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("IndexPolizas","Reportes")"><i class="fa fa-file-archive-o"></i>&nbsp;&nbsp;Generar Reporte</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <!--Fila para detalles generales de la póliza-->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Datos Generales | @Model.NumPoliza</h5>
+                    <div class="ibox-tools">
+                        @*@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-xs"})*@
+                        <a class="collapse-link"><i class="fa fa-chevron-up" style="color: #bebebe;"></i></a>
+                        <a class="close-link"><i class="fa fa-times" style="color: #bebebe;"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <br />
+                        <div class="col-md-6 b-r">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" style="border: solid 2px #bebebe;">
+                                    <tbody>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Cliente</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Cliente.NombreCompleto)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Contacto</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.ContactoIntermediario.NombreCompleto)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Contratante</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Persona.NombreCompleto)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Producto</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Producto.Codigo) | @Html.DisplayFor(model => model.Producto.Descripcion)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Ramo</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Producto.Ramo.Descripcion)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Aseguradora</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Producto.Aseguradora.Descripcion)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Número de Póliza</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.NumPoliza)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Tipo de Póliza</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Tipo)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Fecha de Emisión</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.FechaEmision)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Vigencia</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.FechaDesde) a @Html.DisplayFor(model => model.FechaHasta)</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" style="border: solid 2px #bebebe;">
+                                    <tbody>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Forma de Pago</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.FormaDePago)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Tipo de Moneda</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.TipoMoneda)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Prima Neta</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.PrimaNeta)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Derecho de Emisión</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Emision)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">IVA</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Iva)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Otros</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Otros)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Comisión %</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.ComisionPorcentaje)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Comisión $</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.ComisionValor)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Tipo de Cambio</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.TipoDeCambio)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Agente</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Agente.NombreCompleto)</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <h4> Detalle de Cuotas</h4>
+                            @*<button type="button" class="btn btn-success fa fa-list-ul pull-right" style="float: right;margin-top: -2.5em;margin-left: 1em;" id="btnAbonos"> &nbsp; &nbsp; Ver abonos</button>*@
+                            <br />
+                            <div class="table-responsive">
+                                <table class="table table-bordered" style="border: solid 2px #bebebe;" id="tableDetalleCuotas">
+                                    <tr style="text-transform:uppercase; background-color: #eee;">
+                                        <th>N°</th>
+                                        <th>Fecha</th>
+                                        <th>Monto</th>
+                                        <th>Estado<button type="button" class="bagde bagde-navy fa fa-list-ul pull-right" style="float: right;" id="btnAbonos"></button></th>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Tabs horizontales-->
+    @*<div class="row">
+        <div class="col-lg-12">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#tab-1"><i class="fa fa-folder"></i>&nbsp; Adendas</a></li>
+                    <li class=""><a data-toggle="tab" href="#tab-2"><i class="fa fa-exclamation"></i>&nbsp;Reclamos</a></li>
+                    <li class=""><a data-toggle="tab" href="#tab-3"><i class="fa fa-paper-plane"></i>&nbsp;Trámites</a></li>
+                    <li class=""><a data-toggle="tab" href="#tab-4"><i class="fa fa-pencil"></i>&nbsp;Bitácora</a></li>
+                </ul>
+                <div class="tab-content ">
+                    <div id="tab-1" class="tab-pane active">
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table" id="tableAdendas">
+                                    <thead>
+                                        <tr>
+                                            <th>Num Adenda</th>
+                                            <th>Tipo</th>
+                                            <th>Vigencia</th>
+                                            <th>Suma Asegurada</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-2" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table" id="tableReclamos">
+                                    <thead>
+                                        <tr>
+                                            <th>Num Reclamo</th>
+                                            <th>Tipo</th>
+                                            <th>Fecha</th>
+                                            <th>Monto</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-3" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table" id="tableTramites">
+                                    <thead>
+                                        <tr>
+                                            <th>Tipo</th>
+                                            <th>Modalidad</th>
+                                            <th>Fecha</th>
+                                            <th>Recibido</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-4" class="tab-pane">
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table" id="tableBitacora">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Observación</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />*@
+
+    <!--Fila para bienes asegurados-->
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="ibox">
+                <div class="ibox-title"><h5>Bienes Asegurados</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link"><i class="fa fa-chevron-up" style="color: #bebebe;"></i></a>
+                        <a class="close-link"><i class="fa fa-times" style="color: #bebebe;"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped" id="tableBienes">
+                            <thead>
+                                <tr>
+                                    <th>N° Certificado</th>
+                                    <th>Observación</th>
+                                    <th>¿Excluido?</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title"><h5>Características y Coberturas</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link"><i class="fa fa-chevron-up" style="color: #bebebe;"></i></a>
+                        <a class="close-link"><i class="fa fa-times" style="color: #bebebe;"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-md-6 b-r">
+                            <div class="table-responsive">
+                                <table class="table" id="tableCaracteristicas">
+                                    <thead>
+                                        <tr>
+                                            <th>Característica</th>
+                                            <th>Valor</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped" id="tableCoberturas">
+                                    <thead>
+                                        <tr>
+                                            <th>Cobertura</th>
+                                            <th>Suma Asegurada</th>
+                                            <th>Deducible</th>
+                                            <th>Prima</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Fila para adendas y trámites-->
+    @*<div class="row">
+        <div class="col-lg-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Adendas</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link"><i class="fa fa-chevron-up" style="color: #bebebe;"></i></a>
+                        <a class="close-link"><i class="fa fa-times" style="color: #bebebe;"></i></a>
+                    </div>
+                </div>
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table class="table" id="tableAdendas">
+                                <thead>
+                                    <tr>
+                                        <th>Num Adenda</th>
+                                        <th>Tipo</th>
+                                        <th>Vigencia</th>
+                                        <th>Suma Asegurada</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Reclamos</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link"><i class="fa fa-chevron-up" style="color: #bebebe;"></i></a>
+                        <a class="close-link"><i class="fa fa-times" style="color: #bebebe;"></i></a>
+                    </div>
+                </div>
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table class="table" id="tableReclamos">
+                                <thead>
+                                    <tr>
+                                        <th>Num Reclamo</th>
+                                        <th>Tipo</th>
+                                        <th>Fecha</th>
+                                        <th>Monto</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>*@
+
+    <!--Fila para trámites y bitácora-->
+    @*<div class="row">
+        <div class="col-lg-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Trámites</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link"><i class="fa fa-chevron-up" style="color: #bebebe;"></i></a>
+                        <a class="close-link"><i class="fa fa-times" style="color: #bebebe;"></i></a>
+                    </div>
+                </div>
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table class="table" id="tableTramites">
+                                <thead>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Modalidad</th>
+                                        <th>Fecha</th>
+                                        <th>Recibido</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Bitácora</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link"><i class="fa fa-chevron-up" style="color: #bebebe;"></i></a>
+                        <a class="close-link"><i class="fa fa-times" style="color: #bebebe;"></i></a>
+                    </div>
+                </div>
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <table class="table" id="tableBitacora">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Observación</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>*@
+
+    <!--Prueba de tabs-->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Gestiones</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link"><i class="fa fa-chevron-up" style="color: #bebebe;"></i></a>
+                        <a class="close-link"><i class="fa fa-times" style="color: #bebebe;"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="background-color: #dadadb; border: 3px solid white;">
+                    <div class="tabs-container">
+                        <div class="tabs-left">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="#tab-1"> Adendas</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-2">Reclamos</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-3">Trámites</a></li>
+                                <li class=""><a data-toggle="tab" href="#tab-4">Bitácora</a></li>
+                            </ul>
+                            <div class="tab-content ">
+                                <div id="tab-1" class="tab-pane active">
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            <table class="table" id="tableAdendas">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Núm Adenda</th>
+                                                        <th>Tipo</th>
+                                                        <th>Vigencia</th>
+                                                        <th>Suma Asegurada</th>
+                                                        <th>Acción</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="tab-2" class="tab-pane">
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            <table class="table" id="tableReclamos">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Núm Reclamo</th>
+                                                        <th>Tipo</th>
+                                                        <th>Fecha</th>
+                                                        <th>Monto</th>
+                                                        <th>Acción</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="tab-3" class="tab-pane">
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            <table class="table" id="tableTramites">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Tipo</th>
+                                                        <th>Modalidad</th>
+                                                        <th>Fecha</th>
+                                                        <th>Recibido</th>
+                                                        <th>Acción</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="tab-4" class="tab-pane">
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            <table class="table" id="tableBitacora">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Fecha</th>
+                                                        <th>Observación</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+    
+    <!--Fila archivos-->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Archivos</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link"><i class="fa fa-chevron-up" style="color: #bebebe;"></i></a>
+                        <a class="close-link"><i class="fa fa-times" style="color: #bebebe;"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="lightBoxGallery" id="links">
+                        @foreach (var item in ViewBag.Archivos)
+                        {
+                            <a href="@item.Foto" datagallery>
+                                <img src="@item.Foto" />
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ </div>
+
+
+<!--Modal para detalle de recibos-->
+<div class="modal inmodal fade" id="modal-detalle" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Detalle de Pagos</h4>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("_DetalleRecibos")
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+@section scripts{
+    <!-- Datatable -->
+<link href="~/Content/DataTables/media/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/media/css/dataTables.jqueryui.min.css" rel="stylesheet" />
+<script src="~/Scripts/DataTables/media/js/dataTables.bootstrap.min.js"></script>
+<script src="~/Scripts/DataTables/media/js/dataTables.jqueryui.min.js"></script>
+<script src="~/Scripts/DataTables/media/js/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/jquery.blueimp-gallery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"> </script>
+
+
+    <script>
+
+        var dataTableBienes = null;
+        var dataTableCaracteristicas = null;
+        var dataTableCoberturas = null;
+
+        // Crea una instancia de datatable para el detalle
+        $(function () {
+            dataTableBienes = $("#tableBienes").DataTable({
+                "info": false,
+                "paging": true,
+                "ordering": true,
+                "searching": false,
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "No hay bienes asegurados que mostrar",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                
+            
+                }, "columnDefs": [{
+                    "targets": 3,
+                    "render": function (data, type, row, meta) {
+                        return "<button class='btn btn-sm btn-success' value='" + data + "' type='button'>Mostrar</button>";
+                    }
+                }]
+            });
+
+            dataTableCaracteristicas = $("#tableCaracteristicas").DataTable({
+                "info": false,
+                "paging": false,
+                "ordering": true,
+                "searching": false,
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "No hay características que mostrar.",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }
+            });
+
+            dataTableCoberturas = $("#tableCoberturas").DataTable({
+                "info": false,
+                "paging": false,
+                "ordering": true,
+                "searching": false,
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "No hay coberturas que mostrar",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }
+            });
+        });
+
+        var dataTableAdendas = null;
+        var dataTableReclamos = null;
+        var dataTableTramites = null;
+        var dataTableBitacora = null;
+
+        $(function(){
+            dataTableAdendas = $("#tableAdendas").DataTable({
+                "info": false,
+                "paging": true,
+                "ordering": true,
+                "searching": false,
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "No hay adendas que mostrar",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }, "columnDefs": [{
+                    "targets": 4,
+                    "render": function (data, type, row, meta) {
+                        return "<button class='btn btn-sm btn-success' value='" + data + "' type='button'>Ver detalle</button>";
+                    }
+                }]
+            });
+
+            dataTableReclamos= $("#tableReclamos").DataTable({
+                "info": false,
+                "paging": true,
+                "ordering": true,
+                "searching": false,
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "No hay reclamos que mostrar",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                
+                }, "columnDefs": [{
+                    "targets": 4,
+                    "render": function (data, type, row, meta) {
+                        return "<button class='btn btn-sm btn-success' value='" + data + "' type='button'>Ver detalle</button>";
+                    }
+                }]
+            });
+
+            dataTableTramites= $("#tableTramites").DataTable({
+                "info": false,
+                "paging": true,
+                "ordering": true,
+                "searching": false,
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "No hay trámites que mostrar",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                
+                }, "columnDefs": [{
+                    "targets": 4,
+                    "render": function (data, type, row, meta) {
+                        return "<button class='btn btn-sm btn-success' value='" + data + "' type='button'>Ver detalle</button>";
+                    }
+                }]
+            });
+
+            dataTableBitacora= $("#tableBitacora").DataTable({
+                "info": false,
+                "paging": true,
+                "ordering": true,
+                "searching": false,
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "No hay bitácoras que mostrar",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "/BienesAsegurados/GetBienesXPoliza/" + @Model.Id,
+                dataType: "JSON",
+                success: function (list) {
+                    dataTableBienes.clear().draw();
+                    for (var i = 0; i < list.lista.length; i++) {
+                        var exc = null;
+                        if(list.lista[i].Excluido)
+                            exc = "Sí";
+                        else
+                            exc = "No";
+                        dataTableBienes.row.add([
+                           list.lista[i].NumCertificado,
+                           list.lista[i].Observacion,
+                           exc,
+                           list.lista[i].IdBien]).draw(false);
+                    }
+                }
+            })
+
+            $.ajax({
+                type: "GET",
+                url: "/Polizas/RecuperarCuotas/" + @Model.Id,
+                dataType: "JSON",
+                success: function (list) {
+                    for (var i = 0; i < list.list.length; i++) {
+                        var htmltags = '<tr>'+ '<td>' + list.list[i].Cuotas + '</td>'+ '<td>' + list.list[i].Vence + '</td>'+'<td>' + list.list[i].Monto + 
+                            '</td>'+'<td>' + list.list[i].Estado + '</td></tr>';
+                        //if(list.list[i].Estado=="Pagado")
+                        //    htmltags += '<td> <span class="label label-success">' + list.list[i].Estado + '</span> </td>'+ '</tr>';
+                        //else
+                        //    if(list.list[i].Estado=="Abonado")
+                        //        htmltags += '<td> <span class="label label-warning">' + list.list[i].Estado + '</span> </td>'+ '</tr>';
+                        //    else
+                        //        if(list.list[i].Estado=="Pendiente")
+                        //            htmltags += '<td> <span class="label label-danger">' + list.list[i].Estado + '</span> </td>'+ '</tr>';
+                        $("#tableDetalleCuotas tbody").append(htmltags);
+                    }
+                    $("#btnAbonos").val(list.list[0].CuotaId);
+                }
+            })
+
+            $.ajax({
+                type: "GET",
+                url: "/Adendas/RecuperarAdendas/" + @Model.Id,
+                dataType: "JSON",
+                success: function (list) {
+                    dataTableAdendas.clear().draw();
+                    for (var i = 0; i < list.lista.length; i++) {
+                        dataTableAdendas.row.add([
+                           list.lista[i].NumAdenda,
+                           list.lista[i].Tipo,
+                           list.lista[i].Desde + ' a ' + list.lista[i].Hasta,
+                           list.lista[i].Suma,
+                           list.lista[i].IdAdenda]).draw(false);
+                    }
+                }
+            })
+
+            $.ajax({
+                type: "GET",
+                url: "/Reclamos/RecuperarReclamos/" + @Model.Id,
+                dataType: "JSON",
+                success: function (list) {
+                    dataTableReclamos.clear().draw();
+                    for (var i = 0; i < list.lista.length; i++) {
+                        dataTableReclamos.row.add([
+                           list.lista[i].NumReclamo,
+                           list.lista[i].Tipo,
+                           list.lista[i].Fecha,
+                           list.lista[i].Monto,
+                           list.lista[i].IdReclamo]).draw(false);
+                    }
+                }
+            })
+
+            $.ajax({
+                type: "GET",
+                url: "/Tramites/RecuperarTramites/" + @Model.Id,
+                dataType: "JSON",
+                success: function (list) {
+                    dataTableTramites.clear().draw();
+                    for (var i = 0; i < list.lista.length; i++) {
+                        dataTableTramites.row.add([
+                           list.lista[i].Tipo,
+                           list.lista[i].Modalidad,
+                           list.lista[i].Fecha,
+                           list.lista[i].Recibido,
+                           list.lista[i].IdTramite]).draw(false);
+                    }
+                }
+            })
+
+            $.ajax({
+                type: "GET",
+                url: "/Bitacoras/RecuperarBitacora/" + @Model.Id,
+                dataType: "JSON",
+                success: function (list) {
+                    dataTableBitacora.clear().draw();
+                    for (var i = 0; i < list.lista.length; i++) {
+                        dataTableBitacora.row.add([
+                           list.lista[i].Fecha,
+                           list.lista[i].Observacion]).draw(false);
+                    }
+                }
+            })
+        });
+
+        $("#btnAbonos").click(function(){
+            //swal($(this).val());
+            $.ajax({
+                type:"GET",
+                url: "/ReciboCuotas/GetRecibos/" + $(this).val(),
+                dataType:"JSON",
+                success: function(lista){
+                    var fila;
+                    $(".temporal").remove();
+                    if(lista.lista.length >0)
+                    {
+                        for (var i = 0; i < lista.lista.length; i++) {
+                            fila = "<tr class='temporal'><td>"+ lista.lista[i].Prima +"</td><td>" + lista.lista[i].Recibo +"</td><td>"+ lista.lista[i].Fecha +"</td><td>"+ lista.lista[i].Pago +"</td><td>" + lista.lista[i].PagoNeto +"</td></tr>";
+                            $("#DetalleRecibos tbody").append(fila);
+                        }
+                    }
+                    else
+                    {
+                        fila = "<tr class='temporal'> <td class='text-center' colspan='5'> Aún no hay recibos que mostrar.</td></tr>"
+                        $("#DetalleRecibos tbody").append(fila);
+                    }
+                    $("#modal-detalle").modal("show");
+                }
+            });
+        });
+
+        $(function(){
+            $("#tableBienes tbody").on('click', 'button', function () {
+                var datos = dataTableBienes.row($(this).parents('tr')).data();
+                console.log(datos);
+                $.ajax({
+                    type: "GET",
+                    url: "/Polizas/RecuperarCaracteristicas/" + datos[3],
+                    dataType: "JSON",
+                    success: function (list) {
+                        dataTableCaracteristicas.clear().draw();
+                        for (var i = 0; i < list.list.length; i++) {
+                            dataTableCaracteristicas.row.add([
+                                list.list[i].Descripcion,
+                                list.list[i].Valor
+                            ]).draw(false);
+                        }
+                    }
+                });
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Polizas/RecuperarCoberturas/" + datos[3],
+                    dataType: "JSON",
+                    success: function (list) {
+                        dataTableCoberturas.clear().draw();
+                        for (var i = 0; i < list.list.length; i++) {
+                            dataTableCoberturas.row.add([
+                                list.list[i].Descripcion,
+                                list.list[i].Suma,
+                                list.list[i].Deducible,
+                                list.list[i].Prima
+                            ]).draw(false);
+                        }
+                    }
+                });
+            });
+        })
+
+        $(function(){
+            $("#tableAdendas tbody").on('click', 'button', function () {
+                var datos = dataTableAdendas.row($(this).parents('tr')).data();
+                window.location.href = '/Adendas/Details/' + datos[4];
+            })
+        });
+
+        $(function(){
+            $("#tableReclamos tbody").on('click', 'button', function () {
+                var datos = dataTableReclamos.row($(this).parents('tr')).data();
+                window.location.href = '/Reclamos/Details/' + datos[4];
+            })
+        });
+
+        $(function(){
+            $("#tableTramites tbody").on('click', 'button', function () {
+                var datos = dataTableTramites.row($(this).parents('tr')).data();
+                window.location.href = '/Tramites/Details/' + datos[4];
+            })
+        });
+
+        function Editar()
+        {
+            window.location.href="/Polizas/Edit/"+ @Model.Id;
+        };
+
+        document.getElementById('links').onclick = function(event) {
+            event = event || window.event
+            var target = event.target || event.srcElement,
+              link = target.src ? target.parentNode : target,
+              options = { index: link, event: event },
+              links = this.getElementsByTagName('a')
+            blueimp.Gallery(links, options)
+        }
+
+        function Valor()
+        {
+            $.ajax({
+                url: "/Polizas/SetValue/" + @Model.Id,
+                type: "GET",
+                success: function (data) {
+                }
+            });
+        }
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

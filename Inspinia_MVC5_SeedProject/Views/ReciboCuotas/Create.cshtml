@@ -1,0 +1,542 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.ReciboCuota
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<style>
+    #initialihiddenbutton, #btnAddPago {
+        display: none;
+    }
+
+
+    .ibox-hr {
+        -moz-border-bottom-colors: none;
+        -moz-border-left-colors: none;
+        -moz-border-right-colors: none;
+        -moz-border-top-colors: none;
+        background-color: #ffffff;
+        border-color: #e7eaec;
+        border-image: none;
+        border-style: solid solid none;
+        border-width: 2px 0 0;
+        color: inherit;
+        margin-bottom: 0;
+        padding: 0;
+        min-height: 48px;
+    }
+
+    p {
+        font-weight: 400 !important;
+    }
+
+    h2 {
+        font-size: 26px !important;
+        font-weight: 600 !important;
+    }
+
+
+    .container {
+        width: 97% !important;
+    }
+
+    .btn-default {
+        background: #818e99 !important;
+        color: white !important;
+        opacity: inherit !important;
+    }
+
+    .stepwizard .btn-primary {
+        background-color: #428bca !important;
+        color: white !important;
+    }
+
+
+    .stepwizard-step p {
+        margin-top: 0px;
+    }
+
+    .stepwizard-row {
+        display: table-row;
+    }
+
+    .stepwizard {
+        display: table;
+        width: 100%; /*Cambié esta del 82% al 100% para mejorarlo*/
+        position: relative;
+    }
+
+    .stepwizard-step button[disabled] {
+        opacity: 1 !important;
+        filter: alpha(opacity=100) !important;
+    }
+
+    .stepwizard-row:before {
+        top: 14px;
+        bottom: 0;
+        position: absolute;
+        content: " ";
+        width: 100%;
+        height: 1px;
+        background-color: #ccc;
+        z-index: 0;
+    }
+
+    .stepwizard-step {
+        display: table-cell;
+        text-align: center;
+        position: relative;
+    }
+
+    .btn-circle {
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        padding: 6px 0;
+        font-size: 12px;
+        line-height: 1.428571429;
+        border-radius: 15px;
+    }
+</style>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Pagos</h2>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("Lista", "Index")
+            </li>
+            <li class="active">
+                <strong>Pagos</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-8">
+        <div class="title-action">
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("Index","ReciboCuotas")"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Regresar</a>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Ingresar recibo</h5>
+                </div>
+                <div class="ibox-content">
+
+
+				@using (Html.BeginForm()) 
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    
+
+                    <div class="row setup-content">
+                        <div class="col-md-offset-0">
+                            <div class="col-md-12">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <i class="fa fa-pencil-square-o fa-lg"></i>
+                                        <div class="button-group">
+                                            <button class="btn btn-danger fa fa-times " type="button" onclick="limpiar()" style="float: right;margin-top: -1.7em;margin-left: 1em;" id="initialihiddenbutton">&nbsp;&nbsp;Cancelar</button>
+                                            <button class="btn btn-success fa fa-search" data-toggle="modal" data-target="#modal-poliza" type="button" style="float: right;margin-top:-1.7em; margin-left:1em">&nbsp;&nbsp;Buscar</button>
+                                        </div>
+                                    </div>
+                                    <div class="container" style="margin-top:20px;">
+                                        <h2>Seleccione la Póliza</h2>
+                                        <hr class="ibox-hr" />
+                                    </div>
+
+                                    <div class="panel-body">
+
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-2" for="NombreCompleto">Nombre del Cliente</label>
+                                                <div class="col-md-10">
+                                                    <input id="NombreCompleto" name="NombreCompleto" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br /><br /><br />
+                                        @*<div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-4" for="Nombres">Nombres del Cliente</label>
+                                                    <div class="col-md-8">
+                                                        <input id="Nombres" name="Nombres" class="form-control" readonly />
+                                                    </div>
+                                                </div>
+                                            </div>*@
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4" for="Ident">Identificación del Cliente</label>
+                                                <div class="col-md-8">
+                                                    <input id="Ident" name="Ident" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4" for="NumPoliza">Número de Póliza</label>
+                                                <div class="col-md-8">
+                                                    <input id="NumPoliza" name="NumPoliza" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br /><br /><br />
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4" for="Producto">Producto</label>
+                                                <div class="col-md-8">
+                                                    <input id="Producto" name="Producto" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-4" for="Aseguradora">Aseguradora</label>
+                                                <div class="col-md-8">
+                                                    <input id="Aseguradora" name="Aseguradora" class="form-control" readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br /><br />
+                                        <!--Título del contenedor-->
+                                              <div class="container ibox-title" style="margin-top:20px;">
+                                                  <h2>Detalle de Cuotas</h2>
+                                                  <h3 id="lblRecibo"></h3>
+                                                  <button type="button" data-toggle="modal" data-target="#Modal-Guardar" class="btn btn-success fa fa-plus pull-right" style="float: right;margin-top: -2.5em;margin-left: 1em;" id="btnAddPago"> &nbsp; &nbsp; Agregar abono</button>
+                                              </div> <!--Fin del titulo-->
+                                        <!--TABLA DE DETALLE DE CUOTAS-->
+                                        <div class="panel-footer">
+                                            <div class="table-responsive">
+                                                <table class="table" id="tableCuotasEditar">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Cuota</th>
+                                                            <th>Vence</th>
+                                                            <th>Monto</th>
+                                                            <th>Saldo</th>
+                                                            <th>Estado</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <!--FIN DE TABLA DE DETALLE DE CUOTAS-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+
+@*Modal para buscar una póliza*@
+<div class="modal inmodal fade" id="modal-poliza" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Pólizas</h4>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("_BuscarPoliza")
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+@*Modal para guardar recibos*@
+<div class="modal inmodal fade" id="Modal-Guardar" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Recibo</h4>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("_FormRecibo")
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success pull-right" id="btnAgregarRecibo">Guardar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>   
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<!-- Datatable -->
+<link href="~/Content/DataTables/media/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/media/css/dataTables.jqueryui.min.css" rel="stylesheet" />
+<script src="~/Scripts/DataTables/media/js/dataTables.bootstrap.min.js"></script>
+<script src="~/Scripts/DataTables/media/js/dataTables.jqueryui.min.js"></script>
+<script src="~/Scripts/DataTables/media/js/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"> </script>
+
+
+    <script>
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //===================================================================POLIZAS=========================================================================
+        // Instancia de dataTable para la tabla que muestra las pólizas
+        var dataTable = null;
+
+        $(function () {
+            dataTable = $("#BuscarPoliza").DataTable({
+                "ajax": {
+                    "url": "@Url.Action("getPolizas", "BienesAsegurados")",
+                "type": "POST",
+                "dataType": "Json"
+            }, "columns": [
+            {
+                "data": "IdPoliza", "render": function (data) {
+                    return "<button class='btn btn-success' value='" + data + "'>Seleccionar</button>";
+                }
+            },
+            { "data": "NumPoliza" },
+            { "data": "Apellidos" },
+            { "data": "Nombres" },
+            { "data": "Identificacion" },
+            { "data": "Producto"},
+            { "data": "Aseguradora" },
+            ], "language": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "No hay pólizas para mostrar",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            }
+            });
+        });
+
+
+        $idPolizaSelected = 0;
+
+        // Evento al hacer click en el boton seleccionar
+        $(function () {
+            $("#BuscarPoliza tbody").on("click", "button", function () {
+                var data = dataTable.row($(this).parents('tr')).data();
+                $idPolizaSelected = data.IdPoliza;
+                $("#NumPoliza").val(data.NumPoliza).change();
+                $("#NombreCompleto").val(data.Nombres + ' ' + data.Apellidos).change();
+                //$("#Nombres").val(data.Nombres);
+                $("#Ident").val(data.Identificacion);
+                $("#Producto").val(data.Producto);
+                $("#Aseguradora").val(data.Aseguradora);
+                $("#modal-poliza .close").click();
+            });
+        });
+
+        //Limpiar campos de cliente
+        function limpiar()
+        {
+            $("#NumPoliza").val("").change();
+            $("#NombreCompleto").val("");
+            //$("#Nombres").val("");
+            $("#Ident").val("");
+            $("#Producto").val("");
+            $("#Aseguradora").val("");
+            $idPolizaSelected = 0;
+        }
+
+        //===================================Cuotas=====================================
+        // Referencia la tabla de detalles
+        var dataTableDetalle = null;
+        // Crea una instancia de datatable para el detalle
+        $(function () {
+            // Instancia del datatable para mostrar los detalles de cuotas.
+            dataTableDetalle = $("#tableCuotasEditar").DataTable({
+                "info": false,
+                "paging": false,
+                "ordering": false,
+                "searching": false,
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "No existen cuotas para la póliza seleccionada.",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+               
+                }
+            });
+        });
+
+        // Mostrar el boton agregar solo cuando se seleccione un cliente
+        $("#NumPoliza").change(function () {
+            dataTableDetalle.clear().draw();
+            $("#lblRecibo").text("");
+            if (!$(this).val()) {
+                $("#initialihiddenbutton,#btnAddPago").hide();
+
+            }
+            else {
+                $("#initialihiddenbutton,#btnAddPago").show();
+                var url = "/Polizas/RecuperarCuotas/" + $idPolizaSelected;
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    dataType: "JSON",
+                    success: function (list) {
+                        for (x = 0; x < list.list.length; x++) {
+                            dataTableDetalle.row.add([
+                                   list.list[x].Cuotas,
+                                   list.list[x].Vence,
+                                   list.list[x].Monto,
+                                   list.list[x].Saldo,
+                                   list.list[x].Estado]).draw(false);
+                        }
+                        $("#lblRecibo").text("Recibo de Prima: " + list.list[0].Recibo);
+                        $("#btnAddPago").val(list.list[0].CuotaId);
+                    }
+                });
+            }
+        });
+
+        //===========================GUARDAR=======================================
+        
+        $("#btnAgregarRecibo").click(function () {
+            //console.log($("#btnAddPago").val());
+            if ($("#txtFecha").val().trim() &&
+                $("#txtNumRecibo").val().trim() &&
+                $("#txtPago").val().trim() &&
+                $("#txtPagoNeto").val().trim()) {
+                var url = "/ReciboCuotas/CreateRecibo/";
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    dataType: "JSON",
+                    data: {
+                        fecha: $("#txtFecha").val(),
+                        numrecibo: $("#txtNumRecibo").val(),
+                        pago: $("#txtPago").val(),
+                        pagoneto: $("#txtPagoNeto").val(),
+                        cuota: $("#btnAddPago").val()
+                    },
+                    success: function (data) {
+                        if (data.d == -3) {
+                            swal("El número de recibo que intenta ingresar ya existe.", "Seguros & Más", "error");
+                        }
+                        else
+                            if (data.d == -5) {
+                                swal("No puede ingresar un abono mayor al saldo restante.", "Seguros & Más", "error");
+                            }
+                            else
+                                if (data.d > 0) {
+                                    $("#Modal-Guardar .close").click();
+                                    limpiarmodal();
+                                    var url = "/Polizas/RecuperarCuotas/" + $idPolizaSelected;
+                                    $.ajax({
+                                        type: "GET",
+                                        url: url,
+                                        dataType: "JSON",
+                                        success: function (list) {
+                                            dataTableDetalle.clear();
+                                            for (x = 0; x < list.list.length; x++) {
+                                                dataTableDetalle.row.add([
+                                                    list.list[x].Cuotas,
+                                                    list.list[x].Vence,
+                                                    list.list[x].Monto,
+                                                    list.list[x].Saldo,
+                                                    list.list[x].Estado]).draw(false);
+                                            }
+                                        }
+                                    });
+                                }
+                                else
+                                    swal("Hubo un error al intentar guardar.", "Seguros & Más", "error");
+                    }
+                });
+            }
+            else
+                swal("Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.", "Seguros & Más", "warning");
+        });
+
+        function limpiarmodal()
+        {
+            $("#txtFecha").val("");
+            $("#txtNumRecibo").val("");
+            $("#txtPago").val("");
+            $("#txtPagoNeto").val("");
+        }
+
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Polizas/GetValue/",
+                type: "GET",
+                success: function (data) {
+                    if (data.PolizaActual > 0) {
+                        $.ajax({
+                            url: "/Polizas/GetPoliza/" + data.PolizaActual,
+                            type: "GET",
+                            success: function (data) {
+                                $idPolizaSelected = data.lista[0].IdPoliza;
+                                $("#NumPoliza").val(data.lista[0].NumPoliza).change();
+                                $("#NombreCompleto").val(data.lista[0].Nombres + ' ' + data.lista[0].Apellidos).change();
+                                //$("#Nombres").val(data.lista[0].Nombres);
+                                $("#Ident").val(data.lista[0].Identificacion);
+                                $("#Producto").val(data.lista[0].Producto);
+                                $("#Aseguradora").val(data.lista[0].Aseguradora);
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+}

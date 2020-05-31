@@ -1,0 +1,176 @@
+﻿<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <span class="clear">
+                            <span class="block m-t-xs profile-image">
+                                <img src="~/Content/img/SyM blanco.png" />
+
+                                @*<strong class="font-bold">Example user</strong>*@
+                            </span> @*<span class="text-muted text-xs block">Example menu <b class="caret"></b></span>*@
+                        </span>
+                    </a>
+                    @*<ul class="dropdown-menu animated fadeInRight m-t-xs">
+                    <li><a href="#">Logout</a></li>
+                </ul>*@
+                </div>
+                <div class="logo-element">
+                    @*IN+*@
+                    <span class="clear">
+                        <span class="block m-t-xs little-logo">
+                            <img src="~/Content/img/SyM.png" />
+                        </span>
+                    </span>
+                </div>
+            </li>
+            <li class="@Html.IsSelected(action: "Index", controller: "Home")">
+                <a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> <span class="nav-label">Inicio</span> </a>
+            </li>
+
+
+            <li class="@Html.IsSelected(controller:"Agentes")  @Html.IsSelected(controller:"Aseguradoras") @Html.IsSelected(controller:"Caracteristicas") @Html.IsSelected(controller:"CoberturaReclamos") @Html.IsSelected(controller:"Coberturas")
+                @Html.IsSelected(controller:"Departamentos") @Html.IsSelected(controller:"Ramos") @Html.IsSelected(controller:"Documentos") @Html.IsSelected(controller:"Productos") @Html.IsSelected(controller:"TipoDePagos")">
+                <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label" data-i18n="nav.dashboard">Catálogos</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action:"Agentes")"><a href="@Url.Action("Index","Agentes")">Agentes</a></li>
+                    <li class="@Html.IsSelected(action:"Aseguradoras")"><a href="@Url.Action("Index","Aseguradoras")">Aseguradoras</a></li>
+                    <li class="@Html.IsSelected(action:"Caracteristicas")"><a href="@Url.Action("Index","Caracteristicas")">Características</a></li>
+                    <li class="@Html.IsSelected(action:"CoberturaReclamos")"><a href="@Url.Action("Index","CoberturaReclamos")">Coberturas/Reclamos</a></li>
+                    <li class="@Html.IsSelected(action:"Coberturas")"><a href="@Url.Action("Index","Coberturas")">Coberturas</a></li>
+                    <li class="@Html.IsSelected(action:"Departamentos")"><a href="@Url.Action("Index","Departamentos")">Departamentos</a></li>
+                    <li class="@Html.IsSelected(action:"Documentos")"><a href="@Url.Action("Index","Documentos")">Documentos</a></li>
+                    <li class="@Html.IsSelected(action:"Productos")"><a href="@Url.Action("Index","Productos")">Productos</a></li>
+                    <li class="@Html.IsSelected(action:"Ramos")"><a href="@Url.Action("Index","Ramos")">Ramos</a></li>
+                    <li class="@Html.IsSelected(action:"TipoDePagos")"><a href="@Url.Action("Index","TipoDePagos")">Tipo de Pagos</a></li>
+
+                </ul>
+            </li>
+
+            <li class="@Html.IsSelected(controller:"Clientes")  @Html.IsSelected(controller:"ContactoIntermediarios") @Html.IsSelected(controller:"Personas")">
+                <a href="#"><i class="fa fa-users"></i> <span class="nav-label" data-i18n="nav.dashboard">Personas</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action:"Clientes")"><a href="@Url.Action("Index","Clientes")">Clientes</a></li>
+                    <li class="@Html.IsSelected(action:"ContactoIntermediarios")"><a href="@Url.Action("Index","ContactoIntermediarios")">Contactos</a></li>
+                    <li class="@Html.IsSelected(action:"Personas")"><a href="@Url.Action("Index","Personas")">Contratantes</a></li>
+
+
+                </ul>
+            </li>
+
+            <li class="@Html.IsSelected(controller: "Polizas")  @Html.IsSelected(controller: "Polizas") @Html.IsSelected(action:"Create", controller:"BienesAsegurados") @Html.IsSelected(controller:"Bitacoras")">
+                <a href="#"><i class="fa fa-address-book-o"></i> <span class="nav-label" data-i18n="nav.dashboard">Póliza</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action: "Polizas")"><a href="@Url.Action("Index", "Polizas")">Pólizas</a></li>
+                    <li class="@Html.IsSelected(action: "Polizas")"><a href="@Url.Action("Create", "Polizas")">Nueva Póliza</a></li>
+                    <li class="@Html.IsSelected(action:"BienesAsegurados")"><a href="@Url.Action("Create","BienesAsegurados")" onclick="SetValor()">Bienes Asegurados</a></li>
+                    <li class="@Html.IsSelected(action:"Bitacoras")"><a href="@Url.Action("Create", "Bitacoras")" onclick="SetValor()">Bitácora y Archivos</a></li>
+                    <li class="@Html.IsSelected(action:"Polizas")"><a href="@Url.Action("CreateRenovacion", "Polizas")" onclick="SetValor()">Renovar Póliza</a></li>
+                </ul>
+            </li>
+
+
+            <li class="@Html.IsSelected(controller: "Adendas")  @Html.IsSelected(controller: "Adendas") @Html.IsSelected(action:"CreateAdendas", controller:"BienesAsegurados")">
+                <a href="#"><i class="fa fa-folder"></i> <span class="nav-label" data-i18n="nav.dashboard">Adenda</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action: "Adendas")"><a href="@Url.Action("Index", "Adendas")">Adendas</a></li>
+                    <li class="@Html.IsSelected(action: "Adendas")"><a href="@Url.Action("Create", "Adendas")" onclick="SetValor()">Nueva Adenda</a></li>
+                    <li class="@Html.IsSelected(action: "BienesAsegurados")"><a href="@Url.Action("CreateAdendas", "BienesAsegurados")" onclick="SetValorAdendas()">Bienes Asegurados</a></li>
+                    @*<li class="@Html.IsSelected(action: "ArchivosAdendas")"><a href="@Url.Action("Create", "ArchivosAdendas")">Archivos</a></li>*@
+                </ul>
+            </li>
+
+            <li class="@Html.IsSelected(controller: "Reclamos")  @Html.IsSelected(controller: "Reclamos") @Html.IsSelected(controller:"Reclamos") @Html.IsSelected(controller: "ArchivosReclamos")">
+                <a href="#"><i class="fa fa-exclamation-circle"></i> <span class="nav-label" data-i18n="nav.dashboard">Reclamos</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action: "Reclamos")"><a href="@Url.Action("Index", "Reclamos")">Reclamos</a></li>
+                    <li class="@Html.IsSelected(action: "Reclamos")"><a href="@Url.Action("Create", "Reclamos")" onclick="SetValor()">Nuevo Reclamo</a></li>
+                    <li class="@Html.IsSelected(action: "ArchivosReclamos")"><a href="@Url.Action("Create", "ArchivosReclamos")" onclick="SetValorReclamos()">Archivos</a></li>
+                </ul>
+            </li>
+
+            <li class="@Html.IsSelected(controller: "Tramites")  @Html.IsSelected(controller: "Tramites") @Html.IsSelected(controller:"Tramites") @Html.IsSelected(controller: "Tramites")">
+                <a href="#"><i class="fa fa-folder-open"></i> <span class="nav-label" data-i18n="nav.dashboard">Trámites</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action: "Tramites")"><a href="@Url.Action("Index", "Tramites")">Trámites</a></li>
+                    <li class="@Html.IsSelected(action: "Tramites")"><a href="@Url.Action("Create", "Tramites")" onclick="SetValor()">Nuevo Trámite</a></li>
+                    <li class="@Html.IsSelected(action: "ArchivosTrámites")"><a href="@Url.Action("Create", "ArchivosTrámites")" onclick="SetValorTramites()">Archivos</a></li>
+                </ul>
+            </li>
+
+            <li class="@Html.IsSelected(controller: "ReciboCuotas")  @Html.IsSelected(action:"CreateAdendas", controller:"ReciboCuotas") ">
+                <a href="#"><i class="fa fa-money"></i> <span class="nav-label" data-i18n="nav.dashboard">Pagos</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action: "ReciboCuotas")"><a href="@Url.Action("Create", "ReciboCuotas")" onclick="SetValor()">Pagos Pólizas</a></li>
+                    <li class="@Html.IsSelected(action: "ReciboCuotas")"><a href="@Url.Action("CreateAdendas", "ReciboCuotas")">Pagos Adendas</a></li>
+                </ul>
+            </li>
+
+            <li class="@Html.IsSelected(controller: "Reportes")">
+                <a href="#"><i class="fa fa-file-pdf-o"></i> <span class="nav-label" data-i18n="nav.dashboard">Reportes</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action: "Reportes")"><a href="@Url.Action("IndexClientes", "Reportes")">Clientes</a></li>
+                    <li class="@Html.IsSelected(action: "Reportes")"><a href="@Url.Action("IndexPolizas", "Reportes")">Pólizas</a></li>
+                    <li class="@Html.IsSelected(action: "Reportes")"><a href="@Url.Action("IndexReclamos", "Reportes")">Reclamos</a></li>
+                    <li class="@Html.IsSelected(action: "Reportes")"><a href="@Url.Action("IndexTramites", "Reportes")">Trámites</a></li>
+                    <li class="@Html.IsSelected(action: "Reportes")"><a href="@Url.Action("IndexOtros", "Reportes")">Otros</a></li>
+                </ul>
+            </li>
+
+            <li class="@Html.IsSelected(controller: "Usuarios")">
+                <a href="#"><i class="fa fa-gear"></i> <span class="nav-label" data-i18n="nav.dashboard">Administración</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="@Html.IsSelected(action: "Usuarios")"><a href="@Url.Action("Index", "Usuarios")">Usuarios</a></li>
+                </ul>
+            </li>
+
+            <li class="@Html.IsSelected(action: "Manual", controller: "Home")">
+                @*<a href="@Url.Action("Manual", "Home")"><i class="fa fa-book"></i> <span class="nav-label" data-i18n="nav.dashboard">Manual de Usuario</a>*@
+                <a href="http://manual.segurosymas.com.ni.preview.my-hosting-panel.com/Manual.pdf" target="_blank"><i class="fa fa-book"></i> <span class="nav-label" data-i18n="nav.dashboard">Manual de Usuario</a>
+                
+            </li>
+
+        </ul>
+</div>
+</nav>
+
+<script>
+    function SetValor() {
+        $.ajax({
+            url: "/Polizas/SetValue2/",
+            type: "GET",
+            success: function (data) {
+            }
+        });
+    }
+
+    function SetValorAdendas()
+    {
+        $.ajax({
+            url: "/Adendas/SetValue2/",
+            type: "GET",
+            success: function (data) {
+            }
+        });
+    }
+
+    function SetValorReclamos()
+    {
+        $.ajax({
+            url: "/Reclamos/SetValue2/",
+            type: "GET",
+            success: function (data) {
+            }
+        });
+    }
+
+    function SetValorTramites() {
+        $.ajax({
+            url: "/Tramites/SetValue2/",
+            type: "GET",
+            success: function (data) {
+            }
+        });
+    }
+</script>

@@ -1,0 +1,431 @@
+﻿@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Main";
+}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="col-lg-3">
+                <div class="widget style1 navy-bg">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-users fa-4x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <span> Clientes actuales </span>
+                            <h2 class="font-bold" id="ClientesH">1200</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="widget style1 navy-bg">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-file-text fa-4x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <span>Pólizas activas </span>
+                            <h2 class="font-bold" id="PolizasH">2600</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="widget style1 navy-bg">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-bell fa-4x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <span> Trámites pendientes </span>
+                            <h2 class="font-bold" id="TramitesH">240</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="widget style1 navy-bg">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-dollar fa-4x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <span> Primas pendientes </span>
+                            <h2 class="font-bold" id="PrimasH">$120</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox-title">
+                            <h5>Notificaciones recientes</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover" style="border: solid 2px #bebebe;" id="tableHome">
+                                            <thead>
+                                                <tr>
+                                                    <th>Cliente</th>
+                                                    <th>Fecha</th>
+                                                    <th>Lugar</th>
+                                                    <th>Comentarios</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 pull-right">
+                                    <button class="btn btn-primary btn-block">Ver todos</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Ventas y Clientes</h5>
+                    <div class="ibox-tools">
+                        <div class="btn-group">
+                            <button class="btn btn-white active" id="anual">Anual</button>
+                            <button class="btn btn-white" id="mensual">Mensual</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="col-lg-9">
+                                <canvas id="lineChart" height="100"></canvas>
+                            </div>
+
+                            <div class="col-lg-3" style="padding-top:5%;">
+                                <ul class="stat-list">
+                                    <li>
+                                        <h2 class="no-margins" id="prom">2,346</h2>
+                                        <small>Promedio de Ventas</small>
+                                        <div class="progress progress-mini">
+                                            <div style="width: 48%;" class="progress-bar"></div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <h2 class="no-margins " id="promc">4,422</h2>
+                                        <small>Promedio de Clientes</small>
+                                        <div class="progress progress-mini">
+                                            <div style="width: 60%;" class="progress-bar"></div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <h2 class="no-margins" id="Total">9,180</h2>
+                                        <small>Total de Ventas año actual</small>
+                                        <div class="progress progress-mini">
+                                            <div style="width: 22%;" class="progress-bar"></div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-lg-12 text-center vertical-align">
+                            <div class="table-responsive">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td><img src="~/Content/img/assa.png" width="200" style="padding-left: 5%; padding-right:5%;" /></td>
+                                            <td><img src="~/Content/img/america.png" width="200" style="padding-left: 5%; padding-right:5%;" /></td>
+                                            <td><img src="~/Content/img/iniser.png" width="200" style="padding-left: 5%; padding-right:5%;" /></td>
+                                            <td><img src="~/Content/img/lafise.jpg" width="200" style="padding-left: 5%; padding-right:5%;" /></td>
+                                            <td><img src="~/Content/img/mapfre.png" width="200" style="padding-left: 5%; padding-right:5%;" /></td>
+                                            @*<td><img src="~/Content/img/SyM colores.png" width="200" style="padding-left: 5%; padding-right:5%;" /></td>*@
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            @*<div class="col-lg-2">
+                                <img src="~/Content/img/assa.png" width="150"/>
+                            </div>
+                            <div class="col-lg-2">
+                                <img src="~/Content/img/america.png" width="150" />
+                            </div>
+                            <div class="col-lg-2">
+                                <img src="~/Content/img/iniser.png" width="150"/>
+                            </div>
+                            <div class="col-lg-2">
+                                <img src="~/Content/img/lafise.jpg" width="150" />
+                            </div>
+                            <div class="col-lg-2">
+                                <img src="~/Content/img/mapfre.png" width="150"/>
+                            </div>
+                            <div class="col-lg-2">
+                                <img src="~/Content/img/SyM colores.png" width="150" />
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/Chart.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Metodos/Valores",
+                success: function (data) {
+                    var array = data.concat.split("/");
+                    var c2 = Decimales(array[0]);
+                    $("#PrimasH").text("$" + c2);
+                    $("#ClientesH").text(array[1]);
+                    $("#TramitesH").text(array[2]);
+                    $("#PolizasH").text(array[3]);
+                }
+            });
+        });
+
+        //$(document).ready(function () {
+        //    $.ajax({
+        //        type: "GET",
+        //        url: "/Metodos/GetReclamos/",
+        //        success: function (data) {
+        //            $("#tableHome tbody").empty();
+        //            if (data.list.length > 0) {
+        //                for (var i = 0; i < data.list.length; i++) {
+        //                    var datos = "<tr><td>" + data.list[i].Cliente + "</td><td>" + data.list[i].Fecha + "</td><td>" + data.list[i].Lugar + "</td><td>" + data.list[i].Comentarios + "</td></tr>";
+        //                    $("#tableHome").prepend(datos);
+        //                }
+        //            }
+        //            else {
+        //                var datos = "<tr><td class='text-center' colspan='4'>No hay reclamos que mostrar</td></tr>";
+        //                $("#tableHome").prepend(datos);
+        //            }
+        //        }
+        //    });
+        //});
+
+        function Decimales(numero) {
+            var dividir = (numero).split('.');
+            if (dividir.length <= 1) {
+                dividir = (numero.split(','));
+            }
+            var c = "";
+            var v = 1;
+            for (var i = dividir[0].length - 1; i >= 0; i--) {
+                c += dividir[0][i];
+                if (v%3==0 && v!=dividir[0].length) {
+                    c += ',';
+                }
+                v++;
+            }
+            c = c.split("").reverse().join("");
+            c += '.' + dividir[1];
+            return c;
+        }
+
+        var ventas = [];
+        var ventaslabel = [];
+        var clientes = [];
+        var clienteslabel = [];
+
+        $(document).ready(function () {
+            Anual();
+            $("#anual").addClass("active");
+            $("#mensual").removeClass("active");
+        });
+
+        function Anual() {
+            $.ajax({
+                type: "GET",
+                url: "/Metodos/VentaAnual/",
+                success: function (data) {
+                    ventas = [];
+                    ventaslabel = [];
+                    for (var i = 0; i < data.ventas.length; i++) {
+                        ventaslabel.push(data.ventas[i].Serie);
+                        ventas.push(parseFloat(data.ventas[i].Valor));
+                    }
+
+                    $.ajax({
+                        type: "GET",
+                        url: "/Metodos/ClientesAnual/",
+                        success: function (data) {
+                            clientes = [];
+                            clienteslabel = [];
+                            for (var i = 0; i < data.clientes.length; i++) {
+                                clienteslabel.push(data.clientes[i].Serie);
+                                clientes.push(parseFloat(data.clientes[i].Valor));
+                            }
+
+                            OtrosValores();
+                            Total();
+                            var lineData = {
+                                labels: ventaslabel,
+                                datasets: [
+
+                                    {
+                                        label: "Ventas",
+                                        //backgroundColor: 'rgba(26,179,148,0.5)',
+                                        backgroundColor: 'rgba(26, 179, 148, 0.5)',
+                                        //borderColor: "rgba(26,179,148,0.7)",
+                                        borderColor: 'rgba(26, 179, 148, 0.8)',
+                                        //pointBackgroundColor: "rgba(26,179,148,1)",
+                                        pointBackgroundColor: 'white',
+                                        //pointBorderColor: "#fff",
+                                        pointBorderColor: 'rgba(26, 179, 148, 0.8)',
+                                        data: ventas
+                                    }, {
+                                        label: "Clientes",
+                                        backgroundColor: 'rgba(220, 220, 220, 0.5)',
+                                        pointBorderColor: "#fff",
+                                        data: clientes
+                                    }
+                                ]
+                            };
+
+                            var lineOptions = {
+                                responsive: true
+                            };
+
+
+                            var ctx = document.getElementById("lineChart").getContext("2d");
+                            new Chart(ctx, { type: 'line', data: lineData, options: lineOptions });
+                        }
+                    });
+                }
+            });
+        };
+
+        function Mensual() {
+            $.ajax({
+                type: "GET",
+                url: "/Metodos/VentaMensual/",
+                success: function (data) {
+                    ventas = [];
+                    ventaslabel = [];
+                    for (var i = 0; i < data.ventas.length; i++) {
+                        ventaslabel.push(data.ventas[i].Serie);
+                        ventas.push(parseFloat(data.ventas[i].Valor));
+                    }
+
+                    $.ajax({
+                        type: "GET",
+                        url: "/Metodos/ClientesMensual/",
+                        success: function (data) {
+                            clientes = [];
+                            clienteslabel = [];
+                            for (var i = 0; i < data.clientes.length; i++) {
+                                clienteslabel.push(data.clientes[i].Serie);
+                                clientes.push(parseFloat(data.clientes[i].Valor));
+                            }
+
+                            OtrosValores();
+                            var lineData = {
+                                labels: ventaslabel,
+                                datasets: [
+
+                                    {
+                                        label: "Ventas",
+                                        //backgroundColor: 'rgba(26,179,148,0.5)',
+                                        backgroundColor: 'rgba(26, 179, 148, 0.5)',
+                                        //borderColor: "rgba(26,179,148,0.7)",
+                                        borderColor: 'rgba(26, 179, 148, 0.8)',
+                                        //pointBackgroundColor: "rgba(26,179,148,1)",
+                                        pointBackgroundColor: 'white',
+                                        //pointBorderColor: "#fff",
+                                        pointBorderColor: 'rgba(26, 179, 148, 0.8)',
+                                        data: ventas
+                                    }, {
+                                        label: "Clientes",
+                                        backgroundColor: 'rgba(220, 220, 220, 0.5)',
+                                        pointBorderColor: "#fff",
+                                        data: clientes
+                                    }
+                                ]
+                            };
+
+                            var lineOptions = {
+                                responsive: true
+                            };
+
+
+                            var ctx = document.getElementById("lineChart").getContext("2d");
+                            new Chart(ctx, { type: 'line', data: lineData, options: lineOptions });
+                        }
+                    });
+                }
+            });
+        };
+
+        function OtrosValores() {
+            var sumatoria = ventas.reduce(function (a, b) {
+                return a + b;
+            }, 0);
+            var prom = parseFloat(sumatoria / ventas.length).toFixed(2);
+            prom = Decimales(prom);
+            $("#prom").html("$" + prom);
+
+            var sumatoria2 = clientes.reduce(function (a, b) {
+                return a + b;
+            }, 0);
+            var prom2 = parseFloat(sumatoria2 / clientes.length).toFixed(2);
+            prom2 = Decimales(prom2);
+            $("#promc").html(prom2);
+        }
+
+        function Total() {
+            var actual;
+            var d = new Date();
+            var anio = d.getFullYear();
+            var a = $.inArray("" + anio, ventaslabel);
+            actual = ventas[a];
+            actual = parseFloat(actual).toFixed(2);
+            $("#Total").html("$" + Decimales(actual));
+        }
+
+        $("#mensual").click(function () {
+            Mensual();
+            OtrosValores();
+            $(this).addClass("active");
+            $("#anual").removeClass("active");
+        });
+
+        $("#anual").click(function () {
+            Anual();
+            OtrosValores();
+            $(this).addClass("active");
+            $("#mensual").removeClass("active");
+        });
+    </script>
+    }

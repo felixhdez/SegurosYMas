@@ -1,0 +1,1342 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.BienAsegurado
+
+@{
+    ViewBag.Title = "CreateAdendas";
+}
+
+<style>
+    #initialihiddenbutton {
+        display: none;
+    }
+
+
+    .ibox-hr {
+        -moz-border-bottom-colors: none;
+        -moz-border-left-colors: none;
+        -moz-border-right-colors: none;
+        -moz-border-top-colors: none;
+        background-color: #ffffff;
+        border-color: #e7eaec;
+        border-image: none;
+        border-style: solid solid none;
+        border-width: 2px 0 0;
+        color: inherit;
+        margin-bottom: 0;
+        padding: 0;
+        min-height: 48px;
+    }
+
+    p {
+        font-weight: 400 !important;
+    }
+
+    h2 {
+        font-size: 26px !important;
+        font-weight: 600 !important;
+    }
+
+
+    .container {
+        width: 97% !important;
+    }
+
+    .btn-default {
+        background: #818e99 !important;
+        color: white !important;
+        opacity: inherit !important;
+    }
+
+    .stepwizard .btn-primary {
+        background-color: #428bca !important;
+        color: white !important;
+    }
+
+
+    .stepwizard-step p {
+        margin-top: 0px;
+    }
+
+    .stepwizard-row {
+        display: table-row;
+    }
+
+    .stepwizard {
+        display: table;
+        width: 100%; /*Cambié esta del 82% al 100% para mejorarlo*/
+        position: relative;
+    }
+
+    .stepwizard-step button[disabled] {
+        opacity: 1 !important;
+        filter: alpha(opacity=100) !important;
+    }
+
+    .stepwizard-row:before {
+        top: 14px;
+        bottom: 0;
+        position: absolute;
+        content: " ";
+        width: 100%;
+        height: 1px;
+        background-color: #ccc;
+        z-index: 0;
+    }
+
+    .stepwizard-step {
+        display: table-cell;
+        text-align: center;
+        position: relative;
+    }
+
+    .btn-circle {
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        padding: 6px 0;
+        font-size: 12px;
+        line-height: 1.428571429;
+        border-radius: 15px;
+    }
+</style>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Adendas</h2>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("Lista", "Index")
+            </li>
+            <li class="active">
+                <strong>Bienes Asegurados</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-8">
+        <div class="title-action">
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("Index","Adendas")"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Regresar</a>
+            @*<a class="btn btn-success btn-outline fa fa-file-image-o dim" href="@Url.Action("Create","ArchivosAdendas")">&nbsp;&nbsp;Archivos</a>*@
+        </div>
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Gestión de Bienes Asegurados</h5>
+                </div>
+                <div class="ibox-content">
+
+                    <!--Nav de steps-->
+                    <div class="container">
+                        <div class="stepwizard">
+                            <div class="stepwizard-row setup-panel">
+                                <div class="stepwizard-step col-xs-6">
+                                    <a href="#step-1" type="button" class="btn btn-primary btn-circle">1</a>
+                                    <p>Adenda</p>
+                                </div>
+                                <div class="stepwizard-step col-xs-6">
+                                    <a href="#step-2" type="button" class="btn btn-default btn-circle" @*disabled="disabled"*@>2</a>
+                                    <p>Bienes Asegurados</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!--Finaliza el nav de steps-->
+                    <br /><br />
+
+
+                    @using (Html.BeginForm("CreateAdendas", "BienesAsegurados", FormMethod.Post, new { @onsubmit = "return AgregarDatos(this)" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+
+                        <div class="form-horizontal">
+
+                            <!--Paso #1-->
+                            <div class="row setup-content" id="step-1">
+                                <div class="col-md-offset-0">
+                                    <div class="col-md-12">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                <i class="fa fa-pencil-square-o fa-lg"></i>
+                                                <div class="button-group">
+                                                    <button class="btn btn-danger fa fa-times " type="button" onclick="limpiar()" style="float: right;margin-top: -1.7em;margin-left: 1em;" id="initialihiddenbutton">&nbsp;&nbsp;Cancelar</button>
+                                                    <button class="btn btn-success fa fa-search" data-toggle="modal" data-target="#modal-poliza" type="button" style="float: right;margin-top:-1.7em; margin-left:1em">&nbsp;&nbsp;Buscar</button>
+                                                </div>
+                                            </div>
+                                            <div class="container" style="margin-top:20px;">
+                                                <h2>Seleccione la Adenda</h2>
+                                                <hr class="ibox-hr" />
+                                            </div>
+
+                                            <div class="panel-body">
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-2" for="NombreCompleto">Nombre del Cliente</label>
+                                                        <div class="col-md-10">
+                                                            <input id="NombreCompleto" name="NombreCompleto" class="form-control" readonly />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br /><br /><br />
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-4" for="Ident">Identificación del Cliente</label>
+                                                        <div class="col-md-8">
+                                                            <input id="Ident" name="Ident" class="form-control" readonly />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-4" for="NumPoliza">Número de Adenda</label>
+                                                        <div class="col-md-8">
+                                                            <input id="NumAdenda" name="NumAdenda" class="form-control" readonly />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br /><br /><br />
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-4" for="Producto">Producto</label>
+                                                        <div class="col-md-8">
+                                                            <input id="Producto" name="Producto" class="form-control" readonly />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-4" for="Aseguradora">Aseguradora</label>
+                                                        <div class="col-md-8">
+                                                            <input id="Aseguradora" name="Aseguradora" class="form-control" readonly />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <br /><br />
+                                                <input id="tipo" type="text" hidden />
+                                                <button class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:1.7em;">
+                                                    Siguiente
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--Paso #2-->
+                            <div class="row setup-content" id="step-2">
+                                <div class="col-md-offset-0">
+                                    <div class="col-md-12">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                <i class="fa fa-pencil-square-o fa-lg"></i>
+                                            </div>
+                                            <!--Contenido de la caja-->
+                                            <div class="panel-body">
+                                                <!--Título del contenedor-->
+                                                <div class="container" style="margin-top:20px;">
+                                                    <a class="btn btn-success btn-outline pull-right fa fa-save dim" id="btnGuardarCambioB" style="float: right;margin-top: -0.1em;margin-left: 1em;"></a>
+                                                    <h2>Bienes Asegurados</h2>
+                                                    <label class="text-warning" hidden>Nada</label>
+                                                    <hr class="ibox-hr" />
+                                                </div> <!--Fin del titulo-->
+                                                <div class="col-md-4" style="margin-top: -1em;">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-4">Bien Asegurado</label>
+                                                        <div class="col-md-8">
+                                                            <select class="form-control" id="dropBienesB"></select>
+                                                            <input class="form-control" id="txtNumCB" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" style="margin-top: -1em;">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-4">Observación</label>
+                                                        <div class="col-md-8">
+                                                            <input class="form-control" id="txtObservacionE" name="Observacion" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2" style="margin-top: -0.5em;">
+                                                    <input type="checkbox" name="Exclusion" id="checkEx" />
+                                                    <label style="margin-left: 0.5em;"> ¿Excluido? </label>
+                                                </div>
+                                                <br /><br /><br />
+                                                <!--Título del contenedor-->
+                                                <div class="container ibox-title">
+                                                    <h2>Características</h2>
+                                                    <a class="btn btn-success fa fa-plus dim pull-right" data-toggle="modal" data-target="#myModal5" style="float: right;margin-top: -2.5em;margin-left: 1em;" id="btnAddCaract"> &nbsp; &nbsp; Agregar </a>
+                                                </div> <!--Fin del titulo-->
+                                                <br />
+                                                <!--TABLA DE DETALLE DE CARACTERISTICAS-->
+                                                <div class="panel-footer">
+                                                    <div class="table-responsive">
+                                                        <table class="table" id="tableCaractEditar">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Característica</th>
+                                                                    <th>Valor</th>
+                                                                    <th>Acciones</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!--FIN DE TABLA DE DETALLE DE CARACTERISTICAS-->
+                                                <br />
+                                                <!--Título del contenedor-->
+                                                <div class="container ibox-title">
+                                                    <h2>Coberturas</h2>
+                                                    <a class="btn btn-success fa fa-plus dim pull-right" data-toggle="modal" data-target="#myModalCob" style="float: right;margin-top: -2.5em;margin-left: 1em;" id="btnAddCobert"> &nbsp; &nbsp; Agregar </a>
+                                                </div> <!--Fin del titulo-->
+                                                <br />
+                                                <!--TABLA DE DETALLE DE COBERTURAS-->
+                                                <div class="panel-footer">
+                                                    <div class="table-responsive">
+                                                        <table class="table" id="tableCobertEditar">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Cobertura</th>
+                                                                    <th>Suma Asegurada</th>
+                                                                    <th>Deducible</th>
+                                                                    <th>Prima</th>
+                                                                    <th>Acciones</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <!--FIN DE TABLA DE DETALLE DE COBERTURAS-->
+
+                                                <button class="btn btn-primary backBtn pull-left" type="button" style="float:left; margin-top:1.7em;">Regresar</button>
+                                                <button class="btn btn-primary pull-right" id="btnSave" type="submit" style="margin-top:1.7em;"> Guardar </button>
+
+                                            </div> <!--termina contenido de la caja-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Modal para buscar una adenda*@
+<div class="modal inmodal fade" id="modal-poliza" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Adendas</h4>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("_BuscarAdenda")
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<!--Modal para editar una caracteristica-->
+<div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Característica</h4>
+
+            </div>
+            <div class="modal-body">
+
+                @Html.Partial("_EditarCaracterísticas")
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="" class="btn btn-success pull-right" id="btnGuardarCambios">Guardar</button>
+                <button type="button" onclick="" class="btn btn-success pull-right" id="btnEditarCambios">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal para editar una cobertura-->
+<div class="modal inmodal fade" id="myModalCob" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title">Cobertura</h4>
+
+            </div>
+            <div class="modal-body">
+
+                @Html.Partial("_EditarCoberturas")
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="" class="btn btn-success pull-right" id="btnGuardarCambiosCobertura">Guardar</button>
+                <button type="button" onclick="" class="btn btn-success pull-right" id="btnEditarCambiosCobertura">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <!-- Datatable -->
+    <link href="~/Content/DataTables/media/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/DataTables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="~/Content/DataTables/media/css/dataTables.jqueryui.min.css" rel="stylesheet" />
+    <script src="~/Scripts/DataTables/media/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/DataTables/media/js/dataTables.jqueryui.min.js"></script>
+    <script src="~/Scripts/DataTables/media/js/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+    <!-- Script para el paso a paso.-->
+    <script>
+        $(document).ready(function () {
+            var navListItems = $('div.setup-panel div a'),
+                allWells = $('.setup-content'),
+                allNextBtn = $('.nextBtn'),
+                allBackButton = $('.backBtn');
+
+            allWells.hide();
+
+            navListItems.click(function (e) {
+                e.preventDefault();
+                var $target = $($(this).attr('href')),
+                    $item = $(this);
+
+                if (!$item.hasClass('disabled')) {
+                    navListItems.removeClass('btn-primary').addClass('btn-default');
+                    $item.addClass('btn-primary');
+                    allWells.hide();
+                    $target.show();
+                    $target.find('input:eq(0)').focus();
+                }
+            });
+            allBackButton.click(function () {
+                var curStep = $(this).closest(".setup-content"),
+                    curStepBtn = curStep.attr("id"),
+                    nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().prev().children("a"),
+                    curInputs = curStep.find("input[type='text'],input[type='url']"),
+                    isValid = true;
+
+                $(".form-group").removeClass("has-error");
+                for (var i = 0; i < curInputs.length; i++) {
+                    if (!curInputs[i].validity.valid) {
+                        isValid = false;
+                        $(curInputs[i]).closest(".form-group").addClass("has-error");
+                    }
+                }
+
+                nextStepWizard.removeAttr('disabled').trigger('click');
+            });
+
+            allNextBtn.click(function () {
+                var curStep = $(this).closest(".setup-content"),
+                    curStepBtn = curStep.attr("id"),
+                    nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
+                    curInputs = curStep.find("input[type='text'],input[type='url']"),
+                    isValid = true;
+
+                $(".form-group").removeClass("has-error");
+                for (var i = 0; i < curInputs.length; i++) {
+                    if (!curInputs[i].validity.valid) {
+                        isValid = false;
+                        $(curInputs[i]).closest(".form-group").addClass("has-error");
+                    }
+                }
+
+                if (isValid)
+                    nextStepWizard.removeAttr('disabled').trigger('click');
+            });
+
+
+            $('div.setup-panel div a.btn-primary').trigger('click');
+        });
+    </script>
+
+    <script> 
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //===================================================================ADENDAS=========================================================================
+        // Instancia de dataTable para la tabla que muestra las adendas
+        var dataTable = null;
+
+        $(function () {
+            dataTable = $("#BuscarAdenda").DataTable({
+                "ajax": {
+                    "url": "@Url.Action("getAdenda", "Adendas")",
+                "type": "POST",
+                "dataType": "Json"
+            }, "columns": [
+            {
+                "data": "IdAdenda", "render": function (data) {
+                    return "<button class='btn btn-success' value='" + data + "'>Seleccionar</button>";
+                }
+            },
+            { "data": "NumPoliza" },
+            { "data": "Cliente" },
+            { "data": "NumerodeAdenda" },
+            { "data": "TipodeAdenda" },
+            { "data": "Identificacion" },
+            { "data": "Producto" },
+            { "data": "Aseguradora" },
+            ],  "language": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "No hay adendas para mostrar",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            
+            }, "columnDefs": [{
+                "targets": [5, 6, 7],
+                "visible": false
+                }]
+        });
+        });
+
+
+        $idAdendaSelected = 0;
+        var PolizaId = 0;
+        // Mostrar el boton agregar solo cuando se seleccione un cliente
+        $("#NumAdenda").change(function () {
+            if (!$(this).val()) {
+                $("#initialihiddenbutton").hide();
+            }
+            else {
+                $("#initialihiddenbutton").show();
+            }                    
+        });
+
+        // Evento al hacer click en el boton seleccionar
+        $(function () {
+            $("#BuscarAdenda tbody").on("click", "button", function () {
+                var data = dataTable.row($(this).parents('tr')).data();
+                $("#tipo").val(data.TipodeAdenda);
+                PolizaId = data.IdPoliza;
+                //console.log(PolizaId);
+                $idAdendaSelected = data.IdAdenda;
+                CargarValores();
+                $("#NumAdenda").val(data.NumerodeAdenda).change();
+                $("#NombreCompleto").val(data.Cliente).change();
+                //$("#Nombres").val(data.Nombres);
+                $("#Ident").val(data.Identificacion);
+                $("#Producto").val(data.Producto);
+                $("#Aseguradora").val(data.Aseguradora);
+                $("#modal-poliza .close").click();
+            });
+        });
+
+        //Limpiar campos de cliente
+        function limpiar()
+        {
+            $("#NumAdenda").val("").change();
+            $("#NombreCompleto").val("");
+            //$("#Nombres").val("");
+            $("#Ident").val("");
+            $("#Producto").val("");
+            $("#Aseguradora").val("");
+            $("#tipo").val("");
+            $idAdendaSelected = 0;
+            PolizaId = 0;
+        }
+
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //===================================================================DATATABLES======================================================================
+        var dataTableDetalleCaract = null;
+        // Crea una instancia de datatable para el detalle de características
+        $(function () {
+            // Instancia del datatable para mostrar los detalles.
+            dataTableDetalleCaract = $("#tableCaractEditar").DataTable({
+                "info": false,
+                "paging": false,
+                "ordering": false,
+                "searching": false,
+                "language": {
+                    "emptyTable": "No existen características para el bien seleccionado.",
+                    "search": "Búsqueda"
+                }, "columnDefs": [{
+                    "targets": 2,
+                    "render": function (data, type, row, meta) {
+                        var but = "<button class='btn btn-sm btn-danger textomio' value='" + data + "' type='button' onclick='ClickButton(this)'>Remover</button>&nbsp;";
+                        but += "<button class='btn btn-sm btn-danger btndelete hidden' value='" + data + "' type='button' onclick='Remover(this)'>Remover</button>";
+                        return but;
+                    }
+                }]
+            });
+        });
+
+
+        var dataTableDetalleCobert = null;
+        // Crea una instancia de datatable para el detalle de coberturas
+        $(function () {
+            // Instancia del datatable para mostrar los detalles.
+            dataTableDetalleCobert = $("#tableCobertEditar").DataTable({
+                "info": false,
+                "paging": false,
+                "ordering": false,
+                "searching": false,
+                "language": {
+                    "emptyTable": "No existen coberturas para el bien seleccionado.",
+                    "search": "Búsqueda"
+                }, "columnDefs": [{
+                    "targets": 4,
+                    "render": function (data, type, row, meta) {
+                        var del = "<button class='btn btn-sm btn-danger textomio' value='" + data + "' type='button' onclick='ClickButtonC(this)'>Remover</button>&nbsp;";
+                        del += "<button class='btn btn-sm btn-danger btndelete hidden' value='" + data + "' type='button' onclick='RemoverC(this)'>Remover</button>";
+                        return del;
+                    }
+                }]
+            });
+        });
+
+        $("#dropBienesB").change(function () {
+            id = $(this).val();
+            var datosbien = "/Polizas/RecuperarBien/" + id;
+            var caracteristicas = "/Polizas/RecuperarCaracteristicas/" + id;
+            var coberturas = "/Polizas/RecuperarCoberturas/" + id;
+            var archivos = "/Polizas/RecuperarArchivos/" + id;
+
+            //primer ajax
+            $.ajax({
+                type: "GET",
+                url: datosbien,
+                dataType: "JSON",
+                success: function (list) {
+                    $("#txtObservacionE").val(list.lista[0].Observacion);
+                    $("#checkEx").prop("checked", list.lista[0].Excluido);
+                }
+            })
+            //fin del primer ajax que trae los datos del bien
+
+            //segundo ajax
+            $.ajax({
+                type: "GET",
+                url: caracteristicas,
+                dataType: "JSON",
+                success: function (list) {
+                    dataTableDetalleCaract.clear().draw();
+                    for (var a = 0; a < list.list.length; a++) {
+                        dataTableDetalleCaract.row.add([
+                            list.list[a].Descripcion,
+                            list.list[a].Valor,
+                            list.list[a].IdDetalle]).draw(false);
+                    }
+                    Habilitar();
+                }
+            })
+            //fin del segundo ajax que trae las caracteristicas
+
+            //tercer ajax
+            $.ajax({
+                type: "GET",
+                url: coberturas,
+                dataType: "JSON",
+                success: function (list) {
+                    dataTableDetalleCobert.clear().draw();
+                    for (var a = 0; a < list.list.length; a++) {
+                        dataTableDetalleCobert.row.add([
+                            list.list[a].Descripcion,
+                            list.list[a].Suma,
+                            list.list[a].Deducible,
+                            list.list[a].Prima,
+                            list.list[a].IdDetalle]).draw(false);
+                    }
+                    Habilitar();
+                }
+            })
+        });
+
+
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //===================================================================CARGAR VALORES==================================================================
+
+        //Definir los valores por defecto de los controles
+        $(function () {
+            $("#btnGuardarCambioB,#txtNumCB,#btnAddCaract,#btnAddCobert").hide();
+            //dataTableDetalleCaract.clear().draw();
+            //dataTableDetalleCobert.clear().draw();
+        });
+
+        function LlenarBienes() {
+            $.ajax({
+                type: "GET",
+                url: "/BienesAsegurados/GetBienesXPoliza/" + PolizaId,
+                dataType: "JSON",
+                success: function (list) {
+                    $("#dropBienesB").empty();
+                    if (list.lista.length > 0) {
+                        for (var i = 0; i < list.lista.length; i++) {
+                            $("#dropBienesB").append("<option value=" + list.lista[i].IdBien + ">" + list.lista[i].NumCertificado + "</option>;")
+                        }
+                        $("#dropBienesB").change();
+                    }
+                }
+            });
+        }
+
+        function CargarValores() {
+            var tipo = $("#tipo").val();
+            if (tipo == "Cancelación") {
+                $(".text-warning").text("La Adenda es de tipo 'Cancelación', por ende al guardar se excluirán todos los bienes pertenecientes a la Póliza.").show();
+                Canc();
+            }
+            else
+                if (tipo == "Exclusión") {
+                    $(".text-warning").text("La Adenda es de tipo 'Exclusión'. Seleccione el bien a excluir.").show();
+                    Exc();
+                }
+                else
+                    if (tipo == "Inclusión") {
+                        $(".text-warning").text("La Adenda es de tipo 'Inclusión'. Introduzca los valores.").show();
+                        Inc();
+                    }
+                    else
+                        if (tipo == "Modificación") {
+                            $(".text-warning").text("La Adenda es de tipo 'Modificación'. Edite los datos.").show();
+                            Mod();
+                        }
+                        else
+                            if (tipo == "Liquidación") {
+                                $(".text-warning").text("La Adenda es de tipo 'Liquidación'.").show();
+                                Liq();
+                            }
+        };
+
+        function Habilitar() {
+            var tipo = $("#tipo").val();
+            if (tipo == "Cancelación" || tipo == "Exclusión" || tipo == "Liquidación") {
+                $(".textomio").text("Remover");
+                $(".btndelete").addClass("hidden");
+                $(".textomio").prop("disabled", true);
+            }
+            else
+                if (tipo == "Inclusión") {
+                    $(".textomio").text("Remover");
+                    $(".btndelete").addClass("hidden");
+                    $(".textomio").prop("disabled", false);
+                }
+                else
+                    if (tipo == "Modificación") {
+                        $(".textomio").text("Editar");
+                        $(".btndelete").removeClass("hidden");
+                        $(".textomio").prop("disabled", false);
+                    }
+        }
+
+        //Función de Cancelación
+        function Canc() {
+            $("#dropBienesB").show();
+            LlenarBienes();
+            $("#dropBienesB").prop("disabled", false);
+            $("#txtObservacionE").prop("disabled", true);
+            $("#checkEx").prop("disabled", true);
+            $("#btnGuardarCambioB,#txtNumCB,#btnAddCaract,#btnAddCobert").hide();
+            $("#btnSave").removeClass("disabled");
+        }
+
+        //Función de Modificación
+        function Mod() {
+            $("#dropBienesB").show();
+            LlenarBienes();
+            $("#dropBienesB").prop("disabled", false);
+            $("#txtObservacionE").prop("disabled", false);
+            $("#checkEx").prop("disabled", true);
+            $("#btnGuardarCambioB").show();
+            $("#txtNumCB").hide();
+            //$(".textomio").html("Editar");
+            $("#btnAddCaract,#btnAddCobert").hide();
+            $("#btnSave").removeClass("disabled");
+        }
+
+        //Función de Exclusión
+        function Exc() {
+            $("#dropBienesB").show();
+            LlenarBienes();
+            $("#dropBienesB").prop("disabled", false);
+            $("#txtObservacionE").prop("disabled", true);
+            $("#checkEx").prop("disabled", false);
+            $("#btnGuardarCambioB").show();
+            $("#txtNumCB,#btnAddCaract,#btnAddCobert").hide();
+            $("#btnSave").removeClass("disabled");
+        }
+
+        //Función de Inclusión
+        function Inc() {
+            $("#dropBienesB").hide();
+            $("#dropBienesB").empty();
+            dataTableDetalleCaract.clear().draw();
+            dataTableDetalleCobert.clear().draw();
+            $("#btnGuardarCambioB,#txtNumCB,#btnAddCaract,#btnAddCobert").show();
+            $("#txtObservacionE").val("").prop("disabled", false);
+            $("#checkEx").prop("disabled", true);
+            $("#btnSave").removeClass("disabled");
+        }
+
+        //Función de Liquidación
+        function Liq() {
+            $("#dropBienesB").show();
+            LlenarBienes();
+            $("#dropBienesB").prop("disabled", false);
+            $("#txtObservacionE").prop("disabled", true);
+            $("#checkEx").prop("disabled", true);
+            $("#btnGuardarCambioB,#txtNumCB,#btnAddCaract,#btnAddCobert").hide();
+            $("#btnSave").addClass("disabled");
+        }
+
+
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //===================================================================GUARDAR VALORES=================================================================
+        function getDetalle() {
+            $detalle = [];
+            var data = dataTableDetalleCaract.rows().data();
+            data.each(function (value, index) {
+                item = {};
+                // Hacemos un objeto tipo JSON con las descripciones iguales a nuestra clase en C#
+                item["Id"] = 0;
+                item["Valor"] = value[1];
+                item["CaracteristicaId"] = value[2];
+                item["Caracteristica"] = null;
+                item["BienAsegurado"] = null;
+                $detalle.push(item);
+            });
+            return JSON.stringify($detalle);
+        }
+
+        function getCoberturas() {
+            $detalleCob = [];
+            var data = dataTableDetalleCobert.rows().data();
+            data.each(function (value, index) {
+                item = {};
+                // Hacemos un objeto tipo JSON con las descripciones iguales a nuestra clase en C#
+                item["Id"] = 0;
+                item["SumaAsegurada"] = value[1];
+                item["Deducible"] = value[2];
+                item["Prima"] = value[3];
+                item["CoberturaId"] = value[4];
+                item["BienAsegurados"] = null;
+                item["Coberturas"] = null;
+                $detalleCob.push(item);
+            });
+            return JSON.stringify($detalleCob);
+        }
+
+        //Array para almacenar los detalles de adendas
+        var datos = [];
+
+        $("#btnGuardarCambioB").click(function () {
+            var tipo = $("#tipo").val();
+            //===============++++++++++++EXCLUSIÓN
+            if (tipo == "Exclusión") {
+                $.ajax({
+                    type: "GET",
+                    url: "/BienesAsegurados/CambiarEx/",
+                    data: {
+                        id: $("#dropBienesB").val(),
+                        obs: $("#txtObservacionE").val(),
+                        estado: $("#checkEx").prop("checked")
+                    },
+                    success: function (data) {
+                        if (data.d > 0) {
+                            swal("Se ha cambiado el estado de 'Exclusión' del bien", "Seguros & Más", "success");
+
+                            if ($("#checkEx").prop("checked") == true) {
+                                //Añadimos los valores al arreglo
+                                item = {};
+                                item["AdendaId"] = $idAdendaSelected;
+                                item["BienAseguradoId"] = $("#dropBienesB").val();
+                                item["Adenda"] = null;
+                                item["BienAsegurado"] = null;
+                                datos.push(item);
+                            }
+                            else
+                                if ($("#checkEx").prop("checked") == false) {
+                                    var b = false, i = 0;
+                                    while (i < datos.length && !b){
+                                        if (datos[i].BienAseguradoId == $("#dropBienesB").val())
+                                            b = true;
+                                        else
+                                            i++;
+                                    }
+                                    //console.log(b);
+                                    if(b)
+                                    {
+                                        datos.splice(i, 1);
+                                    }
+                                }
+                        }else
+                            swal("Hubo un error al intentar guardar.", "Seguros & Más", "error");
+                    }
+                });
+            }
+            else
+                if (tipo == "Inclusión") { //==================++++++++++++INCLUSIÓN
+                    if ($("#txtNumCB").val().trim() && $("#txtObservacionE").val().trim() && dataTableDetalleCaract.rows().count() > 0 && dataTableDetalleCobert.rows().count() > 0) {
+                        $.ajax({
+                            type: "GET",
+                            url: "/BienesAsegurados/NuevoB/",
+                            data: {
+                                poliza: PolizaId,
+                                numcert: $("#txtNumCB").val(),
+                                observacion: $("#txtObservacionE").val(),
+                                detalleCaract: getDetalle(),
+                                detalleCobert: getCoberturas()
+                            },
+                            success: function (data) {
+                                if (data.id_ > 0) {
+                                    swal("Se ha almacenado el bien", "Seguros & Más", "success");
+                                    //Añadimos los valores al arreglo
+                                    item = {};
+                                    item["AdendaId"] = $idAdendaSelected;
+                                    item["BienAseguradoId"] = data.id_;
+                                    item["Adenda"] = null;
+                                    item["BienAsegurado"] = null;
+                                    datos.push(item);
+                                    LimpiarCampos();
+                                }
+                                else
+                                    swal("Hubo un error al intentar guardar.", "Seguros & Más", "error");
+                            }
+                        });
+                    }
+                    else {
+                        swal("Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.", "Seguros & Más", "warning");
+                    }
+                }
+                else
+                {
+                    if (tipo == "Modificación") {
+                        if ($("#txtObservacionE").val().trim())
+                        {
+                            $.ajax({
+                                type: "GET",
+                                url: "/BienesAsegurados/Modificar/",
+                                data: {
+                                    id: $idAdendaSelected,
+                                    cadena: $("#txtObservacionE").val()
+                                },
+                                success: function (data) {
+                                    if (data.d > 0) {
+                                        swal("Se ha modificado el bien", "Seguros & Más", "success");
+                                        //Añadimos los valores al arreglo
+                                        item = {};
+                                        item["AdendaId"] = $idAdendaSelected;
+                                        item["BienAseguradoId"] = data.d;
+                                        item["Adenda"] = null;
+                                        item["BienAsegurado"] = null;
+                                        datos.push(item);
+                                    }
+                                    else
+                                        swal("Hubo un error al intentar guardar.", "Seguros & Más", "error");
+                                }
+                            });
+                        } else {
+                            swal("Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.", "Seguros & Más", "warning");
+                        }
+                    }
+                }
+        });
+
+        function LimpiarCampos()
+        {
+            $("#txtNumCB").val("");
+            $("#txtObservacionE").val("");
+            dataTableDetalleCaract.clear().draw();
+            dataTableDetalleCobert.clear().draw();
+        }
+
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //=================================================================CARACT Y COBERT===================================================================
+        $(document).ready(function () {
+            //Listar todas las caracteristicas para mostrarlas en el dropdownlist
+            $.ajax({
+                type: "GET",
+                url: "/Caracteristicas/ListarCaracteristicas/",
+                dataType: "JSON",
+                success: function (list) {
+                    //Vaciar el dropdownlist para que los datos no se repitan
+                    $("#dropCaract").empty();
+                    //console.log(list.list);
+                    for (var a = 0; a < list.list.length; a++) {
+                        $("#dropCaract").append("<option value=" + list.list[a].IdCaract + ">" + list.list[a].Descripcion + "</option>;")
+                    }
+                }
+            });
+
+            //Listamos las coberturas en el dropdownlist
+            $.ajax({
+                type: "GET",
+                url: "/Coberturas/ListarCoberturas/",
+                dataType: "JSON",
+                success: function (list) {
+                    $("#dropCobert").empty();
+                    for (var a = 0; a < list.list.length; a++) {
+                        $("#dropCobert").append("<option value=" + list.list[a].IdCob + ">" + list.list[a].Descripcion + "</option>;")
+                    }
+                }
+            });
+        });
+
+        $("#btnAddCaract,#btnAddCobert").click(function () {
+            $("#btnGuardarCambios,#btnGuardarCambiosCobertura").show();
+            $("#btnEditarCambios,#btnEditarCambiosCobertura").hide();
+        });
+
+        $("#btnGuardarCambios").click(function () {
+            if ($("#tValor").val().trim()) {
+                $("#myModal5 .close").click(); //cerramos la modal
+                dataTableDetalleCaract.row.add([
+                    $("#dropCaract").find('option:selected').text(),
+                    $("#tValor").val(),
+                    $("#dropCaract").val()]).draw(false);
+                // Limpíar seleccion
+                $("#dropCaract").val("");
+                $("#tValor").val("");
+            }
+            else
+                swal("Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.", "Seguros & Más", "warning");
+        });
+
+        $("#btnGuardarCambiosCobertura").click(function () {
+            if ($("#tSuma").val().trim() && $("#tDeducible").val().trim() && $("#tPrima").val().trim()) {
+                $("#myModalCob .close").click(); //cerramos la modal
+                dataTableDetalleCobert.row.add([
+                    $("#dropCobert").find('option:selected').text(),
+                    $("#tSuma").val(),
+                    $("#tDeducible").val(),
+                    $("#tPrima").val(),
+                    $("#dropCobert").val()]).draw(false);
+                // Limpíar seleccion
+                $("#dropCobert").val("");
+                $("#tSuma").val("");
+                $("#tDeducible").val("");
+                $("#tPrima").val("");
+            }
+            else
+                swal("Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.", "Seguros & Más", "warning");
+        });
+
+        var datosCar = null;
+        var datosCob = null;
+
+        function ClickButton(f) {
+            var valor = $(".textomio").text();
+            if(valor[0]=="R")
+            {
+                dataTableDetalleCaract.row($(f).parents('tr')).remove().draw(false);
+            }
+            else
+                if(valor[0]=="E")
+                {
+                    datosCar = dataTableDetalleCaract.row($(f).parents('tr')).data();
+                    $.ajax({
+                        type: "GET",
+                        url: "/Caracteristicas/DetalleCaracteristicas/" + datosCar[2],
+                        success: function (list) {
+                            $("#dropCaract").val(list.listado[0].IdCaract);
+                            $("#tValor").val(list.listado[0].Valor);
+                        }
+                    });
+                    $("#btnGuardarCambios").hide();
+                    $("#btnEditarCambios").show();
+                    $("#myModal5").modal("show");
+                }
+        };
+
+        function ClickButtonC(f) {
+            var valor = $(".textomio").text();
+            if (valor[0] == "R") {
+                dataTableDetalleCobert.row($(f).parents('tr')).remove().draw(false);
+            }
+            else
+                if (valor[0] == "E") {
+                    datosCob = dataTableDetalleCobert.row($(f).parents('tr')).data();
+                    $.ajax({
+                        type: "GET",
+                        url: "/Coberturas/DetalleCoberturas/" + datosCob[4],
+                        success: function (list) {
+                            $("#dropCobert").val(list.listado[0].IdCob);
+                            $("#tSuma").val(list.listado[0].Suma);
+                            $("#tDeducible").val(list.listado[0].Deducible);
+                            $("#tPrima").val(list.listado[0].Prima);
+                        }
+                    });
+                    $("#btnGuardarCambiosCobertura").hide();
+                    $("#btnEditarCambiosCobertura").show();
+                    $("#myModalCob").modal("show");
+                }
+        };
+
+        function Remover(f) {
+            swal({
+                title: "¿Está seguro que sea eliminar la característica seleccionada?",
+                text: "Seguros & Más",
+                icon: "warning",
+                buttons: {
+                    cancel: {
+                        text: "Cancelar",
+                        value: null,
+                        visible: true,
+                        className: "",
+                        closeModal: true,
+                    },
+                    confirm: {
+                        text: "OK",
+                        value: true,
+                        visible: true,
+                        className: "",
+                        closeModal: true
+                    }
+                },
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        var d = dataTableDetalleCaract.row($(f).parents('tr')).data();
+                        $.ajax({
+                            type: "POST",
+                            url: "/Caracteristicas/Delete/" + d[2],
+                            success: function (list) {
+                                if (list.d > 0)
+                                    dataTableDetalleCaract.row($(f).parents('tr')).remove().draw(false);
+                                else
+                                    swal("Hubo un error al intentar eliminar.", "Seguros & Más", "error");
+                            }
+                        });
+                    }
+                });
+        };
+
+        function RemoverC(f) {
+            swal({
+                title: "¿Está seguro que sea eliminar la cobertura seleccionada?",
+                text: "Seguros & Más",
+                icon: "warning",
+                buttons: {
+                    cancel: {
+                        text: "Cancelar",
+                        value: null,
+                        visible: true,
+                        className: "",
+                        closeModal: true,
+                    },
+                    confirm: {
+                        text: "OK",
+                        value: true,
+                        visible: true,
+                        className: "",
+                        closeModal: true
+                    }
+                },
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        var d = dataTableDetalleCobert.row($(f).parents('tr')).data();
+                        $.ajax({
+                            type: "POST",
+                            url: "/Coberturas/Delete/" + d[4],
+                            success: function (list) {
+                                if (list.d > 0)
+                                    dataTableDetalleCobert.row($(f).parents('tr')).remove().draw(false);
+                                else
+                                    swal("Hubo un error al intentar eliminar.", "Seguros & Más", "error");
+                            }
+                        });
+                    }
+                });
+        };
+
+        $("#btnEditarCambios").click(function () {
+            if ($("#tValor").val().trim()) {
+                var caracteristicas = "/Polizas/RecuperarCaracteristicas/" + $("#dropBienesB").val();
+                var url = "/Caracteristicas/GuardarCambios/";
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    dataType: "JSON",
+                    //asignamos los parámetros que va a recibir el controlador
+                    data: {
+                        idDetalle: datosCar[2],
+                        idCaracteristica: $("#dropCaract").val(),
+                        valor: $("#tValor").val()
+                    },
+                    success: function () {
+                        //Cuando se haya almacenado la modificación recuperamos nuevamente los datos
+                        $.ajax({
+                            type: "GET",
+                            url: caracteristicas,
+                            dataType: "JSON",
+                            success: function (list) {
+                                $("#myModal5 .close").click(); //cerramos la modal
+                                dataTableDetalleCaract.clear(); //vaciamos la tabla
+                                for (var a = 0; a < list.list.length; a++) {//volvemos a asignar los valores a la tabla
+                                    dataTableDetalleCaract.row.add([
+                                        list.list[a].Descripcion,
+                                        list.list[a].Valor,
+                                        list.list[a].IdDetalle]).draw(false);
+                                }
+                                Habilitar();
+                            }
+                        })
+                    }
+                })
+            }
+            else
+                swal("Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.", "Seguros & Más", "warning");
+        });
+
+        $("#btnEditarCambiosCobertura").click(function () {
+            if ($("#tSuma").val().trim() && $("#tDeducible").val().trim() && $("#tPrima").val().trim()) {
+                var coberturas = "/Polizas/RecuperarCoberturas/" + $("#dropBienesB").val();
+                var url = "/Coberturas/GuardarCambios/";
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    dataType: "JSON",
+                    //asignamos los parámetros que va a recibir el controlador
+                    data: {
+                        idDetalle: datosCob[4],
+                        idCobertura: $("#dropCobert").val(),
+                        suma: $("#tSuma").val(),
+                        deducible: $("#tDeducible").val(),
+                        prima: $("#tPrima").val()
+                    },
+                    success: function () {
+                        //Cuando se haya almacenado la modificación recuperamos nuevamente los datos
+                        $.ajax({
+                            type: "GET",
+                            url: coberturas,
+                            dataType: "JSON",
+                            success: function (list) {
+                                $("#myModalCob .close").click(); //cerramos la modal
+                                dataTableDetalleCobert.clear(); //vaciamos la tabla
+                                for (var a = 0; a < list.list.length; a++) {//volvemos a asignar los valores a la tabla
+                                    dataTableDetalleCobert.row.add([
+                                        list.list[a].Descripcion,
+                                        list.list[a].Suma,
+                                        list.list[a].Deducible,
+                                        list.list[a].Prima,
+                                        list.list[a].IdDetalle]).draw(false);
+                                }
+                                Habilitar();
+                            }
+                        })
+                    }
+                })
+            }
+            else
+                swal("Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.", "Seguros & Más", "warning");
+        });
+
+        //=======================================================================================================================
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++SUBMIT+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        function AgregarDatos(form) {
+            if ($("#tipo").val() == "Cancelación" || $("#tipo").val() == "Liquidación") {
+                if (PolizaId != 0 && $idAdendaSelected != 0) {
+                    $.ajax({
+                        dataType: "JSON",
+                        type: "POST",
+                        url: form.action,
+                        data: {
+                            PolizaId: PolizaId,
+                            tipo: $("#tipo").val(),
+                            detalleAdenda: JSON.stringify(datos)
+                        },
+                        success: function (list) {
+                            if (list.d > 0)
+                                window.location.href = "/BienesAsegurados/CreateAdenda/";
+                        }
+                    });
+                }
+                else {
+                    swal("Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.", "Seguros & Más", "warning");
+                    return false;
+                }
+            }
+            else
+                if (PolizaId != 0 && $idAdendaSelected != 0 && datos != null) {
+                    $.ajax({
+                        dataType: "JSON",
+                        type: "POST",
+                        url: form.action,
+                        data: {
+                            PolizaId: PolizaId,
+                            tipo: $("#tipo").val(),
+                            detalleAdenda: JSON.stringify(datos)
+                        },
+                        success: function (list) {
+                            if (list.d > 0)
+                                window.location.href = "/BienesAsegurados/CreateAdendas/";
+                                //alert("Hecho");
+                        }
+                    });
+                }
+                else {
+                    swal("Hay campos necesarios en el formulario que aún están vacíos.\nPor favor verifique.", "Seguros & Más", "warning");
+                    return false;
+                }
+            return false;
+        };
+
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Adendas/GetValue/",
+                type: "GET",
+                success: function (data2) {
+                    if (data2.AdendaActual > 0) {
+                        $.ajax({
+                            url: "/Adendas/GetAdenda/" + data2.AdendaActual,
+                            type: "GET",
+                            success: function (data) {
+                                $("#NumAdenda").val(data.lista[0].NumAdenda).change();
+                                $("#NombreCompleto").val(data.lista[0].Nombre).change();
+                                //$("#Nombres").val(data.lista[0].Nombres);
+                                $("#Ident").val(data.lista[0].Identificacion);
+                                $("#Producto").val(data.lista[0].Producto);
+                                $("#Aseguradora").val(data.lista[0].Aseguradora);
+                                $idAdendaSelected = data.lista[0].IdAdenda;
+                                $("#tipo").val(data.lista[0].TipodeAdenda);
+                                PolizaId = data.lista[0].IdPoliza;
+                                $idAdendaSelected = data.lista[0].IdAdenda;
+                                CargarValores();
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+}

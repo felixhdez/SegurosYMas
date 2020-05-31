@@ -1,0 +1,300 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.Reclamo
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<link href="~/Content/blueimp-gallery.min.css" rel="stylesheet" />
+<link href="~/Content/blueimp-gallery.css" rel="stylesheet" />
+
+<style>
+    /* Local style for demo purpose */
+
+    .lightBoxGallery {
+        text-align: center;
+    }
+
+        .lightBoxGallery img {
+            margin: 5px;
+            height: 150px;
+            width: 150px;
+        }
+</style>
+
+<div id="blueimp-gallery" class="blueimp-gallery">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Reclamos</h2>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("Lista", "Index")
+            </li>
+            <li class="active">
+                <strong>Detalle</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-8">
+        <div class="title-action">
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("Index","Reclamos")"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Regresar</a>
+            <a class="btn btn-success btn-outline dim" onclick="Editar()"><i class="fa fa-edit"></i>&nbsp;&nbsp;Editar</a>
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("IndexReclamos","Reportes")"><i class="fa fa-file-archive-o"></i>&nbsp;&nbsp;Generar Reporte</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <!--Fila para detalles generales del reclamo-->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Datos Generales | @Model.NumReclamo</h5>
+                    <div class="ibox-tools">
+                        @*@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-xs"})*@
+                        <a class="collapse-link"><i class="fa fa-chevron-up" style="color: #bebebe;"></i></a>
+                        <a class="close-link"><i class="fa fa-times" style="color: #bebebe;"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <br />
+                        <div class="col-md-6 b-r">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" style="border: solid 2px #bebebe;">
+                                    <tbody>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Cliente</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Poliza.Cliente.NombreCompleto)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Producto</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Poliza.Producto.Codigo) | @Html.DisplayFor(model => model.Poliza.Producto.Descripcion)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Ramo</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Poliza.Producto.Ramo.Descripcion)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Aseguradora</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Poliza.Producto.Aseguradora.Descripcion)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">N° Póliza</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Poliza.NumPoliza)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Bien Asegurado</th>
+                                            <th style="font-weight:normal;">N° @Html.DisplayFor(model => model.BienAsegurado.NumCertificado) | @Html.DisplayFor(model => model.BienAsegurado.Observacion)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">N° Reclamo</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.NumReclamo)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Cobertura Reclamada</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.CoberturaReclamo.Descripcion)</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" style="border: solid 2px #bebebe;">
+                                    <tbody>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Tipo de Reclamo</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.TipoReclamo)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Dependiente</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Dependiente)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Ajustador</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Ajustador)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Fecha de Ingreso</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.FechaAviso)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Fecha de Siniestro</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.FechaSiniestro)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Lugar de Ocurrencia</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.LugarOcurrencia)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Monto Reclamado</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.MontoReclamado)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="text-transform:uppercase; background-color: #eee; width: 30%;">Responsable</th>
+                                            <th style="font-weight:normal;">@Html.DisplayFor(model => model.Responsable)</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Fila para documentos y pagos-->
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Documentos</h5>
+                    <div class="ibox-tools">
+                        @*@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-xs"})*@
+                        <a class="collapse-link"><i class="fa fa-chevron-up" style="color: #bebebe;"></i></a>
+                        <a class="close-link"><i class="fa fa-times" style="color: #bebebe;"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" style="border: solid 2px #bebebe;" id="tableDocumentos">
+                            <tr style="text-transform:uppercase; background-color: #eee;">
+                                <th>Documento</th>
+                                <th>Fecha</th>
+                                <th>Emisor</th>
+                                <th>Número</th>
+                                <th>Valor</th>
+                                <th>Comentarios</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Pagos</h5>
+                    <div class="ibox-tools">
+                        @*@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-xs"})*@
+                        <a class="collapse-link"><i class="fa fa-chevron-up" style="color: #bebebe;"></i></a>
+                        <a class="close-link"><i class="fa fa-times" style="color: #bebebe;"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" style="border: solid 2px #bebebe;" id="tablePagos">
+                            <tr style="text-transform:uppercase; background-color: #eee;">
+                                <th>Tipo de Pago</th>
+                                <th>Fecha</th>
+                                <th>Moneda</th>
+                                <th>N° Doc</th>
+                                <th>Valor</th>
+                                <th>Banco/Taller</th>
+                                <th>Notas</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Fila archivos-->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Archivos</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link"><i class="fa fa-chevron-up" style="color: #bebebe;"></i></a>
+                        <a class="close-link"><i class="fa fa-times" style="color: #bebebe;"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="lightBoxGallery" id="links">
+                        @foreach (var item in ViewBag.Archivos)
+                        {
+                            <a href="@item.Foto" datagallery>
+                                <img src="@item.Foto" />
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+
+@section scripts{
+<script src="~/Scripts/jquery.blueimp-gallery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"> </script>
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "/Reclamos/RecuperarDocumentos/" + @Model.Id,
+                dataType: "JSON",
+                success: function (list) {
+                    for (var i = 0; i < list.list.length; i++) {
+                        var htmltags = '<tr>'+ '<td>' + list.list[i].Doc + '</td>'+ '<td>' + list.list[i].Fecha + '</td>'+'<td>' + list.list[i].Emisor + '</td>' +'<td>' + list.list[i].Num + '</td>' +'<td>' + list.list[i].Valor + '</td>' +'<td>' + list.list[i].Comentarios + '</td>';
+                        $("#tableDocumentos tbody").append(htmltags);
+                    }
+                }
+            });
+
+            $.ajax({
+                type: "GET",
+                url: "/Reclamos/RecuperarPagos/" + @Model.Id,
+                dataType: "JSON",
+                success: function (list) {
+                    for (var i = 0; i < list.list.length; i++) {
+                        var htmltags = '<tr>'+ '<td>' + list.list[i].Tipo + '</td>'+ '<td>' + list.list[i].Fecha + '</td>'+'<td>' + list.list[i].Moneda + '</td>'+'<td>' + list.list[i].Num  + '</td>' +'<td>' + list.list[i].Valor + '</td>' +'<td>' + list.list[i].Banc + '</td>' +'<td>' + list.list[i].Notas + '</td>';
+                        $("#tablePagos tbody").append(htmltags);
+                    }
+                }
+            })
+        });
+
+        function Editar()
+        {
+            window.location.href="/Reclamos/Edit/"+ @Model.Id;
+        };
+
+        document.getElementById('links').onclick = function(event) {
+            event = event || window.event
+            var target = event.target || event.srcElement,
+              link = target.src ? target.parentNode : target,
+              options = { index: link, event: event },
+              links = this.getElementsByTagName('a')
+            blueimp.Gallery(links, options)
+        }
+    </script>
+    }
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,56 @@
+﻿<div class="row">
+    <div class="col-md-12">
+
+        <div class="form-group">
+            <label class="control-label col-md-4">Recibo de Prima</label>
+            <div class="col-md-8">
+                <input id="ReciboP" name="ReciboP" class="form-control"/>
+            </div>
+        </div>
+        <br /><br />
+        <div class="form-group">
+            <label class="control-label col-md-4">Prima Total </label>
+            <div class="col-md-8">
+                <input id="PrimaNeta" name="PrimaNeta" class="form-control" readonly />
+            </div>
+        </div>
+        <br /><br />
+        <div class="form-group">
+            <label class="control-label col-md-4">Tipo</label>
+            <div class="col-md-8">
+                <select id="TipoCuotas" name="TipoCuotas" class="form-control" change="cambiarMonto()">
+                    <option value="valor1">Número Único</option>
+                    <option value="valor2">Consecutivas</option>
+                </select>
+            </div>
+        </div>
+        <br /><br />
+        <div class="form-group">
+            <label class="control-label col-md-4">N° de Cuotas</label>
+            <div class="col-md-8">
+                <input id="NumCuotas" name="NumCuotas" class="form-control" onkeyup="cambiarMonto()" />
+            </div>
+        </div>
+        <br /><br />
+        <div class="form-group">
+            <label class="control-label col-md-4">Vence</label>
+            <div class="col-md-8">
+                <input id="Vence" type="date" name="Vence" class="form-control" />
+            </div>
+        </div>
+        <br /><br />
+        <div class="form-group">
+            <label class="control-label col-md-4">Monto</label>
+            <div class="col-md-8">
+                <input id="Monto" name="Monto" class="form-control" readonly/>
+            </div>
+        </div>
+        <br /><br />
+        @*<div class="form-group">
+            <label class="control-label col-md-4">Cuota Neta</label>
+            <div class="col-md-8">
+                <input id="CNeta" name="CNeta" class="form-control" />
+            </div>
+        </div>*@
+    </div>
+</div>

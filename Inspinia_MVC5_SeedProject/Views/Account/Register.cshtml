@@ -1,0 +1,111 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Nuevo Usuario";
+}
+
+<link href="~/Content/select2/select2.css" rel="stylesheet" />
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Registrar un nuevo usuario</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-md-8 b-r">
+                            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(false, "", new { @class = "text-navy" })
+
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Nombres, new { @class = "col-md-3 control-label" })
+                                    <div class="col-md-9">
+                                        @Html.TextBoxFor(m => m.Nombres, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <br /><br /><br />
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Apellidos, new { @class = "col-md-3 control-label" })
+                                    <div class="col-md-9">
+                                        @Html.TextBoxFor(m => m.Apellidos, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <br /><br />
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.UserName, new { @class = "col-md-3 control-label" })
+                                    <div class="col-md-9">
+                                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <br /><br />
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
+                                    <div class="col-md-9">
+                                        @Html.PasswordFor(m => m.Password, new { @class = "form-control"})
+                                    </div>
+                                </div>
+                                <br /><br />
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-3 control-label" })
+                                    <div class="col-md-9">
+                                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <br /><br />
+                                <div class="form-group">
+                                    @Html.Label("Rol", new { @class = "col-md-3 control-label" })
+                                    <div class="col-md-9">
+                                        @Html.DropDownList("Permiso", (SelectList)ViewBag.ListaPermisos, "-Seleccione un rol-", new { @class = "form-control", @onchange = "Clientes(this)" })
+                                    </div>
+                                </div>
+                                <br /><br />
+                                <div class="form-group hidden" id="Campo">
+                                    @Html.LabelFor(m => m.ClienteId, "Cliente", new { @class = "col-md-3 control-label" })
+                                    <div class="col-md-9">
+                                        @Html.DropDownListFor(m => m.ClienteId, (SelectList)ViewBag.ListaClientes,"-Seleccione un cliente-", new { @class = "form-control" })
+                                    </div>
+                                    <br /><br />
+                                </div>
+
+                                <div class="ibox-footer">
+                                    <input type="submit" class="btn btn-primary pull-right" value="Registrar" />
+                                    <br />
+                                </div>
+                            }
+                        </div>
+                        <div class="col-md-4 text-center" style="padding-top:8%;">
+                            <img style="vertical-align: middle;" src="~/Content/img/SyM colores.png" width="90%" ; />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                
+
+                @section Scripts {
+                    @Scripts.Render("~/bundles/jqueryval")
+                    <script src="~/Scripts/select2/select2.full.js"></script>
+
+                    <script>
+                        $(document).ready(function () {
+                            $("#ClienteId,#Permiso").select2({width:"100%"});
+                        });
+
+                        function Clientes(f) {
+                            if ($(f).find('option:selected').text() == "Cliente") {
+                                $("#Campo").removeClass('hidden');
+                            }
+                            else {
+                                $("#Campo").addClass('hidden');
+                                $("#ClienteId").select2("val", "");
+                            }
+                        }
+                    </script>
+                }
+

@@ -1,0 +1,239 @@
+﻿@model IEnumerable<Inspinia_MVC5_SeedProject.Models.Cliente>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    .oculta {
+        display: none;
+    }
+
+    .muestra{
+        display: table-row;
+    }
+</style>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Clientes</h2>
+        <ol class="breadcrumb">
+            <li class="active">
+                <strong>Lista de Clientes</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    @*<h5>List of Cliente</h5>*@
+					<div class="ibox-tools">
+						@*@Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary btn-xs"})*@
+                        <a class="btn btn-success dim" id="btnFiltrar"><i class="fa fa-filter"></i>&nbsp;&nbsp;Mostrar/Filtrar</a>
+                        <a class="btn btn-success dim" href="@Url.Action("Create","Clientes")"><i class="fa fa-plus"></i></a>
+					</div>
+                </div>
+                <div class="ibox-content">
+                    <div id="Filtro">
+                        <div class="col-md-1">
+                            <label class="control-label" style="margin-top: 0.5em;">Filtrar por:</label>
+                        </div>
+                        <div class="col-md-5">
+                            <select id="dropCampo" class="form-control">
+                                <option value="0">Apellidos</option>
+                                <option value="1">Nombres</option>
+                                <option value="2">Identificación</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <input id="buscarC" type="text" class="form-control" placeholder="Buscar" />
+                        </div>
+
+                        <br /><br /><br /><br />
+                    </div>
+<table class="table table-striped" id="tableC">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombres)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellidos)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Identificacion)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.Direccion)
+            </th>
+            <th>
+                Departamento
+            </th>
+            <th>
+                Teléfono
+            </th>
+            <th>
+                    @Html.DisplayNameFor(model => model.NumTelf2)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NumTelf3)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Celular)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                    @Html.DisplayNameFor(model => model.Notas)
+                </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoCliente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaNacimiento)
+            </th>*@
+            <th></th>
+        </tr>
+    </thead>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nombres)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Apellidos)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Identificacion)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Direccion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Departamento.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumTelf1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumTelf2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumTelf3)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Celular)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Notas)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TipoCliente)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaNacimiento)
+        </td>*@
+        <td>
+            @*<a href="#" class="btn btn-primary btn-sm btnDetalles" data-value="@item.Id">Ver detalle</a>*@
+			@Html.ActionLink("Ver detalle", "Details", new { id=item.Id }, new { @class = "btn btn-primary btn-sm"})
+            @Html.ActionLink("Editar", "Edit", new { id=item.Id }, new { @class = "btn btn-white btn-sm"})
+            @*@Html.ActionLink("Delete", "Delete", new { id=item.Id }, new { @class = "btn btn-white btn-sm"})*@
+        </td>
+    </tr>
+}
+
+</table>
+                    @section scripts{
+                        <script>
+                            $(document).ready(function () {
+                                $("#Filtro").show();
+                                var contenido_fila;
+                                var coincidencias;
+                                var exp;
+                                var codigoAscci;
+
+                                $(function () {
+                                    $("#tableC tbody tr").each(function (){
+                                        $(this).addClass('oculta');
+                                    })
+                                });
+
+                                $("#buscarC").keyup(function () {
+                                    if ($(this).val().length >= 1)
+                                        filtrar($(this).val());
+                                    else
+                                        mostrarfilas();
+                                });
+
+                                function filtrar(cadena) {
+                                    $("#tableC tbody tr").each(function () {
+                                        $(this).removeClass('muestra');
+                                        if ($("#dropCampo").val() == '0')
+                                            contenido_fila = $(this).find('td:eq(1)').text();
+                                        else
+                                            if ($("#dropCampo").val() == '1')
+                                                contenido_fila = $(this).find('td:eq(0)').text();
+                                            else
+                                                if ($("#dropCampo").val() == '2')
+                                                    contenido_fila = $(this).find('td:eq(2)').text();
+                                        exp = RegExp(cadena, 'gi');
+                                        coincidencias = contenido_fila.match(exp);
+                                        if (coincidencias != null)
+                                            $(this).addClass('muestra');
+                                        //else
+                                        //    $(this).addClass('oculta');
+                                    })
+                                };
+
+                                function mostrarfilas() {
+                                    $("#tableC tbody tr").each(function () {
+                                        $(this).removeClass('muestra');
+                                        $(this).addClass('oculta');
+                                        //$(this).removeClass('resaltar');
+                                    })
+                                };
+                            })
+
+                            var num = 0;
+
+                            $("#btnFiltrar").click(function () {
+                                if (num == 0) {
+                                    $("#Filtro").hide();
+                                    $("#tableC tbody tr").each(function () {
+                                        $(this).addClass('muestra');
+                                        $(this).removeClass('oculta');
+                                    })
+                                    num = 1;
+                                }
+                                else {
+                                    $("#Filtro").show();
+                                    $("#tableC tbody tr").each(function () {
+                                        $(this).addClass('oculta');
+                                        $(this).removeClass('muestra');
+                                    })
+                                    num = 0;
+                                }
+                            });
+                        </script>
+                    }
+                    @*Modal*@
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+
+
+

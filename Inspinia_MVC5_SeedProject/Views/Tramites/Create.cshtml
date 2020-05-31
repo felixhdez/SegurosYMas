@@ -1,0 +1,584 @@
+﻿@model Inspinia_MVC5_SeedProject.Models.Tramite
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<style>
+        #initialihiddenbutton,
+        #btnCancelarContratante,
+        #btnCancelarIntermediario {
+            display: none;
+        }
+
+        .ibox-hr {
+            -moz-border-bottom-colors: none;
+            -moz-border-left-colors: none;
+            -moz-border-right-colors: none;
+            -moz-border-top-colors: none;
+            background-color: #ffffff;
+            border-color: #e7eaec;
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 2px 0 0;
+            color: inherit;
+            margin-bottom: 0;
+            padding: 0;
+            min-height: 48px;
+        }
+
+        p {
+            font-weight: 400 !important;
+        }
+
+        h2 {
+            font-size: 26px !important;
+            font-weight: 600 !important;
+        }
+
+        .container {
+            width: 97% !important;
+        }
+
+        .btn-default {
+            background: #818e99 !important;
+            color: white !important;
+            opacity: inherit !important;
+        }
+
+        .stepwizard .btn-primary {
+            background-color: #428bca !important;
+            color: white !important;
+        }
+
+
+        /*body{
+        margin-top:40px;
+    }*/
+
+        .stepwizard-step p {
+            margin-top: 10px;
+        }
+
+        .stepwizard-row {
+            display: table-row;
+        }
+
+        .stepwizard {
+            display: table;
+            width: 100%;
+            position: relative;
+        }
+
+        .stepwizard-step button[disabled] {
+            opacity: 1 !important;
+            filter: alpha(opacity=100) !important;
+        }
+
+        .stepwizard-row:before {
+            top: 14px;
+            bottom: 0;
+            position: absolute;
+            content: " ";
+            width: 100%;
+            height: 1px;
+            background-color: #ccc;
+            z-index: 0;
+        }
+
+        .stepwizard-step {
+            display: table-cell;
+            text-align: center;
+            position: relative;
+        }
+
+        .btn-circle {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            padding: 6px 0;
+            font-size: 12px;
+            line-height: 1.428571429;
+            border-radius: 15px;
+        }
+</style>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-sm-4">
+        <h2>Trámites</h2>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("Lista", "Index")
+            </li>
+            <li class="active">
+                <strong>Crear</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-sm-8">
+        <div class="title-action">
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("Index","Tramites")"><i class="fa fa-arrow-left"></i>&nbsp;&nbsp;Regresar</a>
+            <a class="btn btn-success btn-outline dim" href="@Url.Action("Create","ArchivosTrámites")" onclick="Valor()"><i class="fa fa-file-image-o"></i>&nbsp;&nbsp;Archivos</a>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Ingresar Tramite</h5>
+                </div>
+                <div class="ibox-content">
+
+                    <div class="container">
+                        <div class="stepwizard">
+                            <div class="stepwizard-row setup-panel">
+                                <div class="stepwizard-step col-xs-6">
+                                    <a href="#step-1" type="button" class="btn btn-primary btn-circle">1</a>
+                                    <p>Póliza</p>
+                                </div>
+                                <div class="stepwizard-step col-xs-6">
+                                    <a href="#step-2" type="button" class="btn btn-default btn-circle" @*disabled="disabled"*@>2</a>
+                                    <p>Trámites</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @using (Html.BeginForm("Create","Tramites",FormMethod.Post,new { @onsubmit = "return AgregarDatos(this)" })) {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(false,"",new { @class = "text-danger" })
+                        <!--Paso #1-->
+                        <div class="row setup-content" id="step-1">
+                            <div class="col-md-offset-0">
+                                <div class="col-md-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-pencil-square-o fa-lg"></i>
+                                            <div class="button-group">
+                                                <button class="btn btn-danger fa fa-times " type="button" onclick="limpiar()" style="float: right;margin-top: -1.7em;margin-left: 1em;" id="initialihiddenbutton">&nbsp;&nbsp;Cancelar</button>
+                                                <button class="btn btn-success fa fa-search" data-toggle="modal" data-target="#modal-poliza" type="button" style="float: right;margin-top:-1.7em; margin-left:1em">&nbsp;&nbsp;Buscar</button>
+                                            </div>
+                                        </div>
+                                        <div class="container" style="margin-top:20px;">
+                                            <h2>Seleccione la Póliza</h2>
+                                            <hr class="ibox-hr" />
+                                        </div>
+
+                                        <div class="panel-body">
+
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-2" for="NombreCompleto">Nombre del Cliente</label>
+                                                    <div class="col-md-10">
+                                                        <input id="NombreCompleto" name="NombreCompleto" class="form-control" readonly />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br /><br /><br />
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-4" for="Ident">Identificación del Cliente</label>
+                                                    <div class="col-md-8">
+                                                        <input id="Ident" name="Ident" class="form-control" readonly />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-4" for="NumPoliza">Número de Póliza</label>
+                                                    <div class="col-md-8">
+                                                        <input id="NumPoliza" name="NumPoliza" class="form-control" readonly />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br /><br /><br />
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-4" for="Producto">Producto</label>
+                                                    <div class="col-md-8">
+                                                        <input id="Producto" name="Producto" class="form-control" readonly />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-4" for="Aseguradora">Aseguradora</label>
+                                                    <div class="col-md-8">
+                                                        <input id="Aseguradora" name="Aseguradora" class="form-control" readonly />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br /><br />
+                                            <button class="btn btn-primary nextBtn pull-right" type="button" style="margin-top:1.7em;">
+                                                Siguiente
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!--Paso #2-->
+                        <div class="row setup-content" id="step-2">
+                            <div class="col-md-offset-0">
+                                <div class="col-md-12">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-pencil-square-o fa-lg"></i>
+                                        </div>
+                                        <div class="container" style="margin-top:20px;">
+                                            <h2>Datos del Trámite</h2>
+                                            <hr class="ibox-hr" />
+                                        </div>
+
+                                        <div class="panel-body">
+
+                                            <div class="form-horizontal">
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Tipo,new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.DropDownList("Tipo",(SelectList)ViewBag.Tipos,htmlAttributes: new { @class = "form-control",@id = "dropTipo" })
+                                                        @Html.ValidationMessageFor(model => model.Tipo,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Modalidad,new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.Modalidad)
+                                                        @Html.ValidationMessageFor(model => model.Modalidad,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Descripcion,new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.Descripcion)
+                                                        @Html.ValidationMessageFor(model => model.Descripcion,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.FechaRecepcion,new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.FechaRecepcion)
+                                                        @Html.ValidationMessageFor(model => model.FechaRecepcion,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.NombreEjecutivo,new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.NombreEjecutivo)
+                                                        @Html.ValidationMessageFor(model => model.NombreEjecutivo,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.FechaEnvio,new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.FechaEnvio)
+                                                        @Html.ValidationMessageFor(model => model.FechaEnvio,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.FechaRecibido,new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.FechaRecibido)
+                                                        @Html.ValidationMessageFor(model => model.FechaRecibido,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.RecibidoPor,new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.RecibidoPor)
+                                                        @Html.ValidationMessageFor(model => model.RecibidoPor,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    @Html.LabelFor(model => model.Finalizacion,new { @class = "control-label col-md-2" })
+                                                    <div class="col-md-10">
+                                                        @Html.EditorFor(model => model.Finalizacion)
+                                                        @Html.ValidationMessageFor(model => model.Finalizacion,"",new { @class = "text-danger" })
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            <button class="btn btn-primary backBtn pull-left" type="button" style="float:left; margin-top:1.7em;">Regresar</button>
+                                            <button class="btn btn-primary pull-right" type="submit" style="margin-top:1.7em;"> Guardar </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
+
+
+@*Modal para buscar una póliza*@
+<div class="modal inmodal fade" id="modal-poliza" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Pólizas</h4>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("_BuscarPoliza")
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->+
+</div>
+ 
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+!-- Datatable -->
+<link href="~/Content/DataTables/media/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/media/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/media/css/dataTables.jqueryui.min.css" rel="stylesheet" />
+<script src="~/Scripts/DataTables/media/js/dataTables.bootstrap.min.js"></script>
+<script src="~/Scripts/DataTables/media/js/dataTables.jqueryui.min.js"></script>
+<script src="~/Scripts/DataTables/media/js/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"> </script>
+
+
+<!-- Script para el paso a paso.-->
+<script>
+            $(document).ready(function () {
+                var navListItems = $('div.setup-panel div a'),
+                        allWells = $('.setup-content'),
+                        allNextBtn = $('.nextBtn'),
+                        allBackButton = $('.backBtn');
+
+                allWells.hide();
+
+                navListItems.click(function (e) {
+                    e.preventDefault();
+                    var $target = $($(this).attr('href')),
+                            $item = $(this);
+
+                    if (!$item.hasClass('disabled')) {
+                        navListItems.removeClass('btn-primary').addClass('btn-default');
+                        $item.addClass('btn-primary');
+                        allWells.hide();
+                        $target.show();
+                        $target.find('input:eq(0)').focus();
+                    }
+                });
+                allBackButton.click(function () {
+                    var curStep = $(this).closest(".setup-content"),
+                        curStepBtn = curStep.attr("id"),
+                        nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().prev().children("a"),
+                        curInputs = curStep.find("input[type='text'],input[type='url']"),
+                        isValid = true;
+
+                    $(".form-group").removeClass("has-error");
+                    for (var i = 0; i < curInputs.length; i++) {
+                        if (!curInputs[i].validity.valid) {
+                            isValid = false;
+                            $(curInputs[i]).closest(".form-group").addClass("has-error");
+                        }
+                    }
+
+                    nextStepWizard.removeAttr('disabled').trigger('click');
+                });
+
+                allNextBtn.click(function () {
+                    var curStep = $(this).closest(".setup-content"),
+                        curStepBtn = curStep.attr("id"),
+                        nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().next().children("a"),
+                        curInputs = curStep.find("input[type='text'],input[type='url']"),
+                        isValid = true;
+
+                    $(".form-group").removeClass("has-error");
+                    for (var i = 0; i < curInputs.length; i++) {
+                        if (!curInputs[i].validity.valid) {
+                            isValid = false;
+                            $(curInputs[i]).closest(".form-group").addClass("has-error");
+                        }
+                    }
+
+                    if (isValid)
+                        nextStepWizard.removeAttr('disabled').trigger('click');
+                });
+
+
+                $('div.setup-panel div a.btn-primary').trigger('click');
+            });
+</script>
+
+    <script>
+        $(document).ready(function () {
+            $("#dropTipo").select2({ width: "100%" });
+        });
+
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //===================================================================POLIZAS=========================================================================
+    // Instancia de dataTable para la tabla que muestra las pólizas
+    var dataTable = null;
+
+    $(function () {
+        dataTable = $("#BuscarPoliza").DataTable({
+            "ajax": {
+                "url": "@Url.Action("getPolizas", "BienesAsegurados")",
+                "type": "POST",
+                "dataType": "Json"
+                }, "columns": [
+                {
+                "data": "IdPoliza", "render": function (data) {
+                return "<button class='btn btn-success' value='" + data + "'>Seleccionar</button>";
+                }
+                },
+                { "data": "NumPoliza" },
+                { "data": "Apellidos" },
+                { "data": "Nombres" },
+                { "data": "Identificacion" },
+                { "data": "Producto"},
+                { "data": "Aseguradora" },
+                ], "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "No hay pólizas para mostrar",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "Buscar:",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }
+        });
+                });
+
+
+                $idPolizaSelected = 0;
+                // Mostrar el boton agregar solo cuando se seleccione un cliente
+                $("#NumPoliza").change(function () {
+                if (!$(this).val())
+                $("#initialihiddenbutton").hide();
+                else
+                $("#initialihiddenbutton").show();
+                });
+
+                // Evento al hacer click en el boton seleccionar
+                $(function () {
+                $("#BuscarPoliza tbody").on("click", "button", function () {
+                    var data = dataTable.row($(this).parents('tr')).data();
+                    $("#NumPoliza").val(data.NumPoliza).change();
+                    $("#NombreCompleto").val(data.Nombres + ' ' + data.Apellidos).change();
+                    //$("#Nombres").val(data.Nombres);
+                    $("#Ident").val(data.Identificacion);
+                    $("#Producto").val(data.Producto);
+                    $("#Aseguradora").val(data.Aseguradora);
+                    $idPolizaSelected = data.IdPoliza;
+                    $("#modal-poliza .close").click();
+                });
+                });
+
+                //Limpiar campos de cliente
+                function limpiar()
+                {
+                    $("#NumPoliza").val("").change();
+                    $("#NombreCompleto").val("");
+                    //$("#Nombres").val("");
+                    $("#Ident").val("");
+                    $("#Producto").val("");
+                    $("#Aseguradora").val("");
+                    $idPolizaSelected = 0;
+                }
+
+                $form = null;
+                function AgregarDatos(form) {
+                    $.validator.unobtrusive.parse(form);
+                    if ($(form).valid() && $idPolizaSelected!=0) {
+                        var data = $(form).serialize() + "&IdPoliza=" + $idPolizaSelected;
+                        $.ajax({
+                            url: form.action,
+                            type: "POST",
+                            data: data,
+                            success: function (data) {
+                                    if (data.d > 0) {
+                                        window.location.href = '/Tramites/Create';
+                                    }
+                                    else
+                                        swal("Hubo un error al intentar guardar.", "Seguros & Más", "error");
+                            }
+                        });
+                    } else {
+                        $detalle = [];
+                        swal("Aún faltan datos.\nPor favor verifique.", "Seguros & Más", "error");
+                        return false;
+                    }
+                    return false;
+                }
+
+                $(document).ready(function () {
+                    $.ajax({
+                        url: "/Polizas/GetValue/",
+                        type: "GET",
+                        success: function (data) {
+                            if (data.PolizaActual > 0) {
+                                $.ajax({
+                                    url: "/Polizas/GetPoliza/" + data.PolizaActual,
+                                    type: "GET",
+                                    success: function (data) {
+                                        $("#NumPoliza").val(data.lista[0].NumPoliza).change();
+                                        $("#NombreCompleto").val(data.lista[0].Nombres + ' ' + data.lista[0].Apellidos).change();
+                                        //$("#Nombres").val(data.lista[0].Nombres);
+                                        $("#Ident").val(data.lista[0].Identificacion);
+                                        $("#Producto").val(data.lista[0].Producto);
+                                        $("#Aseguradora").val(data.lista[0].Aseguradora);
+                                        $idPolizaSelected = data.lista[0].IdPoliza;
+                                    }
+                                });
+                            }
+                        }
+                    });
+                });
+
+                function Valor() {
+                    $.ajax({
+                        url: "/Tramites/SetValue/" + 0,
+                        type: "GET",
+                        success: function (data) {
+                        }
+                    });
+                }
+    </script>
+}
