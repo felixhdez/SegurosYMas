@@ -10,7 +10,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
     {
 
         //Vuelvo a escribir xd
-
+        //Ahora hago otro, otra vez xd
         [Authorize]
         public ActionResult Index()
         {
