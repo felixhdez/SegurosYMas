@@ -59,6 +59,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
 
         }
 
+        //Obtener polizas por cliente
         public JsonResult GetPolizas(int Id)
         {
             var d = db.Polizas.Where(x=> x.ClienteId == Id).ToList();
