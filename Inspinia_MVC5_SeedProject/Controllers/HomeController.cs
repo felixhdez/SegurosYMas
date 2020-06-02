@@ -8,6 +8,8 @@ namespace Inspinia_MVC5_SeedProject.Controllers
 {
     public class HomeController : Controller
     {
+
+        //Ahora un comentario para la rama Probando
         [Authorize]
         public ActionResult Index()
         {
