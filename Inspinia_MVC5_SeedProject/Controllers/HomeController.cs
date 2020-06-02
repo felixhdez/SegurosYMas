@@ -10,6 +10,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
     {
 
         //Ahora un comentario para la rama Probando
+        //No se que hice xd
         [Authorize]
         public ActionResult Index()
         {
