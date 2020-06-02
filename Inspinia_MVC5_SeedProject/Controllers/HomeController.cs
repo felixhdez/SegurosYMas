@@ -9,8 +9,7 @@ namespace Inspinia_MVC5_SeedProject.Controllers
     public class HomeController : Controller
     {
 
-        //Ahora un comentario para la rama Probando
-        //No se que hice xd
+        
         [Authorize]
         public ActionResult Index()
         {
